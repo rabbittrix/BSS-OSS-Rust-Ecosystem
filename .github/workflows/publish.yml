@@ -1,0 +1,160 @@
+name: Publish to crates.io
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 0.1.0)'
+        required: true
+        type: string
+      crate:
+        description: 'Crate to publish (leave empty for all publishable crates)'
+        required: false
+        type: choice
+        options:
+          - all
+          - tmf-apis-core
+          - tmf620-catalog
+          - pcm-engine
+          - bss-oss-utils
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  publish:
+    name: Publish to crates.io
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for trusted publishing
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Configure git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/credentials
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Set up Cargo credentials
+        run: |
+          mkdir -p ~/.cargo
+          echo "[registry]" >> ~/.cargo/credentials.toml
+          echo 'token = "${{ secrets.CRATES_IO_TOKEN }}"' >> ~/.cargo/credentials.toml
+          mv ~/.cargo/credentials.toml ~/.cargo/credentials
+
+      - name: Extract version from tag (if release)
+        if: github.event_name == 'release'
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          VERSION=${VERSION#refs/tags/}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Publishing version: $VERSION"
+
+      - name: Set version from input (if manual)
+        if: github.event_name == 'workflow_dispatch'
+        id: version
+        run: |
+          echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          echo "📦 Publishing version: ${{ github.event.inputs.version }}"
+
+      - name: Publish tmf-apis-core
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' && 
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'tmf-apis-core'))
+        working-directory: crates/tmf-apis/core
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+            cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+          else
+            cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+            cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+          fi
+
+      - name: Publish tmf620-catalog
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' && 
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'tmf620-catalog'))
+        working-directory: crates/tmf-apis/tmf620_catalog
+        run: |
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
+      - name: Publish pcm-engine
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' && 
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'pcm-engine'))
+        working-directory: crates/pcm-engine
+        run: |
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
+      - name: Publish bss-oss-utils
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' && 
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'bss-oss-utils'))
+        working-directory: crates/utils
+        run: |
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
+      - name: Verify publication
+        run: |
+          echo "✅ All crates published successfully to crates.io"
+          echo "🔗 Check: https://crates.io/crates/tmf-apis-core"
+          echo "🔗 Check: https://crates.io/crates/tmf620-catalog"
+          echo "🔗 Check: https://crates.io/crates/pcm-engine"
+          echo "🔗 Check: https://crates.io/crates/bss-oss-utils"
+
+      - name: Create GitHub release notes
+        if: github.event_name == 'release'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const crates = [
+              'tmf-apis-core',
+              'tmf620-catalog',
+              'pcm-engine',
+              'bss-oss-utils'
+            ];
+            
+            let notes = `# Release ${{ steps.version.outputs.version }}\n\n`;
+            notes += `Published to crates.io:\n\n`;
+            
+            crates.forEach(crate => {
+              notes += `- [${crate}](https://crates.io/crates/${crate})\n`;
+            });
+            
+            fs.writeFileSync('RELEASE_NOTES.md', notes);
+            console.log('Release notes created');
+

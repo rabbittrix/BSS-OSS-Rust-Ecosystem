@@ -1,0 +1,35 @@
+# Code Owners
+# This file defines who owns different parts of the codebase
+# Owners will be automatically requested for review on pull requests
+
+# Global owners - all files
+* @rabbittrix
+
+# TMF APIs
+/crates/tmf-apis/ @rabbittrix
+
+# Product Catalog Engine
+/crates/pcm-engine/ @rabbittrix
+
+# Server and main application
+/crates/server/ @rabbittrix
+
+# Utilities
+/crates/utils/ @rabbittrix
+
+# Documentation
+/docs/ @rabbittrix
+*.md @rabbittrix
+
+# CI/CD and GitHub workflows
+/.github/ @rabbittrix
+
+# Configuration files
+/Cargo.toml @rabbittrix
+/Cargo.lock @rabbittrix
+/docker-compose.yml @rabbittrix
+/Dockerfile @rabbittrix
+
+# Database migrations
+/migrations/ @rabbittrix
+

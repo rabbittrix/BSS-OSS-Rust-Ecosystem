@@ -1,0 +1,42 @@
+# Build artifacts (will be built in Docker)
+target/
+**/target/
+
+# Git files (not needed in Docker image)
+.git/
+.gitignore
+.github/
+
+# Documentation (not needed in Docker image)
+*.md
+docs/
+README.md
+LICENSE
+
+# IDE files (not needed)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs (not needed)
+*.log
+
+# Environment files (security - use env vars instead)
+.env
+.env.local
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files (not needed inside image)
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Database migrations (if not needed in image)
+# migrations/
+

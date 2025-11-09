@@ -1,0 +1,14 @@
+[package]
+name = "tmf-apis-core"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+utoipa.workspace = true

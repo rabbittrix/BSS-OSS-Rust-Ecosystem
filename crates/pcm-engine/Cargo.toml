@@ -1,0 +1,15 @@
+[package]
+name = "pcm-engine"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license.workspace = true
+
+[dependencies]
+tmf-apis-core = { path = "../tmf-apis/core" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+regex = "1"

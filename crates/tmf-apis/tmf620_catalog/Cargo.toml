@@ -1,0 +1,21 @@
+[package]
+name = "tmf620-catalog"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license.workspace = true
+
+[dependencies]
+tmf-apis-core = { path = "../core" }
+actix-web.workspace = true
+sqlx.workspace = true
+jsonwebtoken.workspace = true
+utoipa.workspace = true
+utoipa-swagger-ui.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+tokio.workspace = true
+log.workspace = true
+env_logger.workspace = true
