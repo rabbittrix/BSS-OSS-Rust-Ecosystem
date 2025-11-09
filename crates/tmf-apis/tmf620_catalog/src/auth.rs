@@ -40,11 +40,7 @@ pub fn validate_token(req: &HttpRequest) -> Result<String, ActixError> {
     if let Some(header_value) = req.headers().get("Authorization") {
         let token = header_value
             .to_str()
-            .map_err(|_| {
-                ActixError::from(actix_web::error::ErrorBadRequest(
-                    "Invalid authorization header",
-                ))
-            })?
+            .map_err(|_| actix_web::error::ErrorBadRequest("Invalid authorization header"))?
             .replace("Bearer ", "");
 
         let token_data = decode::<Claims>(
@@ -52,16 +48,12 @@ pub fn validate_token(req: &HttpRequest) -> Result<String, ActixError> {
             &DecodingKey::from_secret(secret.as_ref()),
             &Validation::default(),
         )
-        .map_err(|_| {
-            ActixError::from(actix_web::error::ErrorUnauthorized(
-                "Invalid or expired token",
-            ))
-        })?;
+        .map_err(|_| actix_web::error::ErrorUnauthorized("Invalid or expired token"))?;
 
         Ok(token_data.claims.sub)
     } else {
-        Err(ActixError::from(actix_web::error::ErrorUnauthorized(
+        Err(actix_web::error::ErrorUnauthorized(
             "Missing authorization header",
-        )))
+        ))
     }
 }
