@@ -121,14 +121,18 @@ jobs:
   # ============================================
   build:
     name: Build Project
-    runs-on: ubuntu-latest
     needs: [lint, test]
     strategy:
       matrix:
-        target:
-          - x86_64-unknown-linux-gnu
-          - x86_64-pc-windows-msvc
-          - x86_64-apple-darwin
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+          - target: x86_64-apple-darwin
+            os: macos-latest
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -163,6 +167,7 @@ jobs:
           name: binary-${{ matrix.target }}
           path: target/${{ matrix.target }}/release/bss-oss-rust*
           retention-days: 7
+          if-no-files-found: warn
 
   # ============================================
   # SECURITY SCAN
