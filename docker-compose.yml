@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   postgres:
     image: postgres:15-alpine
@@ -12,6 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      # Mount migrations directory - PostgreSQL will run all .sql files in alphabetical order
+      # Migration order: 001_initial_schema.sql (TMF620), 002_tmf622_ordering_schema.sql, 003_tmf637_inventory_schema.sql
       - ./migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bssoss -d bssoss"]
@@ -20,6 +20,7 @@ services:
       retries: 5
     networks:
       - bss-oss-network
+    restart: unless-stopped
 
   app:
     build:
@@ -37,6 +38,12 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/swagger-ui/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     networks:
       - bss-oss-network
     restart: unless-stopped

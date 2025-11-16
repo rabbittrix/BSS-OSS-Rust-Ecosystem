@@ -15,6 +15,8 @@ path = "src/main.rs"
 [dependencies]
 tmf-apis-core = { path = "../tmf-apis/core", version = "0.1.0" }
 tmf620-catalog = { path = "../tmf-apis/tmf620_catalog", version = "0.1.0" }
+tmf622-ordering = { path = "../tmf-apis/tmf622_ordering", version = "0.1.0" }
+tmf637-inventory = { path = "../tmf-apis/tmf637_inventory", version = "0.1.0" }
 bss-oss-utils = { path = "../utils", version = "0.1.0" }
 actix-web.workspace = true
 utoipa.workspace = true

@@ -2,6 +2,8 @@
 members = [
     "crates/tmf-apis/core",
     "crates/tmf-apis/tmf620_catalog",
+    "crates/tmf-apis/tmf622_ordering",
+    "crates/tmf-apis/tmf637_inventory",
     "crates/pcm-engine",
     "crates/utils",
     "crates/server",

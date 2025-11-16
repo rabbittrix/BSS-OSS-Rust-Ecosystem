@@ -1,5 +1,5 @@
 # Multi-stage build for BSS/OSS Rust application
-FROM rust:1.75 as builder
+FROM rust:latest AS builder
 
 WORKDIR /app
 
@@ -16,6 +16,7 @@ FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl3 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
