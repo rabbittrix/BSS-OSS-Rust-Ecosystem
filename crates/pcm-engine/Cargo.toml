@@ -4,9 +4,12 @@ version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license.workspace = true
+description = "Product Catalog Engine (PCM) Framework for pricing, eligibility, and bundling rules"
+repository.workspace = true
+documentation.workspace = true
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.1.0" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
