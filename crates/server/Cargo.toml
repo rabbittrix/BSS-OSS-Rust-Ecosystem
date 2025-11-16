@@ -4,15 +4,18 @@ version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license.workspace = true
+description = "BSS/OSS Rust ecosystem server application"
+repository.workspace = true
+documentation.workspace = true
 
 [[bin]]
 name = "bss-oss-rust"
 path = "src/main.rs"
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core" }
-tmf620-catalog = { path = "../tmf-apis/tmf620_catalog" }
-bss-oss-utils = { path = "../utils" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.1.0" }
+tmf620-catalog = { path = "../tmf-apis/tmf620_catalog", version = "0.1.0" }
+bss-oss-utils = { path = "../utils", version = "0.1.0" }
 actix-web.workspace = true
 utoipa.workspace = true
 utoipa-swagger-ui.workspace = true
