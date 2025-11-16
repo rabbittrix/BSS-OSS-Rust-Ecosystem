@@ -117,8 +117,10 @@ pub struct CreateProductOrderRequest {
 pub struct CreateOrderItemRequest {
     pub action: String,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[schema(value_type = String, format = "uuid")]
     pub product_offering_id: Option<Uuid>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[schema(value_type = String, format = "uuid")]
     pub product_specification_id: Option<Uuid>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quantity: Option<i32>,

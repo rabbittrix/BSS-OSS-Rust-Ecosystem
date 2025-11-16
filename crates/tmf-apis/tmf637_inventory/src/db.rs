@@ -121,15 +121,15 @@ pub async fn create_inventory(
          reserved_quantity, activation_date, last_modified_date)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
     )
-    .bind(&id)
+    .bind(id)
     .bind(&request.name)
     .bind(&request.description)
     .bind(&request.version)
     .bind(&state)
-    .bind(&request.quantity)
-    .bind(&0i32) // reserved_quantity defaults to 0
-    .bind(&now)
-    .bind(&now)
+    .bind(request.quantity)
+    .bind(0i32) // reserved_quantity defaults to 0
+    .bind(now)
+    .bind(now)
     .execute(pool)
     .await
     .map_err(map_sqlx_error)?;
@@ -142,8 +142,8 @@ pub async fn create_inventory(
                 "INSERT INTO inventory_related_parties (id, inventory_id, name, role)
                  VALUES ($1, $2, $3, $4)",
             )
-            .bind(&party_id)
-            .bind(&id)
+            .bind(party_id)
+            .bind(id)
             .bind(&party.name)
             .bind(&party.role)
             .execute(pool)

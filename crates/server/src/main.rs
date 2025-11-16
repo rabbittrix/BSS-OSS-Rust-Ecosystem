@@ -13,8 +13,8 @@ use tmf622_ordering::models::{
     ProductSpecificationRef as Tmf622ProductSpecificationRef, RelatedParty as Tmf622RelatedParty,
 };
 use tmf637_inventory::models::{
-    CreateProductInventoryRequest, InventoryState, ProductInventory,
-    ProductOfferingRef as Tmf637ProductOfferingRef,
+    CreateProductInventoryRequest, CreateRelatedPartyRequest as Tmf637CreateRelatedPartyRequest,
+    InventoryState, ProductInventory, ProductOfferingRef as Tmf637ProductOfferingRef,
     ProductSpecificationRef as Tmf637ProductSpecificationRef, RelatedParty as Tmf637RelatedParty,
 };
 use tmf_apis_core::{BaseEntity, LifecycleStatus, TimePeriod};
@@ -62,6 +62,7 @@ use utoipa_swagger_ui::SwaggerUi;
         // TMF637
         ProductInventory,
         CreateProductInventoryRequest,
+        Tmf637CreateRelatedPartyRequest,
         InventoryState,
         Tmf637ProductOfferingRef,
         Tmf637ProductSpecificationRef,

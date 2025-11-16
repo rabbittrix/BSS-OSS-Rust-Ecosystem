@@ -121,12 +121,12 @@ pub async fn create_order(
         "INSERT INTO product_orders (id, name, description, version, state, order_date, priority)
          VALUES ($1, $2, $3, $4, $5, $6, $7)",
     )
-    .bind(&id)
+    .bind(id)
     .bind(&request.name)
     .bind(&request.description)
     .bind(&request.version)
     .bind(&state)
-    .bind(&now)
+    .bind(now)
     .bind(&request.priority)
     .execute(pool)
     .await
@@ -141,13 +141,13 @@ pub async fn create_order(
                  product_specification_id, state, quantity)
                  VALUES ($1, $2, $3, $4, $5, $6, $7)",
             )
-            .bind(&item_id)
-            .bind(&id)
+            .bind(item_id)
+            .bind(id)
             .bind(&item.action)
-            .bind(&item.product_offering_id)
-            .bind(&item.product_specification_id)
+            .bind(item.product_offering_id)
+            .bind(item.product_specification_id)
             .bind(&state)
-            .bind(&item.quantity)
+            .bind(item.quantity)
             .execute(pool)
             .await
             .map_err(map_sqlx_error)?;
@@ -162,8 +162,8 @@ pub async fn create_order(
                 "INSERT INTO related_parties (id, order_id, name, role)
                  VALUES ($1, $2, $3, $4)",
             )
-            .bind(&party_id)
-            .bind(&id)
+            .bind(party_id)
+            .bind(id)
             .bind(&party.name)
             .bind(&party.role)
             .execute(pool)
