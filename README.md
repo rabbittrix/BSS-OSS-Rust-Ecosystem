@@ -18,6 +18,8 @@ This project aims to revolutionize the BSS/OSS landscape by providing:
 3. ✅ Integrate **JWT Authentication** using `jsonwebtoken`
 4. ✅ Add **OpenAPI/Swagger** auto-generation using `utoipa` and `utoipa-swagger-ui`
 5. ✅ License: **MIT + Donation Link**
+6. ✅ Implement **TMF622 - Product Ordering Management API**
+7. ✅ Implement **TMF637 - Product Inventory Management API**
 
 ## 🏗️ Architecture
 
@@ -28,7 +30,9 @@ bss-oss-rust/
 ├── crates/
 │   ├── tmf-apis/
 │   │   ├── core/              # Shared models and errors
-│   │   └── tmf620_catalog/    # TMF620 Product Catalog API
+│   │   ├── tmf620_catalog/    # TMF620 Product Catalog API ✅
+│   │   ├── tmf622_ordering/   # TMF622 Product Ordering API ✅
+│   │   └── tmf637_inventory/  # TMF637 Product Inventory API ✅
 │   ├── pcm-engine/            # Product Catalog Engine
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
@@ -44,11 +48,8 @@ The most strategic choice for interoperability. Adherence to industry standards 
 **Current Implementation:**
 
 - **TMF620** - Product Catalog Management API ✅
-
-**Planned:**
-
-- **TMF622** - Product Ordering Management API
-- **TMF637** - Product Inventory Management API
+- **TMF622** - Product Ordering Management API ✅
+- **TMF637** - Product Inventory Management API ✅
 
 #### 2. Product Catalog Engine (PCM) Framework
 
@@ -224,6 +225,26 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 - **GET** `/productOffering` - List all product offerings
 - **POST** `/productOffering` - Create a new product offering
 
+### TMF622 Product Ordering Management API
+
+**Base URL:** `/tmf-api/productOrderingManagement/v4`
+
+#### Product Orders
+
+- **GET** `/productOrder` - List all product orders
+- **GET** `/productOrder/{id}` - Get product order by ID (UUID)
+- **POST** `/productOrder` - Create a new product order
+
+### TMF637 Product Inventory Management API
+
+**Base URL:** `/tmf-api/productInventoryManagement/v4`
+
+#### Product Inventories
+
+- **GET** `/productInventory` - List all product inventories
+- **GET** `/productInventory/{id}` - Get product inventory by ID (UUID)
+- **POST** `/productInventory` - Create a new product inventory
+
 ### Example Requests
 
 **Create a catalog:**
@@ -253,6 +274,46 @@ curl -X POST http://localhost:8080/tmf-api/productCatalogManagement/v4/productOf
     "lifecycle_status": "ACTIVE",
     "is_sellable": true,
     "is_bundle": false
+  }'
+```
+
+**Create a product order (TMF622):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/productOrderingManagement/v4/productOrder \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "external_id": "ORDER-001",
+    "order_date": "2025-01-15T10:00:00Z",
+    "order_state": "ACKNOWLEDGED",
+    "order_items": [
+      {
+        "action": "ADD",
+        "product_offering": {
+          "id": "product-offering-uuid",
+          "name": "5G Premium Plan"
+        },
+        "quantity": 1
+      }
+    ]
+  }'
+```
+
+**Create a product inventory (TMF637):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/productInventoryManagement/v4/productInventory \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "external_id": "INV-001",
+    "product_offering": {
+      "id": "product-offering-uuid",
+      "name": "5G Premium Plan"
+    },
+    "state": "ACTIVE",
+    "quantity": 1
   }'
 ```
 
@@ -305,6 +366,8 @@ See examples in the [API Endpoints](#-api-endpoints) section above.
 
 - **`tmf-apis-core`**: Shared models and error types for all TMF APIs
 - **`tmf620-catalog`**: TMF620 Product Catalog Management API implementation
+- **`tmf622-ordering`**: TMF622 Product Ordering Management API implementation
+- **`tmf637-inventory`**: TMF637 Product Inventory Management API implementation
 - **`pcm-engine`**: Product Catalog Engine framework (pricing, eligibility, bundling)
 - **`bss-oss-utils`**: Common utilities, logger, and helpers
 - **`bss-oss-server`**: Main application server (binary)
@@ -344,6 +407,12 @@ psql -U bssoss -d bssoss -c "SELECT * FROM catalogs;"
 
 # Query product offerings
 psql -U bssoss -d bssoss -c "SELECT * FROM product_offerings;"
+
+# Query product orders (TMF622)
+psql -U bssoss -d bssoss -c "SELECT * FROM product_orders;"
+
+# Query product inventories (TMF637)
+psql -U bssoss -d bssoss -c "SELECT * FROM product_inventories;"
 ```
 
 ## 🐛 Troubleshooting
