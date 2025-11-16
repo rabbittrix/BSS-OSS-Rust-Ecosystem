@@ -80,7 +80,7 @@ use utoipa_swagger_ui::SwaggerUi;
     info(
         title = "BSS/OSS Rust - TM Forum Open APIs",
         description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637)",
-        version = "0.1.0",
+        version = "0.1.5",
         contact(
             name = "Roberto de Souza",
             email = "rabbittrix@hotmail.com"

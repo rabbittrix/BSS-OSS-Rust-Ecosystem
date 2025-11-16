@@ -449,7 +449,7 @@ Crates are automatically published when:
 
 1. Go to **Actions** → **Publish to crates.io**
 2. Click **Run workflow**
-3. Enter version (e.g., `0.1.0`)
+3. Enter version (e.g., `0.1.5`)
 4. Select crate(s) to publish (or "all")
 5. Click **Run workflow**
 
