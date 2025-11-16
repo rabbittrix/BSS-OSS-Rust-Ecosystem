@@ -4,6 +4,9 @@ version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license.workspace = true
+description = "Core models and error types for TM Forum Open APIs implementation in Rust"
+repository.workspace = true
+documentation.workspace = true
 
 [dependencies]
 serde.workspace = true
