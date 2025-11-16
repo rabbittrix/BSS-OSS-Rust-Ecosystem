@@ -33,3 +33,58 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "MIT"
+repository = "https://github.com/rabbittrix/BSS-OSS-Rust-Ecosystem.git"
+documentation = "https://github.com/rabbittrix/BSS-OSS-Rust-Ecosystem/blob/main/README.md"
+
+keywords = [
+    "bss",
+    "oss",
+    "rust",
+    "tmf",
+    "tmforum",
+    "openapi",
+    "openapi-v3",
+    "openapi-v2",
+    "openapi-v1",
+    "openapi-v0",
+    "openapi-v0.1",
+    "openapi-v0.2",
+    "openapi-v0.3",
+    "openapi-v0.4",
+    "openapi-v0.5",
+    "openapi-v0.6",
+    "openapi-v0.7",
+    "openapi-v0.8",
+    "openapi-v0.9",
+]
+categories = [
+    "network",
+    "telecom",
+    "bss",
+    "oss",
+    "tmf",
+    "tmforum",
+    "openapi",
+    "openapi-v3",
+    "openapi-v2",
+    "openapi-v1",
+    "openapi-v0",
+    "openapi-v0.1",
+    "openapi-v0.2",
+    "openapi-v0.3",
+    "openapi-v0.4",
+    "openapi-v0.5",
+    "openapi-v0.6",
+    "openapi-v0.7",
+    "openapi-v0.8",
+    "openapi-v0.9",
+]
+
+[workspace.build-dependencies]
+cargo-release = "0.25.22"
+
+[workspace.dev-dependencies]
+cargo-release = "0.25.22"
+
+[workspace.package.metadata]
+release = { crate-name = "bss-oss-rust" }
