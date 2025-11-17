@@ -47,14 +47,12 @@ pub async fn get_bills(pool: &Pool<Postgres>) -> TmfResult<Vec<CustomerBill>> {
     for row in rows {
         let total_amount_value: Option<f64> = row.get("total_amount_value");
         let total_amount_unit: Option<String> = row.get("total_amount_unit");
-        let total_amount = if total_amount_value.is_some() && total_amount_unit.is_some() {
-            Some(Money {
-                value: total_amount_value.unwrap(),
-                unit: total_amount_unit.unwrap(),
-            })
-        } else {
-            None
-        };
+        let total_amount =
+            if let (Some(value), Some(unit)) = (total_amount_value, total_amount_unit) {
+                Some(Money { value, unit })
+            } else {
+                None
+            };
 
         bills.push(CustomerBill {
             base: tmf_apis_core::BaseEntity {
@@ -95,11 +93,8 @@ pub async fn get_bill_by_id(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<Custom
 
     let total_amount_value: Option<f64> = row.get("total_amount_value");
     let total_amount_unit: Option<String> = row.get("total_amount_unit");
-    let total_amount = if total_amount_value.is_some() && total_amount_unit.is_some() {
-        Some(Money {
-            value: total_amount_value.unwrap(),
-            unit: total_amount_unit.unwrap(),
-        })
+    let total_amount = if let (Some(value), Some(unit)) = (total_amount_value, total_amount_unit) {
+        Some(Money { value, unit })
     } else {
         None
     };
@@ -148,7 +143,7 @@ pub async fn create_bill(
     .bind(&request.version)
     .bind(&state)
     .bind(request.bill_date.unwrap_or(now))
-    .bind(&request.due_date)
+    .bind(request.due_date)
     .bind(total_amount_value)
     .bind(total_amount_unit)
     .bind(request.tax_included)
