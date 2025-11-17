@@ -1,6 +1,6 @@
 //! Database operations for TMF688 Appointment Management
 
-use crate::models::{CreateAppointmentRequest, Appointment, AppointmentState};
+use crate::models::{Appointment, AppointmentState, CreateAppointmentRequest};
 use chrono::{DateTime, Utc};
 use sqlx::{Pool, Postgres, Row};
 use tmf_apis_core::{TmfError, TmfResult};
@@ -171,4 +171,3 @@ pub async fn create_appointment(
     // Fetch the created appointment
     get_appointment_by_id(pool, id).await
 }
-

@@ -1,6 +1,6 @@
 //! Database operations for TMF678 Customer Bill Management
 
-use crate::models::{CreateCustomerBillRequest, CustomerBill, BillState, Money};
+use crate::models::{BillState, CreateCustomerBillRequest, CustomerBill, Money};
 use chrono::{DateTime, Utc};
 use sqlx::{Pool, Postgres, Row};
 use tmf_apis_core::{TmfError, TmfResult};
@@ -72,8 +72,8 @@ pub async fn get_bills(pool: &Pool<Postgres>) -> TmfResult<Vec<CustomerBill>> {
             due_date: row.get::<Option<DateTime<Utc>>, _>("due_date"),
             total_amount,
             tax_included: row.get::<bool, _>("tax_included"),
-            bill_item: None,      // Load separately if needed
-            related_party: None,  // Load separately if needed
+            bill_item: None,     // Load separately if needed
+            related_party: None, // Load separately if needed
         });
     }
 
@@ -198,4 +198,3 @@ pub async fn create_bill(
     // Fetch the created bill
     get_bill_by_id(pool, id).await
 }
-

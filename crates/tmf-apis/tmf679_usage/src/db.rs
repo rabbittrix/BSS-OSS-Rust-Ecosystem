@@ -156,4 +156,3 @@ pub async fn create_usage(
     // Fetch the created usage
     get_usage_by_id(pool, id).await
 }
-
