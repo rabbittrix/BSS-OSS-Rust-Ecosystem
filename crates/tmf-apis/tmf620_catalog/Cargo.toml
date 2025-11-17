@@ -9,7 +9,7 @@ repository.workspace = true
 documentation.workspace = true
 
 [dependencies]
-tmf-apis-core = { path = "../core", version = "0.1.5" }
+tmf-apis-core = { path = "../core", version = "0.2.0" }
 actix-web.workspace = true
 sqlx.workspace = true
 jsonwebtoken.workspace = true

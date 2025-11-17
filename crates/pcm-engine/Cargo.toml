@@ -9,7 +9,7 @@ repository.workspace = true
 documentation.workspace = true
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.1.5" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.0" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true

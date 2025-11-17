@@ -11,7 +11,7 @@ This project aims to revolutionize the BSS/OSS landscape by providing:
 - **Safety & Performance**: Rust's memory safety guarantees prevent costly billing errors
 - **Modularity**: Composable crates for different BSS/OSS components
 
-## 🧱 Phase 1 Roadmap – Stable Core Foundation
+## 🧱 Phase 1 Roadmap – Stable Core Foundation ✅
 
 1. ✅ Implement **TMF620 - Product Catalog Management API**
 2. ✅ Add **PostgreSQL (via sqlx)** for real data persistence
@@ -20,6 +20,41 @@ This project aims to revolutionize the BSS/OSS landscape by providing:
 5. ✅ License: **MIT + Donation Link**
 6. ✅ Implement **TMF622 - Product Ordering Management API**
 7. ✅ Implement **TMF637 - Product Inventory Management API**
+
+### Current Version: 0.2.0
+
+## 🧭 Phase 2 Roadmap – Customer & User Domain (High Priority) 🔄
+
+### Next Strategic TMF APIs to Implement
+
+These are critical for any commercial BSS:
+
+1. 🔄 **TMF629 – Customer Management**
+
+   - Manages customer profiles and their contact information
+   - **Why**: Core for CRM, KYC, account management, onboarding
+
+2. 🔄 **TMF678 – Customer Bill Management**
+
+   - Retrieves bills and billing structures
+   - **Why**: Required for customer portals and self-care
+
+3. 🔄 **TMF679 – Customer Usage Management**
+
+   - Handles CDRs, usage records, and consumption
+   - **Why**: Essential for 5G, IoT, prepaid, and analytics
+
+4. 🔄 **TMF688 – Appointment Management**
+   - For scheduling technician visits, installations, etc.
+   - **Why**: Critical for field operations and order fulfillment
+
+### Additional Phase 2 Goals
+
+- 🔄 Add comprehensive test coverage for all TMF APIs
+- 🔄 Performance optimization and benchmarking
+- 🔄 Add rate limiting and request validation
+- 🔄 Enhanced error handling and validation
+- 🔄 API versioning and backward compatibility
 
 ## 🏗️ Architecture
 
@@ -32,7 +67,11 @@ bss-oss-rust/
 │   │   ├── core/              # Shared models and errors
 │   │   ├── tmf620_catalog/    # TMF620 Product Catalog API ✅
 │   │   ├── tmf622_ordering/   # TMF622 Product Ordering API ✅
-│   │   └── tmf637_inventory/  # TMF637 Product Inventory API ✅
+│   │   ├── tmf637_inventory/  # TMF637 Product Inventory API ✅
+│   │   ├── tmf629_customer/   # TMF629 Customer Management API 🔄 (Planned)
+│   │   ├── tmf678_billing/    # TMF678 Customer Bill Management API 🔄 (Planned)
+│   │   ├── tmf679_usage/      # TMF679 Customer Usage Management API 🔄 (Planned)
+│   │   └── tmf688_appointment/# TMF688 Appointment Management API 🔄 (Planned)
 │   ├── pcm-engine/            # Product Catalog Engine
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
@@ -45,11 +84,18 @@ bss-oss-rust/
 
 The most strategic choice for interoperability. Adherence to industry standards is crucial for commercial value.
 
-**Current Implementation:**
+**Current Implementation (v0.2.0):**
 
 - **TMF620** - Product Catalog Management API ✅
 - **TMF622** - Product Ordering Management API ✅
 - **TMF637** - Product Inventory Management API ✅
+
+**Planned for Phase 2:**
+
+- **TMF629** - Customer Management API 🔄
+- **TMF678** - Customer Bill Management API 🔄
+- **TMF679** - Customer Usage Management API 🔄
+- **TMF688** - Appointment Management API 🔄
 
 #### 2. Product Catalog Engine (PCM) Framework
 

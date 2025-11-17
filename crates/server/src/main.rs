@@ -12,10 +12,31 @@ use tmf622_ordering::models::{
     ProductOfferingRef as Tmf622ProductOfferingRef, ProductOrder,
     ProductSpecificationRef as Tmf622ProductSpecificationRef, RelatedParty as Tmf622RelatedParty,
 };
+use tmf629_customer::models::{
+    AccountRef as Tmf629AccountRef, Characteristic as Tmf629Characteristic,
+    ContactMedium as Tmf629ContactMedium, CreateContactMediumRequest, CreateCustomerRequest,
+    CreateRelatedPartyRequest as Tmf629CreateRelatedPartyRequest, Customer, CustomerState,
+    RelatedParty as Tmf629RelatedParty,
+};
 use tmf637_inventory::models::{
     CreateProductInventoryRequest, CreateRelatedPartyRequest as Tmf637CreateRelatedPartyRequest,
     InventoryState, ProductInventory, ProductOfferingRef as Tmf637ProductOfferingRef,
     ProductSpecificationRef as Tmf637ProductSpecificationRef, RelatedParty as Tmf637RelatedParty,
+};
+use tmf678_billing::models::{
+    BillItem, BillState, CreateBillItemRequest, CreateCustomerBillRequest,
+    CreateRelatedPartyRequest as Tmf678CreateRelatedPartyRequest, CustomerBill, Money as BillMoney,
+    ProductOfferingRef as Tmf678ProductOfferingRef, RelatedParty as Tmf678RelatedParty,
+};
+use tmf679_usage::models::{
+    CreateCustomerUsageRequest, CreateRelatedPartyRequest as Tmf679CreateRelatedPartyRequest,
+    CustomerUsage, RelatedParty as Tmf679RelatedParty, UsageState,
+};
+use tmf688_appointment::models::{
+    Appointment, AppointmentState, ContactMedium as Tmf688ContactMedium, CreateAppointmentRequest,
+    CreateContactMediumRequest as Tmf688CreateContactMediumRequest,
+    CreateRelatedPartyRequest as Tmf688CreateRelatedPartyRequest,
+    RelatedParty as Tmf688RelatedParty,
 };
 use tmf_apis_core::{BaseEntity, LifecycleStatus, TimePeriod};
 use utoipa::OpenApi;
@@ -38,6 +59,22 @@ use utoipa_swagger_ui::SwaggerUi;
         tmf637_inventory::handlers::get_inventories,
         tmf637_inventory::handlers::get_inventory_by_id,
         tmf637_inventory::handlers::create_inventory,
+        // TMF629
+        tmf629_customer::handlers::get_customers,
+        tmf629_customer::handlers::get_customer_by_id,
+        tmf629_customer::handlers::create_customer,
+        // TMF678
+        tmf678_billing::handlers::get_bills,
+        tmf678_billing::handlers::get_bill_by_id,
+        tmf678_billing::handlers::create_bill,
+        // TMF679
+        tmf679_usage::handlers::get_usages,
+        tmf679_usage::handlers::get_usage_by_id,
+        tmf679_usage::handlers::create_usage,
+        // TMF688
+        tmf688_appointment::handlers::get_appointments,
+        tmf688_appointment::handlers::get_appointment_by_id,
+        tmf688_appointment::handlers::create_appointment,
     ),
     components(schemas(
         // TMF620
@@ -67,6 +104,40 @@ use utoipa_swagger_ui::SwaggerUi;
         Tmf637ProductOfferingRef,
         Tmf637ProductSpecificationRef,
         Tmf637RelatedParty,
+        // TMF629
+        Customer,
+        CreateCustomerRequest,
+        CreateContactMediumRequest,
+        Tmf629CreateRelatedPartyRequest,
+        CustomerState,
+        Tmf629AccountRef,
+        Tmf629Characteristic,
+        Tmf629ContactMedium,
+        Tmf629RelatedParty,
+        // TMF678
+        CustomerBill,
+        CreateCustomerBillRequest,
+        CreateBillItemRequest,
+        Tmf678CreateRelatedPartyRequest,
+        BillState,
+        BillItem,
+        BillMoney,
+        Tmf678ProductOfferingRef,
+        Tmf678RelatedParty,
+        // TMF679
+        CustomerUsage,
+        CreateCustomerUsageRequest,
+        Tmf679CreateRelatedPartyRequest,
+        UsageState,
+        Tmf679RelatedParty,
+        // TMF688
+        Appointment,
+        CreateAppointmentRequest,
+        Tmf688CreateContactMediumRequest,
+        Tmf688CreateRelatedPartyRequest,
+        AppointmentState,
+        Tmf688ContactMedium,
+        Tmf688RelatedParty,
         // Common
         BaseEntity,
         LifecycleStatus,
@@ -75,12 +146,16 @@ use utoipa_swagger_ui::SwaggerUi;
     tags(
         (name = "TMF620", description = "Product Catalog Management API"),
         (name = "TMF622", description = "Product Ordering Management API"),
-        (name = "TMF637", description = "Product Inventory Management API")
+        (name = "TMF637", description = "Product Inventory Management API"),
+        (name = "TMF629", description = "Customer Management API"),
+        (name = "TMF678", description = "Customer Bill Management API"),
+        (name = "TMF679", description = "Customer Usage Management API"),
+        (name = "TMF688", description = "Appointment Management API")
     ),
     info(
         title = "BSS/OSS Rust - TM Forum Open APIs",
-        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637)",
-        version = "0.1.5",
+        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF679, TMF688)",
+        version = "0.2.0",
         contact(
             name = "Roberto de Souza",
             email = "rabbittrix@hotmail.com"
@@ -121,6 +196,10 @@ async fn main() -> std::io::Result<()> {
     log::info!("   - TMF620: Product Catalog Management");
     log::info!("   - TMF622: Product Ordering Management");
     log::info!("   - TMF637: Product Inventory Management");
+    log::info!("   - TMF629: Customer Management");
+    log::info!("   - TMF678: Customer Bill Management");
+    log::info!("   - TMF679: Customer Usage Management");
+    log::info!("   - TMF688: Appointment Management");
     log::info!(
         "📚 Swagger UI will be available at http://{}:{}/swagger-ui",
         host,
@@ -139,6 +218,10 @@ async fn main() -> std::io::Result<()> {
             .configure(tmf620_catalog::api::configure_routes)
             .configure(tmf622_ordering::api::configure_routes)
             .configure(tmf637_inventory::api::configure_routes)
+            .configure(tmf629_customer::api::configure_routes)
+            .configure(tmf678_billing::api::configure_routes)
+            .configure(tmf679_usage::api::configure_routes)
+            .configure(tmf688_appointment::api::configure_routes)
     })
     .bind((host.as_str(), port))?
     .run()

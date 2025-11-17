@@ -4,6 +4,10 @@ members = [
     "crates/tmf-apis/tmf620_catalog",
     "crates/tmf-apis/tmf622_ordering",
     "crates/tmf-apis/tmf637_inventory",
+    "crates/tmf-apis/tmf629_customer",
+    "crates/tmf-apis/tmf678_billing",
+    "crates/tmf-apis/tmf679_usage",
+    "crates/tmf-apis/tmf688_appointment",
     "crates/pcm-engine",
     "crates/utils",
     "crates/server",
@@ -31,7 +35,7 @@ chrono = { version = "0.4", features = ["serde"] }
 tokio = { version = "1", features = ["full"] }
 
 [workspace.package]
-version = "0.1.5"
+version = "0.2.0"
 edition = "2021"
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "MIT"

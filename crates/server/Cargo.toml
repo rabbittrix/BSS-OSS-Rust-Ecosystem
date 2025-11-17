@@ -13,11 +13,15 @@ name = "bss-oss-rust"
 path = "src/main.rs"
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.1.5" }
-tmf620-catalog = { path = "../tmf-apis/tmf620_catalog", version = "0.1.5" }
-tmf622-ordering = { path = "../tmf-apis/tmf622_ordering", version = "0.1.5" }
-tmf637-inventory = { path = "../tmf-apis/tmf637_inventory", version = "0.1.5" }
-bss-oss-utils = { path = "../utils", version = "0.1.5" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.0" }
+tmf620-catalog = { path = "../tmf-apis/tmf620_catalog", version = "0.2.0" }
+tmf622-ordering = { path = "../tmf-apis/tmf622_ordering", version = "0.2.0" }
+tmf637-inventory = { path = "../tmf-apis/tmf637_inventory", version = "0.2.0" }
+tmf629-customer = { path = "../tmf-apis/tmf629_customer", version = "0.2.0" }
+tmf678-billing = { path = "../tmf-apis/tmf678_billing", version = "0.2.0" }
+tmf679-usage = { path = "../tmf-apis/tmf679_usage", version = "0.2.0" }
+tmf688-appointment = { path = "../tmf-apis/tmf688_appointment", version = "0.2.0" }
+bss-oss-utils = { path = "../utils", version = "0.2.0" }
 actix-web.workspace = true
 utoipa.workspace = true
 utoipa-swagger-ui.workspace = true
