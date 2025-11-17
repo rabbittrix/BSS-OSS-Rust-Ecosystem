@@ -126,7 +126,7 @@ pub async fn create_appointment(
     .bind(&request.version)
     .bind(&state)
     .bind(request.appointment_date.unwrap_or(now))
-    .bind(&request.duration)
+    .bind(request.duration)
     .bind(&request.appointment_type)
     .execute(pool)
     .await

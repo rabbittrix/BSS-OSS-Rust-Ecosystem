@@ -125,12 +125,12 @@ pub async fn create_usage(
     .bind(&request.version)
     .bind(&state)
     .bind(request.usage_date.unwrap_or(now))
-    .bind(&request.start_date)
-    .bind(&request.end_date)
+    .bind(request.start_date)
+    .bind(request.end_date)
     .bind(&request.usage_type)
-    .bind(&request.amount)
+    .bind(request.amount)
     .bind(&request.unit)
-    .bind(&request.product_offering_id)
+    .bind(request.product_offering_id)
     .execute(pool)
     .await
     .map_err(map_sqlx_error)?;
