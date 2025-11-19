@@ -4,8 +4,8 @@ use crate::dependencies::ServiceDependencyGraph;
 use crate::state::{ServiceLifecycleState, ServiceWorkflowContext};
 use sqlx::PgPool;
 use std::sync::Arc;
-use tmf640_service_activation::CreateServiceActivationRequest;
 use tmf638_service_inventory::CreateServiceInventoryRequest;
+use tmf640_service_activation::CreateServiceActivationRequest;
 use uuid::Uuid;
 
 /// Service activation automation engine
@@ -18,9 +18,7 @@ impl ServiceActivationEngine {
     pub fn new(pool: PgPool) -> Self {
         Self {
             pool: Arc::new(pool),
-            dependency_graph: Arc::new(tokio::sync::RwLock::new(
-                ServiceDependencyGraph::new(),
-            )),
+            dependency_graph: Arc::new(tokio::sync::RwLock::new(ServiceDependencyGraph::new())),
         }
     }
 
@@ -49,9 +47,7 @@ impl ServiceActivationEngine {
         };
 
         // Create service activation via database
-        let activation_id = self
-            .create_service_activation(activation_request)
-            .await?;
+        let activation_id = self.create_service_activation(activation_request).await?;
 
         // Update workflow context
         if let Some(task) = context
@@ -67,11 +63,12 @@ impl ServiceActivationEngine {
         self.execute_activation(activation_id).await?;
 
         // Update workflow context
-        if let Some(task) = context
-            .tasks
-            .iter_mut()
-            .find(|t| matches!(t.task_type, crate::state::ServiceTaskType::ExecuteActivation))
-        {
+        if let Some(task) = context.tasks.iter_mut().find(|t| {
+            matches!(
+                t.task_type,
+                crate::state::ServiceTaskType::ExecuteActivation
+            )
+        }) {
             task.activation_id = Some(activation_id);
             task.state = ServiceLifecycleState::Activated;
         }
@@ -220,4 +217,3 @@ pub enum ActivationError {
     #[error("Invalid activation state")]
     InvalidState,
 }
-

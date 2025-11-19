@@ -87,7 +87,7 @@ impl ApiGateway {
         let app = app
             .wrap(LoggingMiddleware)
             .wrap(ValidationMiddleware::default());
-        
+
         // Conditionally apply auth middleware
         // Note: This requires all middleware to be applied due to type constraints
         let app = if self.config.require_auth {

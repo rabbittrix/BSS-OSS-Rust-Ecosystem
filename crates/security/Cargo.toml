@@ -1,0 +1,32 @@
+[package]
+name = "security"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license.workspace = true
+description = "Security System for OAuth 2.0/OIDC, MFA, RBAC, and Audit Logging"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.5" }
+tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.2.5" }
+tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.2.5" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+tokio.workspace = true
+async-trait.workspace = true
+sqlx.workspace = true
+log.workspace = true
+jsonwebtoken.workspace = true
+actix-web.workspace = true
+base64 = "0.22"
+sha2 = "0.10"
+sha1 = "0.10"
+rand = "0.8"
+totp-lite = "2.0"
+qrcode = "0.14"
+image = "0.25"

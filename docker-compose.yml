@@ -34,6 +34,7 @@ services:
       #   020_service_orchestration_schema.sql (Service Orchestration)
       #   021_resource_management_schema.sql (Resource Management)
       #   022_revenue_management_schema.sql (Revenue Management: Charging, Rating, Billing Cycles, Settlements)
+      #   023_security_schema.sql (Security: OAuth 2.0/OIDC, MFA, RBAC, Audit Logging)
       - ./migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bssoss -d bssoss"]

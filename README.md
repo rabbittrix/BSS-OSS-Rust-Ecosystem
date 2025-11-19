@@ -165,6 +165,43 @@ These APIs manage security, party management, and identity:
    - Handles digital identities, credentials, OAuth/JWT integration
    - **Why**: Your system becomes enterprise-ready
 
+### Phase 6 Security Features Implemented
+
+Comprehensive security system for enterprise-grade authentication and authorization:
+
+1. ✅ **OAuth 2.0 / OIDC Integration**
+
+   - OAuth 2.0 authorization server with multiple grant types
+   - Authorization code flow with PKCE support
+   - Client credentials flow for service-to-service authentication
+   - Access token generation, validation, and refresh
+   - Token revocation and expiration management
+   - OpenID Connect (OIDC) discovery document support
+
+2. ✅ **Multi-Factor Authentication (MFA)**
+
+   - TOTP (Time-based One-Time Password) support with QR code generation
+   - SMS-based MFA with challenge codes
+   - Email-based MFA with challenge codes
+   - Backup codes generation and verification
+   - MFA status management and configuration
+
+3. ✅ **Role-Based Access Control (RBAC)**
+
+   - Role creation and management with permissions
+   - Permission-based access control (resource:action format)
+   - User-role assignments with optional expiration
+   - Permission checking methods (has_role, has_permission, has_any_permission, has_all_permissions)
+   - Role and permission queries for identities
+
+4. ✅ **Audit Logging for Security Events**
+   - Comprehensive security event logging (authentication, authorization, role assignments, etc.)
+   - OAuth token events logging (issued, revoked)
+   - MFA events logging (enabled, disabled, verified)
+   - Security policy violation logging
+   - Query capabilities (by identity, event type, date range)
+   - Compliance-ready audit trail
+
 ## 📡 Phase 7 Roadmap – Open Digital Architecture (MDM, AI, Orchestration) ✅
 
 ### Phase 7 TMF APIs Implemented
@@ -221,6 +258,7 @@ bss-oss-rust/
 │   ├── service-orchestrator/  # Service Lifecycle Orchestrator ✅
 │   ├── resource-management/  # Resource Management (capacity, reservation, topology)
 │   ├── revenue-management/   # Revenue Management System ✅
+│   ├── security/             # Security System (OAuth 2.0/OIDC, MFA, RBAC, Audit) ✅
 │   ├── test-utils/            # Test utilities and fixtures
 │   ├── benchmarks/            # Performance benchmarks
 │   ├── utils/                 # Logger, helpers, observability
@@ -290,6 +328,17 @@ Comprehensive revenue management for charging, billing, and partner settlements.
 - Usage aggregation and rating engine with multiple rate types
 - Billing cycle management with automatic bill generation
 - Partner settlement workflows with revenue sharing
+
+#### 5. Security System ✅
+
+Enterprise-grade security system for authentication, authorization, and compliance.
+
+**Features:**
+
+- OAuth 2.0 / OIDC integration with multiple grant types and PKCE support
+- Multi-factor authentication (TOTP, SMS, Email, Backup Codes)
+- Role-based access control (RBAC) with fine-grained permissions
+- Comprehensive audit logging for security events and compliance
 
 ## 🚀 Getting Started
 
@@ -1079,6 +1128,7 @@ See examples in the [API Endpoints](#-api-endpoints) section above.
 - **`service-orchestrator`**: Service lifecycle orchestrator (workflows, dependencies, activation automation) ✅
 - **`resource-management`**: Resource management (capacity, reservation, network topology)
 - **`revenue-management`**: Revenue management system (charging, rating, billing cycles, settlements) ✅
+- **`security`**: Security system (OAuth 2.0/OIDC, MFA, RBAC, audit logging) ✅
 
 ### Infrastructure Crates
 
@@ -1185,6 +1235,14 @@ psql -U bssoss -d bssoss -c "SELECT * FROM rating_rules;"
 psql -U bssoss -d bssoss -c "SELECT * FROM billing_cycles;"
 psql -U bssoss -d bssoss -c "SELECT * FROM partner_settlements;"
 psql -U bssoss -d bssoss -c "SELECT * FROM settlement_rules;"
+
+# Query security tables
+psql -U bssoss -d bssoss -c "SELECT * FROM oauth_clients;"
+psql -U bssoss -d bssoss -c "SELECT * FROM access_tokens;"
+psql -U bssoss -d bssoss -c "SELECT * FROM mfa_configs;"
+psql -U bssoss -d bssoss -c "SELECT * FROM roles;"
+psql -U bssoss -d bssoss -c "SELECT * FROM user_roles;"
+psql -U bssoss -d bssoss -c "SELECT * FROM audit_logs;"
 ```
 
 ## 🐛 Troubleshooting

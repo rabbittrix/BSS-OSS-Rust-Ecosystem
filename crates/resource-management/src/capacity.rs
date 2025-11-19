@@ -1,7 +1,9 @@
 //! Resource Capacity Management
 
 use crate::error::{ResourceManagementError, ResourceManagementResult};
-use crate::models::{CreateResourceCapacityRequest, ResourceCapacity, UpdateResourceCapacityRequest};
+use crate::models::{
+    CreateResourceCapacityRequest, ResourceCapacity, UpdateResourceCapacityRequest,
+};
 use chrono::Utc;
 use sqlx::{Pool, Postgres, Row};
 use uuid::Uuid;
@@ -81,9 +83,10 @@ pub async fn get_capacity_by_id(
                 updated_at: row.get("updated_at"),
             })
         }
-        None => Err(ResourceManagementError::ResourceNotFound(
-            format!("Capacity with id {} not found", capacity_id),
-        )),
+        None => Err(ResourceManagementError::ResourceNotFound(format!(
+            "Capacity with id {} not found",
+            capacity_id
+        ))),
     }
 }
 
@@ -127,16 +130,16 @@ pub async fn update_resource_capacity(
 
     let total = request.total_capacity.unwrap_or(current.total_capacity);
     let used = request.used_capacity.unwrap_or(current.used_capacity);
-    let reserved = request.reserved_capacity.unwrap_or(current.reserved_capacity);
+    let reserved = request
+        .reserved_capacity
+        .unwrap_or(current.reserved_capacity);
 
     // Validate capacity
     if used + reserved > total {
-        return Err(ResourceManagementError::InsufficientCapacity(
-            format!(
-                "Used ({}) + Reserved ({}) exceeds total capacity ({})",
-                used, reserved, total
-            ),
-        ));
+        return Err(ResourceManagementError::InsufficientCapacity(format!(
+            "Used ({}) + Reserved ({}) exceeds total capacity ({})",
+            used, reserved, total
+        )));
     }
 
     let now = Utc::now();
@@ -188,12 +191,10 @@ pub async fn reserve_capacity(
         if capacity.capacity_type == capacity_type {
             let new_reserved = capacity.reserved_capacity + amount;
             if new_reserved > capacity.total_capacity - capacity.used_capacity {
-                return Err(ResourceManagementError::InsufficientCapacity(
-                    format!(
-                        "Cannot reserve {} {}: only {} available",
-                        amount, capacity.unit, capacity.available_capacity
-                    ),
-                ));
+                return Err(ResourceManagementError::InsufficientCapacity(format!(
+                    "Cannot reserve {} {}: only {} available",
+                    amount, capacity.unit, capacity.available_capacity
+                )));
             }
 
             let update_request = UpdateResourceCapacityRequest {
@@ -242,4 +243,3 @@ pub async fn release_reserved_capacity(
         capacity_type, resource_inventory_id
     )))
 }
-

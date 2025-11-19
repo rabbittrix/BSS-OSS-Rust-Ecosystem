@@ -56,10 +56,10 @@
 
 - [x] Implement TMF632 - Party Management API
 - [x] Implement TMF669 - Identity & Credential Management API
-- [ ] Add OAuth 2.0 / OIDC integration
-- [ ] Implement multi-factor authentication
-- [ ] Add role-based access control (RBAC)
-- [ ] Implement audit logging for security events
+- [x] Add OAuth 2.0 / OIDC integration
+- [x] Implement multi-factor authentication
+- [x] Add role-based access control (RBAC)
+- [x] Implement audit logging for security events
 
 ## Phase 7: Testing & Quality Assurance 🔄
 
