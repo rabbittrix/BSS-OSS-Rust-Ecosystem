@@ -91,17 +91,21 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
                 continue;
             }
             // Execute statement, providing context on failure
-            // COMMENT ON TABLE statements may fail if table doesn't exist, which is non-critical
+            // Some statements may fail if table doesn't exist, which is non-critical for IF NOT EXISTS
             let result = sqlx::query(trimmed).execute(pool).await;
             if let Err(e) = result {
-                // If it's a COMMENT statement failing due to missing table, continue
-                // This can happen if CREATE TABLE IF NOT EXISTS didn't create the table
-                // (e.g., if it already existed but was dropped, or if there was an error)
-                let is_comment = trimmed.to_uppercase().starts_with("COMMENT ON");
-                let is_table_not_found = e.to_string().contains("does not exist");
+                let error_msg = e.to_string();
+                let is_table_not_found = error_msg.contains("does not exist");
+                let upper = trimmed.to_uppercase();
 
-                if is_comment && is_table_not_found {
-                    // Non-critical error - table might not exist, skip the comment
+                // Non-critical statements that can fail if table doesn't exist:
+                // - COMMENT ON TABLE/INDEX (documentation)
+                // - CREATE INDEX IF NOT EXISTS (indexes can be recreated)
+                let is_non_critical = (upper.starts_with("COMMENT ON") && is_table_not_found)
+                    || (upper.starts_with("CREATE INDEX IF NOT EXISTS") && is_table_not_found);
+
+                if is_non_critical {
+                    // Non-critical error - table/index might not exist, skip
                     continue;
                 }
 
