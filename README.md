@@ -202,7 +202,56 @@ Comprehensive security system for enterprise-grade authentication and authorizat
    - Query capabilities (by identity, event type, date range)
    - Compliance-ready audit trail
 
-## 📡 Phase 7 Roadmap – Open Digital Architecture (MDM, AI, Orchestration) ✅
+## 🧪 Phase 7 Roadmap – Testing & Quality Assurance ✅
+
+### Phase 7 Testing & Quality Assurance Features Implemented
+
+Comprehensive testing infrastructure for quality assurance:
+
+1. ✅ **Comprehensive Unit Test Coverage (>80%)**
+
+   - Unit tests for all security modules (OAuth, MFA, RBAC, Audit)
+   - Unit tests for revenue management components
+   - Unit tests for service orchestration
+   - Test coverage tracking and reporting
+
+2. ✅ **Integration Tests for All TMF APIs**
+
+   - Integration tests for all 17 TMF APIs
+   - Database-backed integration tests
+   - API endpoint testing utilities
+
+3. ✅ **End-to-End Workflow Tests**
+
+   - Customer onboarding workflow tests
+   - Billing cycle workflow tests
+   - Service orchestration workflow tests
+
+4. ✅ **Performance Benchmarking and Optimization**
+
+   - API response time benchmarks
+   - Concurrent request handling benchmarks
+   - Database query performance benchmarks
+   - JSON serialization/deserialization benchmarks
+
+5. ✅ **Load Testing and Stress Testing**
+
+   - Load testing utilities with configurable concurrent users
+   - Stress testing with gradual user ramp-up
+   - Performance metrics collection (RPS, response times, error rates)
+
+6. ✅ **Security Vulnerability Scanning**
+
+   - Automated security audits using `cargo-audit`
+   - CI/CD integration for continuous security monitoring
+   - Dependency vulnerability tracking
+
+7. ✅ **Code Quality Metrics**
+   - Automated clippy linting with strict warnings
+   - Code formatting checks with `rustfmt`
+   - CI/CD integration for quality gates
+
+## 📡 Phase 8 Roadmap – Open Digital Architecture (MDM, AI, Orchestration) ✅
 
 ### Phase 7 TMF APIs Implemented
 
@@ -400,7 +449,31 @@ cd bss-oss-rust
    psql -U postgres -c "CREATE DATABASE bssoss;"
    ```
 
-1. **Run database migrations:**
+1. **Using Docker Compose (Recommended):**
+
+```bash
+# Start all services (PostgreSQL + Application)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f app
+
+# Stop services
+docker-compose down
+
+# Start with test database
+docker-compose --profile test up -d postgres_test
+```
+
+The Docker Compose setup includes:
+
+- **PostgreSQL** database on port `5432` (main database)
+- **PostgreSQL Test** database on port `5433` (for running tests, use `--profile test`)
+- **Application** server on port `8080` with Swagger UI
+- Automatic database migrations on startup
+- Health checks for all services
+
+1. **Manual Setup - Run database migrations:**
 
 ```bash
 psql -U bssoss -d bssoss -f migrations/001_initial_schema.sql
@@ -1070,30 +1143,195 @@ The raw OpenAPI specification is available at <http://localhost:8080/api-doc/ope
 
 ## 🧪 Testing
 
+### Test Infrastructure
+
+The project includes comprehensive testing infrastructure:
+
+- **Unit Tests**: Located in each crate's `tests/` directory
+- **Integration Tests**: Test TMF API endpoints with database
+- **End-to-End Tests**: Test complete workflows
+- **Performance Benchmarks**: Using Criterion for benchmarking
+- **Load Testing**: Utilities for load and stress testing
+- **Coverage Reporting**: Using cargo-tarpaulin for coverage analysis
+
 ### Run Tests
+
+#### Using Docker Compose (Recommended)
+
+```bash
+# Start test database
+docker-compose --profile test up -d postgres_test
+
+# Set test database URL
+export TEST_DATABASE_URL="postgresql://bssoss:bssoss123@localhost:5433/bssoss_test"
+
+# Run all tests
+cargo test --all-targets
+
+# Stop test database when done
+docker-compose --profile test down postgres_test
+```
+
+#### Local Testing
 
 ```bash
 # Run all tests
-cargo test
+cargo test --all-targets
 
 # Run tests for specific crate
-cargo test --package tmf620-catalog
+cargo test --package security
 
 # Run tests with output
-cargo test -- --nocapture
+cargo test --all-targets -- --nocapture
+
+# Run integration tests
+cargo test --test integration_tmf_apis
+
+# Run end-to-end tests
+cargo test --test e2e_workflows
+
+# Run all tests using script
+./scripts/run-all-tests.sh
+```
+
+### Test Coverage
+
+```bash
+# Install cargo-tarpaulin
+cargo install cargo-tarpaulin
+
+# Generate coverage report
+cargo tarpaulin --out Xml --out Html --output-dir coverage
+
+# View report
+open coverage/tarpaulin-report.html
+```
+
+**Coverage Target:** >80% code coverage
+
+### Performance Benchmarks
+
+```bash
+# Run benchmarks
+cargo bench --all-targets
+
+# View benchmark results
+open target/criterion/*/report/index.html
+```
+
+### Load Testing
+
+```bash
+# Using test utilities (Rust)
+cargo test --package test-utils --features load-testing
+
+# Using scripts (requires ab or wrk)
+./scripts/load-test.sh
+```
+
+### Security Auditing
+
+```bash
+# Install cargo-audit
+cargo install cargo-audit
+
+# Run security audit
+cargo audit
+
+# Or use script
+./scripts/security-audit.sh
+```
+
+### Code Quality
+
+```bash
+# Check formatting
+cargo fmt --all -- --check
+
+# Format code
+cargo fmt --all
+
+# Run clippy
+cargo clippy --all-targets --all-features -- -D warnings
 ```
 
 ### Test API Endpoints
 
-**Using Swagger UI (Recommended):**
+#### Using Swagger UI (Recommended)
 
-1. Open <http://localhost:8080/swagger-ui>
-2. Click "Try it out" on any endpoint
-3. Fill in parameters and request body
-4. Click "Execute" to test
+Swagger UI provides an interactive interface to test all TMF APIs:
 
-**Using cURL:**
+1. **Start the application:**
+
+   ```bash
+   # Using Docker Compose
+   docker-compose up -d
+
+   # Or locally
+   cargo run --bin bss-oss-rust
+   ```
+
+2. **Access Swagger UI:**
+
+   - Open <http://localhost:8080/swagger-ui> in your browser
+   - All 17 TMF APIs are available and documented
+
+3. **Test Endpoints:**
+
+   - Click on any API endpoint to expand it
+   - Click "Try it out" to enable testing
+   - Fill in required parameters and request body (JSON)
+   - Click "Execute" to send the request
+   - View the response, status code, and headers
+
+4. **Authentication (if required):**
+
+   - Click the "Authorize" button at the top right
+   - Enter your JWT token: `Bearer <your-token>`
+   - Click "Authorize" to save
+   - All subsequent requests will include the authentication header
+
+5. **Test All APIs:**
+
+   - **TMF620**: Product Catalog Management (catalogs, product offerings)
+   - **TMF622**: Product Ordering (create, list, get orders)
+   - **TMF637**: Product Inventory (inventory management)
+   - **TMF629**: Customer Management (customers, contact info)
+   - **TMF678**: Customer Bill Management (bills, billing structures)
+   - **TMF679**: Customer Usage Management (usage records, CDRs)
+   - **TMF688**: Appointment Management (scheduling, technician visits)
+   - **TMF641**: Service Order Management (service-level orders)
+   - **TMF638**: Service Inventory (provisioned services)
+   - **TMF640**: Service Activation (service provisioning)
+   - **TMF702**: Resource Activation (network element provisioning)
+   - **TMF639**: Resource Inventory (network resources)
+   - **TMF645**: Resource Order Management (resource orders)
+   - **TMF635**: Usage Management (usage tracking, queries)
+   - **TMF668**: Party Role Management (parties, organizations, roles)
+   - **TMF632**: Party Management (individuals, organizations)
+   - **TMF669**: Identity & Credential Management (OAuth, JWT)
+   - **TMF642**: Alarm Management (network alarms, NOC workflows)
+   - **TMF656**: Slice Management (5G network slicing)
+
+6. **View OpenAPI Specification:**
+   - Access the raw OpenAPI JSON at <http://localhost:8080/api-doc/openapi.json>
+   - This can be imported into Postman, Insomnia, or other API clients
+
+#### Using cURL
+
 See examples in the [API Endpoints](#-api-endpoints) section above.
+
+#### Running Tests via Swagger
+
+You can use Swagger UI to manually test all endpoints and verify:
+
+- Request/response formats
+- Error handling
+- Authentication flows
+- Data validation
+- API documentation accuracy
+
+**For detailed testing documentation, see [docs/TESTING.md](docs/TESTING.md)**
 
 ## 📦 Workspace Crates
 
