@@ -23,28 +23,30 @@ This project aims to revolutionize the BSS/OSS landscape by providing:
 
 ### Current Version: 0.2.0
 
-## 🧭 Phase 2 Roadmap – Customer & User Domain (High Priority) 🔄
+**Phase 2 APIs Completed:** 8. ✅ Implement **TMF629 - Customer Management API** 9. ✅ Implement **TMF678 - Customer Bill Management API** 10. ✅ Implement **TMF679 - Customer Usage Management API** 11. ✅ Implement **TMF688 - Appointment Management API**
 
-### Next Strategic TMF APIs to Implement
+## 🧭 Phase 2 Roadmap – Customer & User Domain (High Priority) ✅
+
+### Strategic TMF APIs Implemented
 
 These are critical for any commercial BSS:
 
-1. 🔄 **TMF629 – Customer Management**
+1. ✅ **TMF629 – Customer Management**
 
    - Manages customer profiles and their contact information
    - **Why**: Core for CRM, KYC, account management, onboarding
 
-2. 🔄 **TMF678 – Customer Bill Management**
+2. ✅ **TMF678 – Customer Bill Management**
 
    - Retrieves bills and billing structures
    - **Why**: Required for customer portals and self-care
 
-3. 🔄 **TMF679 – Customer Usage Management**
+3. ✅ **TMF679 – Customer Usage Management**
 
    - Handles CDRs, usage records, and consumption
    - **Why**: Essential for 5G, IoT, prepaid, and analytics
 
-4. 🔄 **TMF688 – Appointment Management**
+4. ✅ **TMF688 – Appointment Management**
    - For scheduling technician visits, installations, etc.
    - **Why**: Critical for field operations and order fulfillment
 
@@ -55,6 +57,82 @@ These are critical for any commercial BSS:
 - 🔄 Add rate limiting and request validation
 - 🔄 Enhanced error handling and validation
 - 🔄 API versioning and backward compatibility
+
+## 🔥 Phase 3 Roadmap – Service Lifecycle (OSS Core) ✅
+
+### Phase 3 TMF APIs Implemented
+
+These APIs manage the technical services, not the commercial products:
+
+1. ✅ **TMF641 – Service Order Management**
+
+   - Equivalent to TMF622 but for network/service-level
+   - A customer order triggers one or more service orders
+   - **Why**: You cannot complete fulfillment without this
+
+2. ✅ **TMF638 – Service Inventory**
+
+   - Manages provisioned services and service instances
+   - **Why**: You need this to track active network-level services
+
+3. ✅ **TMF640 – Service Activation & Configuration**
+
+   - Handles provisioning actions on network elements
+   - **Why**: Connects BSS → OSS → Network
+
+4. ✅ **TMF702 – Resource Activation & Configuration**
+   - Low-level provisioning of physical/virtual network elements
+   - **Why**: Required for automated orchestration
+
+## ⚡ Phase 4 Roadmap – Resource Domain (Network & Infrastructure) ✅
+
+### Phase 4 TMF APIs Implemented
+
+These APIs manage network resources and infrastructure:
+
+1. ✅ **TMF639 – Resource Inventory**
+
+   - Tracks physical and virtual network resources
+   - **Why**: Needed for network planning, provisioning, 5G slicing
+
+2. ✅ **TMF645 – Resource Order Management**
+   - Like TMF622 & TMF641, but for network resources
+   - **Why**: Service activation depends on resource orders
+
+## 💰 Phase 5 Roadmap – Revenue Management (Charging & Billing) ✅
+
+### Phase 5 TMF APIs Implemented
+
+These APIs manage revenue, charging, and billing:
+
+1. ✅ **TMF678 – Billing Management** (Already implemented in Phase 2)
+
+   - Retrieves bills and billing structures
+   - **Why**: Required for customer portals and self-care
+
+2. ✅ **TMF635 – Usage Management**
+
+   - Tracks and queries usage (CDRs, event consumption)
+   - **Why**: Needed for OCS/OFCS (5G charging systems)
+
+3. ✅ **TMF668 – Party Role Management**
+   - Manages parties, organizations, roles, partners
+   - **Why**: Required for partner settlements and ecosystem play
+
+## 🔒 Phase 6 Roadmap – Security, Party & Identity ✅
+
+### Phase 6 TMF APIs Implemented
+
+These APIs manage security, party management, and identity:
+
+1. ✅ **TMF632 – Party Management**
+
+   - Manages individuals, organizations, account-level attributes
+   - **Why**: KYC & business partners depend on it
+
+2. ✅ **TMF669 – Identity & Credential Management**
+   - Handles digital identities, credentials, OAuth/JWT integration
+   - **Why**: Your system becomes enterprise-ready
 
 ## 🏗️ Architecture
 
@@ -68,10 +146,20 @@ bss-oss-rust/
 │   │   ├── tmf620_catalog/    # TMF620 Product Catalog API ✅
 │   │   ├── tmf622_ordering/   # TMF622 Product Ordering API ✅
 │   │   ├── tmf637_inventory/  # TMF637 Product Inventory API ✅
-│   │   ├── tmf629_customer/   # TMF629 Customer Management API 🔄 (Planned)
-│   │   ├── tmf678_billing/    # TMF678 Customer Bill Management API 🔄 (Planned)
-│   │   ├── tmf679_usage/      # TMF679 Customer Usage Management API 🔄 (Planned)
-│   │   └── tmf688_appointment/# TMF688 Appointment Management API 🔄 (Planned)
+│   │   ├── tmf629_customer/   # TMF629 Customer Management API ✅
+│   │   ├── tmf678_billing/    # TMF678 Customer Bill Management API ✅
+│   │   ├── tmf679_usage/      # TMF679 Customer Usage Management API ✅
+│   │   ├── tmf688_appointment/# TMF688 Appointment Management API ✅
+│   │   ├── tmf641_service_order/ # TMF641 Service Order Management API ✅
+│   │   ├── tmf638_service_inventory/ # TMF638 Service Inventory Management API ✅
+│   │   ├── tmf640_service_activation/ # TMF640 Service Activation & Configuration API ✅
+│   │   ├── tmf702_resource_activation/ # TMF702 Resource Activation & Configuration API ✅
+│   │   ├── tmf639_resource_inventory/ # TMF639 Resource Inventory Management API ✅
+│   │   ├── tmf645_resource_order/ # TMF645 Resource Order Management API ✅
+│   │   ├── tmf635_usage/ # TMF635 Usage Management API ✅
+│   │   ├── tmf668_party_role/ # TMF668 Party Role Management API ✅
+│   │   ├── tmf632_party/ # TMF632 Party Management API ✅
+│   │   └── tmf669_identity/ # TMF669 Identity & Credential Management API ✅
 │   ├── pcm-engine/            # Product Catalog Engine
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
@@ -89,13 +177,20 @@ The most strategic choice for interoperability. Adherence to industry standards 
 - **TMF620** - Product Catalog Management API ✅
 - **TMF622** - Product Ordering Management API ✅
 - **TMF637** - Product Inventory Management API ✅
-
-**Planned for Phase 2:**
-
-- **TMF629** - Customer Management API 🔄
-- **TMF678** - Customer Bill Management API 🔄
-- **TMF679** - Customer Usage Management API 🔄
-- **TMF688** - Appointment Management API 🔄
+- **TMF629** - Customer Management API ✅
+- **TMF678** - Customer Bill Management API ✅
+- **TMF679** - Customer Usage Management API ✅
+- **TMF688** - Appointment Management API ✅
+- **TMF641** - Service Order Management API ✅
+- **TMF638** - Service Inventory Management API ✅
+- **TMF640** - Service Activation & Configuration API ✅
+- **TMF702** - Resource Activation & Configuration API ✅
+- **TMF639** - Resource Inventory Management API ✅
+- **TMF645** - Resource Order Management API ✅
+- **TMF635** - Usage Management API ✅
+- **TMF668** - Party Role Management API ✅
+- **TMF632** - Party Management API ✅
+- **TMF669** - Identity & Credential Management API ✅
 
 #### 2. Product Catalog Engine (PCM) Framework
 
@@ -291,6 +386,86 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 - **GET** `/productInventory/{id}` - Get product inventory by ID (UUID)
 - **POST** `/productInventory` - Create a new product inventory
 
+### TMF629 Customer Management API
+
+**Base URL:** `/tmf-api/customerManagement/v4`
+
+#### Customers
+
+- **GET** `/customer` - List all customers
+- **GET** `/customer/{id}` - Get customer by ID (UUID)
+- **POST** `/customer` - Create a new customer
+
+### TMF678 Customer Bill Management API
+
+**Base URL:** `/tmf-api/customerBillManagement/v4`
+
+#### Customer Bills
+
+- **GET** `/customerBill` - List all customer bills
+- **GET** `/customerBill/{id}` - Get customer bill by ID (UUID)
+- **POST** `/customerBill` - Create a new customer bill
+
+### TMF679 Customer Usage Management API
+
+**Base URL:** `/tmf-api/customerUsageManagement/v4`
+
+#### Customer Usages
+
+- **GET** `/customerUsage` - List all customer usage records
+- **GET** `/customerUsage/{id}` - Get customer usage by ID (UUID)
+- **POST** `/customerUsage` - Create a new customer usage record
+
+### TMF688 Appointment Management API
+
+**Base URL:** `/tmf-api/appointmentManagement/v4`
+
+#### Appointments
+
+- **GET** `/appointment` - List all appointments
+- **GET** `/appointment/{id}` - Get appointment by ID (UUID)
+- **POST** `/appointment` - Create a new appointment
+
+### TMF641 Service Order Management API
+
+**Base URL:** `/tmf-api/serviceOrderingManagement/v4`
+
+#### Service Orders
+
+- **GET** `/serviceOrder` - List all service orders
+- **GET** `/serviceOrder/{id}` - Get service order by ID (UUID)
+- **POST** `/serviceOrder` - Create a new service order
+
+### TMF638 Service Inventory Management API
+
+**Base URL:** `/tmf-api/serviceInventoryManagement/v4`
+
+#### Service Inventories
+
+- **GET** `/serviceInventory` - List all service inventories
+- **GET** `/serviceInventory/{id}` - Get service inventory by ID (UUID)
+- **POST** `/serviceInventory` - Create a new service inventory
+
+### TMF640 Service Activation & Configuration API
+
+**Base URL:** `/tmf-api/serviceActivationAndConfiguration/v4`
+
+#### Service Activations
+
+- **GET** `/serviceActivation` - List all service activations
+- **GET** `/serviceActivation/{id}` - Get service activation by ID (UUID)
+- **POST** `/serviceActivation` - Create a new service activation
+
+### TMF702 Resource Activation & Configuration API
+
+**Base URL:** `/tmf-api/resourceActivationAndConfiguration/v4`
+
+#### Resource Activations
+
+- **GET** `/resourceActivation` - List all resource activations
+- **GET** `/resourceActivation/{id}` - Get resource activation by ID (UUID)
+- **POST** `/resourceActivation` - Create a new resource activation
+
 ### Example Requests
 
 **Create a catalog:**
@@ -363,6 +538,318 @@ curl -X POST http://localhost:8080/tmf-api/productInventoryManagement/v4/product
   }'
 ```
 
+**Create a customer (TMF629):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/customerManagement/v4/customer \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "description": "Premium customer",
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "contact_medium": [
+      {
+        "medium_type": "email",
+        "preferred": true,
+        "value": "john.doe@example.com",
+        "contact_type": "primary"
+      }
+    ]
+  }'
+```
+
+**Create a customer bill (TMF678):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/customerBillManagement/v4/customerBill \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Bill-2025-01",
+    "description": "Monthly bill for January 2025",
+    "version": "1.0.0",
+    "bill_date": "2025-01-31T00:00:00Z",
+    "due_date": "2025-02-15T00:00:00Z",
+    "total_amount": {
+      "value": 99.99,
+      "unit": "USD"
+    },
+    "tax_included": true,
+    "bill_item": [
+      {
+        "description": "5G Premium Plan - Monthly",
+        "amount": {
+          "value": 99.99,
+          "unit": "USD"
+        },
+        "quantity": 1
+      }
+    ]
+  }'
+```
+
+**Create a customer usage record (TMF679):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/customerUsageManagement/v4/customerUsage \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Usage-2025-01-15",
+    "description": "Data usage for January 15, 2025",
+    "version": "1.0.0",
+    "usage_date": "2025-01-15T12:00:00Z",
+    "start_date": "2025-01-15T00:00:00Z",
+    "end_date": "2025-01-15T23:59:59Z",
+    "usage_type": "DATA",
+    "amount": 1024.5,
+    "unit": "MB"
+  }'
+```
+
+**Create an appointment (TMF688):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/appointmentManagement/v4/appointment \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Installation Appointment",
+    "description": "5G router installation",
+    "version": "1.0.0",
+    "appointment_date": "2025-02-01T10:00:00Z",
+    "duration": 120,
+    "appointment_type": "INSTALLATION",
+    "related_party": [
+      {
+        "name": "John Doe",
+        "role": "CUSTOMER"
+      }
+    ],
+    "contact_medium": [
+      {
+        "medium_type": "address",
+        "value": "123 Main St, City, State 12345"
+      }
+    ]
+  }'
+```
+
+**Create a service order (TMF641):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/serviceOrderingManagement/v4/serviceOrder \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Service Order-001",
+    "description": "5G service provisioning order",
+    "version": "1.0.0",
+    "priority": "HIGH",
+    "external_id": "PROD-ORDER-001",
+    "order_item": [
+      {
+        "action": "ADD",
+        "service_specification_id": "service-spec-uuid",
+        "quantity": 1
+      }
+    ]
+  }'
+```
+
+**Create a service inventory (TMF638):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/serviceInventoryManagement/v4/serviceInventory \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Service-Instance-001",
+    "description": "Active 5G service instance",
+    "version": "1.0.0",
+    "service_specification_id": "service-spec-uuid",
+    "service_id": "service-uuid"
+  }'
+```
+
+**Create a service activation (TMF640):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/serviceActivationAndConfiguration/v4/serviceActivation \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Service Activation-001",
+    "description": "Activate 5G service on network",
+    "version": "1.0.0",
+    "service_id": "service-uuid",
+    "service_order_id": "service-order-uuid",
+    "configuration": [
+      {
+        "name": "bandwidth",
+        "value": "1000",
+        "description": "Bandwidth in Mbps"
+      }
+    ]
+  }'
+```
+
+**Create a resource activation (TMF702):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/resourceActivationAndConfiguration/v4/resourceActivation \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Resource Activation-001",
+    "description": "Activate network resource",
+    "version": "1.0.0",
+    "resource_id": "resource-uuid",
+    "service_activation_id": "service-activation-uuid",
+    "configuration": [
+      {
+        "name": "port",
+        "value": "eth0",
+        "description": "Network port"
+      }
+    ]
+  }'
+```
+
+**Create a resource inventory (TMF639):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/resourceInventoryManagement/v4/resourceInventory \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Network-Resource-001",
+    "description": "5G base station resource",
+    "version": "1.0.0",
+    "resource_type": "PHYSICAL",
+    "resource_specification_id": "resource-spec-uuid"
+  }'
+```
+
+**Create a resource order (TMF645):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/resourceOrderingManagement/v4/resourceOrder \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Resource Order-001",
+    "description": "Network resource provisioning order",
+    "version": "1.0.0",
+    "priority": "HIGH",
+    "external_id": "SERVICE-ORDER-001",
+    "order_item": [
+      {
+        "action": "ADD",
+        "resource_specification_id": "resource-spec-uuid",
+        "quantity": 1
+      }
+    ]
+  }'
+```
+
+**Create a usage record (TMF635):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/usageManagement/v4/usage \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Usage-2025-01-15",
+    "description": "Data usage record",
+    "version": "1.0.0",
+    "usage_type": "DATA",
+    "usage_date": "2025-01-15T12:00:00Z",
+    "start_date": "2025-01-15T00:00:00Z",
+    "end_date": "2025-01-15T23:59:59Z",
+    "amount": 1024.5,
+    "unit": "MB"
+  }'
+```
+
+**Create a party role (TMF668):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/partyRoleManagement/v4/partyRole \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Partner-ABC",
+    "description": "Reseller partner",
+    "version": "1.0.0",
+    "role": "RESELLER",
+    "party_type": "ORGANIZATION",
+    "engagement_date": "2025-01-01T00:00:00Z",
+    "contact_medium": [
+      {
+        "medium_type": "email",
+        "value": "partner@example.com",
+        "preferred": true
+      }
+    ]
+  }'
+```
+
+**Create a party (TMF632):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/partyManagement/v4/party \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "description": "Individual customer",
+    "version": "1.0.0",
+    "party_type": "INDIVIDUAL",
+    "registration_date": "2025-01-01T00:00:00Z",
+    "contact_medium": [
+      {
+        "medium_type": "email",
+        "value": "john.doe@example.com",
+        "preferred": true
+      }
+    ],
+    "characteristic": [
+      {
+        "name": "taxId",
+        "value": "123-45-6789",
+        "value_type": "string"
+      }
+    ]
+  }'
+```
+
+**Create an identity (TMF669):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/identityManagement/v4/identity \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "user-identity-001",
+    "description": "User identity for API access",
+    "version": "1.0.0",
+    "identity_type": "USER",
+    "party_id": "party-uuid",
+    "oauth_client_id": "client-123",
+    "jwt_issuer": "https://api.example.com",
+    "expiration_date": "2026-01-01T00:00:00Z",
+    "credential": [
+      {
+        "credential_type": "JWT",
+        "expiration_date": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }'
+```
+
 ## 📚 API Documentation
 
 ### Swagger UI
@@ -414,6 +901,20 @@ See examples in the [API Endpoints](#-api-endpoints) section above.
 - **`tmf620-catalog`**: TMF620 Product Catalog Management API implementation
 - **`tmf622-ordering`**: TMF622 Product Ordering Management API implementation
 - **`tmf637-inventory`**: TMF637 Product Inventory Management API implementation
+- **`tmf629-customer`**: TMF629 Customer Management API implementation
+- **`tmf678-billing`**: TMF678 Customer Bill Management API implementation
+- **`tmf679-usage`**: TMF679 Customer Usage Management API implementation
+- **`tmf688-appointment`**: TMF688 Appointment Management API implementation
+- **`tmf641-service-order`**: TMF641 Service Order Management API implementation
+- **`tmf638-service-inventory`**: TMF638 Service Inventory Management API implementation
+- **`tmf640-service-activation`**: TMF640 Service Activation & Configuration API implementation
+- **`tmf702-resource-activation`**: TMF702 Resource Activation & Configuration API implementation
+- **`tmf639-resource-inventory`**: TMF639 Resource Inventory Management API implementation
+- **`tmf645-resource-order`**: TMF645 Resource Order Management API implementation
+- **`tmf635-usage`**: TMF635 Usage Management API implementation
+- **`tmf668-party-role`**: TMF668 Party Role Management API implementation
+- **`tmf632-party`**: TMF632 Party Management API implementation
+- **`tmf669-identity`**: TMF669 Identity & Credential Management API implementation
 - **`pcm-engine`**: Product Catalog Engine framework (pricing, eligibility, bundling)
 - **`bss-oss-utils`**: Common utilities, logger, and helpers
 - **`bss-oss-server`**: Main application server (binary)
@@ -459,6 +960,48 @@ psql -U bssoss -d bssoss -c "SELECT * FROM product_orders;"
 
 # Query product inventories (TMF637)
 psql -U bssoss -d bssoss -c "SELECT * FROM product_inventories;"
+
+# Query customers (TMF629)
+psql -U bssoss -d bssoss -c "SELECT * FROM customers;"
+
+# Query customer bills (TMF678)
+psql -U bssoss -d bssoss -c "SELECT * FROM customer_bills;"
+
+# Query customer usages (TMF679)
+psql -U bssoss -d bssoss -c "SELECT * FROM customer_usages;"
+
+# Query appointments (TMF688)
+psql -U bssoss -d bssoss -c "SELECT * FROM appointments;"
+
+# Query service orders (TMF641)
+psql -U bssoss -d bssoss -c "SELECT * FROM service_orders;"
+
+# Query service inventories (TMF638)
+psql -U bssoss -d bssoss -c "SELECT * FROM service_inventories;"
+
+# Query service activations (TMF640)
+psql -U bssoss -d bssoss -c "SELECT * FROM service_activations;"
+
+# Query resource activations (TMF702)
+psql -U bssoss -d bssoss -c "SELECT * FROM resource_activations;"
+
+# Query resource inventories (TMF639)
+psql -U bssoss -d bssoss -c "SELECT * FROM resource_inventories;"
+
+# Query resource orders (TMF645)
+psql -U bssoss -d bssoss -c "SELECT * FROM resource_orders;"
+
+# Query usage records (TMF635)
+psql -U bssoss -d bssoss -c "SELECT * FROM usages;"
+
+# Query party roles (TMF668)
+psql -U bssoss -d bssoss -c "SELECT * FROM party_roles;"
+
+# Query parties (TMF632)
+psql -U bssoss -d bssoss -c "SELECT * FROM parties;"
+
+# Query identities (TMF669)
+psql -U bssoss -d bssoss -c "SELECT * FROM identities;"
 ```
 
 ## 🐛 Troubleshooting

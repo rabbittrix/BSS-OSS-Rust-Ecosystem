@@ -11,7 +11,24 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       # Mount migrations directory - PostgreSQL will run all .sql files in alphabetical order
-      # Migration order: 001_initial_schema.sql (TMF620), 002_tmf622_ordering_schema.sql, 003_tmf637_inventory_schema.sql
+      # Migration order:
+      #   001_initial_schema.sql (TMF620)
+      #   002_tmf622_ordering_schema.sql (TMF622)
+      #   003_tmf637_inventory_schema.sql (TMF637)
+      #   004_tmf629_customer_schema.sql (TMF629)
+      #   005_tmf678_billing_schema.sql (TMF678)
+      #   006_tmf679_usage_schema.sql (TMF679)
+      #   007_tmf688_appointment_schema.sql (TMF688)
+      #   008_tmf641_service_order_schema.sql (TMF641)
+      #   009_tmf638_service_inventory_schema.sql (TMF638)
+      #   010_tmf640_service_activation_schema.sql (TMF640)
+      #   011_tmf702_resource_activation_schema.sql (TMF702)
+      #   012_tmf639_resource_inventory_schema.sql (TMF639)
+      #   013_tmf645_resource_order_schema.sql (TMF645)
+      #   014_tmf635_usage_schema.sql (TMF635)
+      #   015_tmf668_party_role_schema.sql (TMF668)
+      #   016_tmf632_party_schema.sql (TMF632)
+      #   017_tmf669_identity_schema.sql (TMF669)
       - ./migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bssoss -d bssoss"]

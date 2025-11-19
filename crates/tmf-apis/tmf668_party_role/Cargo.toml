@@ -1,0 +1,24 @@
+[package]
+name = "tmf668-party-role"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license.workspace = true
+description = "TM Forum TMF668 Party Role Management API implementation in Rust"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+tmf-apis-core = { path = "../core", version = "0.2.0" }
+actix-web.workspace = true
+sqlx.workspace = true
+jsonwebtoken.workspace = true
+utoipa.workspace = true
+utoipa-swagger-ui.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+tokio.workspace = true
+log.workspace = true
+env_logger.workspace = true

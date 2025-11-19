@@ -7,6 +7,7 @@ license.workspace = true
 description = "BSS/OSS Rust ecosystem server application"
 repository.workspace = true
 documentation.workspace = true
+readme = "README.md"
 
 [[bin]]
 name = "bss-oss-rust"
@@ -21,6 +22,16 @@ tmf629-customer = { path = "../tmf-apis/tmf629_customer", version = "0.2.0" }
 tmf678-billing = { path = "../tmf-apis/tmf678_billing", version = "0.2.0" }
 tmf679-usage = { path = "../tmf-apis/tmf679_usage", version = "0.2.0" }
 tmf688-appointment = { path = "../tmf-apis/tmf688_appointment", version = "0.2.0" }
+tmf641-service-order = { path = "../tmf-apis/tmf641_service_order", version = "0.2.0" }
+tmf638-service-inventory = { path = "../tmf-apis/tmf638_service_inventory", version = "0.2.0" }
+tmf640-service-activation = { path = "../tmf-apis/tmf640_service_activation", version = "0.2.0" }
+tmf702-resource-activation = { path = "../tmf-apis/tmf702_resource_activation", version = "0.2.0" }
+tmf639-resource-inventory = { path = "../tmf-apis/tmf639_resource_inventory", version = "0.2.0" }
+tmf645-resource-order = { path = "../tmf-apis/tmf645_resource_order", version = "0.2.0" }
+tmf635-usage = { path = "../tmf-apis/tmf635_usage", version = "0.2.0" }
+tmf668-party-role = { path = "../tmf-apis/tmf668_party_role", version = "0.2.0" }
+tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.2.0" }
+tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.2.0" }
 bss-oss-utils = { path = "../utils", version = "0.2.0" }
 actix-web.workspace = true
 utoipa.workspace = true
