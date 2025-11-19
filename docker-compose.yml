@@ -29,6 +29,8 @@ services:
       #   015_tmf668_party_role_schema.sql (TMF668)
       #   016_tmf632_party_schema.sql (TMF632)
       #   017_tmf669_identity_schema.sql (TMF669)
+      #   018_tmf642_alarm_schema.sql (TMF642)
+      #   019_tmf656_slice_schema.sql (TMF656)
       - ./migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bssoss -d bssoss"]

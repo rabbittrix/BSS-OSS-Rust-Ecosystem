@@ -58,11 +58,20 @@ use tmf641_service_order::models::{
     ServiceOrderState, ServiceRef as Tmf641ServiceRef,
     ServiceSpecificationRef as Tmf641ServiceSpecificationRef,
 };
+use tmf642_alarm::models::{
+    Alarm, AlarmSeverity, AlarmState, AlarmType, CreateAlarmRequest,
+    ResourceRef as Tmf642ResourceRef, UpdateAlarmRequest,
+};
 use tmf645_resource_order::models::{
     CreateRelatedPartyRequest as Tmf645CreateRelatedPartyRequest, CreateResourceOrderItemRequest,
     CreateResourceOrderRequest, RelatedParty as Tmf645RelatedParty, ResourceOrder,
     ResourceOrderItem, ResourceOrderState, ResourceRef as Tmf645ResourceRef,
     ResourceSpecificationRef as Tmf645ResourceSpecificationRef,
+};
+use tmf656_slice::models::{
+    CreateNetworkFunctionRefRequest, CreateNetworkSliceRequest, CreateSLAParametersRequest,
+    NetworkFunctionRef, NetworkSlice, SLAParameters, SliceState, SliceType,
+    UpdateNetworkSliceRequest,
 };
 use tmf668_party_role::models::{
     ContactMedium as Tmf668ContactMedium,
@@ -172,6 +181,18 @@ use utoipa_swagger_ui::SwaggerUi;
         tmf669_identity::handlers::get_identities,
         tmf669_identity::handlers::get_identity_by_id,
         tmf669_identity::handlers::create_identity,
+        // TMF642
+        tmf642_alarm::handlers::get_alarms,
+        tmf642_alarm::handlers::get_alarm_by_id,
+        tmf642_alarm::handlers::create_alarm,
+        tmf642_alarm::handlers::update_alarm,
+        tmf642_alarm::handlers::delete_alarm,
+        // TMF656
+        tmf656_slice::handlers::get_network_slices,
+        tmf656_slice::handlers::get_network_slice_by_id,
+        tmf656_slice::handlers::create_network_slice,
+        tmf656_slice::handlers::update_network_slice,
+        tmf656_slice::handlers::delete_network_slice,
     ),
     components(schemas(
         // TMF620
@@ -324,6 +345,24 @@ use utoipa_swagger_ui::SwaggerUi;
         CreateCredentialRequest,
         CredentialType,
         Tmf669PartyRef,
+        // TMF642
+        Alarm,
+        CreateAlarmRequest,
+        UpdateAlarmRequest,
+        AlarmState,
+        AlarmSeverity,
+        AlarmType,
+        Tmf642ResourceRef,
+        // TMF656
+        NetworkSlice,
+        CreateNetworkSliceRequest,
+        UpdateNetworkSliceRequest,
+        SliceState,
+        SliceType,
+        SLAParameters,
+        CreateSLAParametersRequest,
+        NetworkFunctionRef,
+        CreateNetworkFunctionRefRequest,
         // Common
         BaseEntity,
         LifecycleStatus,
@@ -346,11 +385,13 @@ use utoipa_swagger_ui::SwaggerUi;
         (name = "TMF635", description = "Usage Management API"),
         (name = "TMF668", description = "Party Role Management API"),
         (name = "TMF632", description = "Party Management API"),
-        (name = "TMF669", description = "Identity & Credential Management API")
+        (name = "TMF669", description = "Identity & Credential Management API"),
+        (name = "TMF642", description = "Alarm Management API"),
+        (name = "TMF656", description = "Slice Management API")
     ),
     info(
         title = "BSS/OSS Rust - TM Forum Open APIs",
-        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF679, TMF688, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669)",
+        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF679, TMF688, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656)",
         version = "0.2.0",
         contact(
             name = "Roberto de Souza",
@@ -406,6 +447,8 @@ async fn main() -> std::io::Result<()> {
     log::info!("   - TMF668: Party Role Management");
     log::info!("   - TMF632: Party Management");
     log::info!("   - TMF669: Identity & Credential Management");
+    log::info!("   - TMF642: Alarm Management");
+    log::info!("   - TMF656: Slice Management");
     log::info!(
         "📚 Swagger UI will be available at http://{}:{}/swagger-ui",
         host,
@@ -438,6 +481,8 @@ async fn main() -> std::io::Result<()> {
             .configure(tmf668_party_role::api::configure_routes)
             .configure(tmf632_party::api::configure_routes)
             .configure(tmf669_identity::api::configure_routes)
+            .configure(tmf642_alarm::api::configure_routes)
+            .configure(tmf656_slice::api::configure_routes)
     })
     .bind((host.as_str(), port))?
     .run()

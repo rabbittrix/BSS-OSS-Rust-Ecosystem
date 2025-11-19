@@ -134,6 +134,26 @@ These APIs manage security, party management, and identity:
    - Handles digital identities, credentials, OAuth/JWT integration
    - **Why**: Your system becomes enterprise-ready
 
+## 📡 Phase 7 Roadmap – Open Digital Architecture (MDM, AI, Orchestration) ✅
+
+### Phase 7 TMF APIs Implemented
+
+These APIs manage alarms, network slicing, and orchestration:
+
+1. ✅ **TMF702 – Resource Activation & Configuration** (Already implemented in Phase 3)
+
+   - Low-level provisioning of physical/virtual network elements
+   - **Why**: Required for automated orchestration
+
+2. ✅ **TMF642 – Alarm Management**
+
+   - For network alarms, NOC workflows
+   - **Why**: Critical for network operations and monitoring
+
+3. ✅ **TMF656 – Slice Management (5G)**
+   - Required for new 5G/FTTH products
+   - **Why**: Essential for 5G network slicing and service differentiation
+
 ## 🏗️ Architecture
 
 ### Workspace Structure
@@ -159,7 +179,9 @@ bss-oss-rust/
 │   │   ├── tmf635_usage/ # TMF635 Usage Management API ✅
 │   │   ├── tmf668_party_role/ # TMF668 Party Role Management API ✅
 │   │   ├── tmf632_party/ # TMF632 Party Management API ✅
-│   │   └── tmf669_identity/ # TMF669 Identity & Credential Management API ✅
+│   │   ├── tmf669_identity/ # TMF669 Identity & Credential Management API ✅
+│   │   ├── tmf642_alarm/ # TMF642 Alarm Management API ✅
+│   │   └── tmf656_slice/ # TMF656 Slice Management API ✅
 │   ├── pcm-engine/            # Product Catalog Engine
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
@@ -191,6 +213,8 @@ The most strategic choice for interoperability. Adherence to industry standards 
 - **TMF668** - Party Role Management API ✅
 - **TMF632** - Party Management API ✅
 - **TMF669** - Identity & Credential Management API ✅
+- **TMF642** - Alarm Management API ✅
+- **TMF656** - Slice Management API ✅
 
 #### 2. Product Catalog Engine (PCM) Framework
 
@@ -465,6 +489,30 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 - **GET** `/resourceActivation` - List all resource activations
 - **GET** `/resourceActivation/{id}` - Get resource activation by ID (UUID)
 - **POST** `/resourceActivation` - Create a new resource activation
+
+### TMF642 Alarm Management API
+
+**Base URL:** `/tmf-api/alarmManagement/v4`
+
+#### Alarms
+
+- **GET** `/alarm` - List all alarms
+- **GET** `/alarm/{id}` - Get alarm by ID (UUID)
+- **POST** `/alarm` - Create a new alarm
+- **PATCH** `/alarm/{id}` - Update an alarm (state, acknowledged_time, cleared_time)
+- **DELETE** `/alarm/{id}` - Delete an alarm
+
+### TMF656 Slice Management API
+
+**Base URL:** `/tmf-api/sliceManagement/v4`
+
+#### Network Slices
+
+- **GET** `/networkSlice` - List all network slices
+- **GET** `/networkSlice/{id}` - Get network slice by ID (UUID)
+- **POST** `/networkSlice` - Create a new network slice
+- **PATCH** `/networkSlice/{id}` - Update a network slice (state, activation_date, termination_date)
+- **DELETE** `/networkSlice/{id}` - Delete a network slice
 
 ### Example Requests
 
@@ -850,6 +898,45 @@ curl -X POST http://localhost:8080/tmf-api/identityManagement/v4/identity \
   }'
 ```
 
+**Create an alarm (TMF642):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/alarmManagement/v4/alarm \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Network Interface Down",
+    "description": "Network interface eth0 is down",
+    "version": "1.0.0",
+    "severity": "CRITICAL",
+    "alarm_type": "COMMUNICATIONS_ALARM",
+    "source_resource_id": "resource-uuid",
+    "raised_time": "2025-01-19T10:00:00Z",
+    "alarm_details": "Interface eth0 on router-01 is down"
+  }'
+```
+
+**Create a network slice (TMF656):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/sliceManagement/v4/networkSlice \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "5G-eMBB-Slice-001",
+    "description": "Enhanced Mobile Broadband slice for high-speed data",
+    "version": "1.0.0",
+    "slice_type": "ENHANCED_MOBILE_BROADBAND",
+    "sla_parameters": {
+      "max_latency_ms": 10,
+      "min_throughput_mbps": 1000,
+      "max_devices": 10000,
+      "coverage_area": "Metropolitan Area"
+    },
+    "activation_date": "2025-01-20T00:00:00Z"
+  }'
+```
+
 ## 📚 API Documentation
 
 ### Swagger UI
@@ -915,6 +1002,8 @@ See examples in the [API Endpoints](#-api-endpoints) section above.
 - **`tmf668-party-role`**: TMF668 Party Role Management API implementation
 - **`tmf632-party`**: TMF632 Party Management API implementation
 - **`tmf669-identity`**: TMF669 Identity & Credential Management API implementation
+- **`tmf642-alarm`**: TMF642 Alarm Management API implementation
+- **`tmf656-slice`**: TMF656 Slice Management API implementation
 - **`pcm-engine`**: Product Catalog Engine framework (pricing, eligibility, bundling)
 - **`bss-oss-utils`**: Common utilities, logger, and helpers
 - **`bss-oss-server`**: Main application server (binary)
@@ -1002,6 +1091,12 @@ psql -U bssoss -d bssoss -c "SELECT * FROM parties;"
 
 # Query identities (TMF669)
 psql -U bssoss -d bssoss -c "SELECT * FROM identities;"
+
+# Query alarms (TMF642)
+psql -U bssoss -d bssoss -c "SELECT * FROM alarms;"
+
+# Query network slices (TMF656)
+psql -U bssoss -d bssoss -c "SELECT * FROM network_slices;"
 ```
 
 ## 🐛 Troubleshooting

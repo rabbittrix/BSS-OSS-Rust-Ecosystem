@@ -18,6 +18,8 @@ members = [
     "crates/tmf-apis/tmf668_party_role",
     "crates/tmf-apis/tmf632_party",
     "crates/tmf-apis/tmf669_identity",
+    "crates/tmf-apis/tmf642_alarm",
+    "crates/tmf-apis/tmf656_slice",
     "crates/pcm-engine",
     "crates/utils",
     "crates/server",
