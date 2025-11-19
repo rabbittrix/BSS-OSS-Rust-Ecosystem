@@ -1,0 +1,25 @@
+[package]
+name = "revenue-management"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license.workspace = true
+description = "Revenue Management System for Charging, Billing, and Partner Settlement"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.5" }
+tmf635-usage = { path = "../tmf-apis/tmf635_usage", version = "0.2.5" }
+tmf678-billing = { path = "../tmf-apis/tmf678_billing", version = "0.2.5" }
+pcm-engine = { path = "../pcm-engine", version = "0.2.5" }
+bss-oss-event-bus = { path = "../event-bus", version = "0.2.5" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+tokio.workspace = true
+async-trait.workspace = true
+sqlx.workspace = true
+log.workspace = true

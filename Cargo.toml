@@ -28,6 +28,7 @@ members = [
     "crates/resource-management",
     "crates/event-bus",
     "crates/policy-engine",
+    "crates/revenue-management",
     "crates/test-utils",
     "crates/server",
 ]
