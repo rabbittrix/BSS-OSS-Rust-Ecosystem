@@ -101,12 +101,27 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
                 // Non-critical statements that can fail if table doesn't exist:
                 // - COMMENT ON TABLE/INDEX (documentation)
                 // - CREATE INDEX IF NOT EXISTS (indexes can be recreated)
+                // Note: CREATE TABLE IF NOT EXISTS should not fail silently, but if it does
+                // due to table already existing, that's okay
                 let is_non_critical = (upper.starts_with("COMMENT ON") && is_table_not_found)
-                    || (upper.starts_with("CREATE INDEX IF NOT EXISTS") && is_table_not_found);
+                    || (upper.starts_with("CREATE INDEX IF NOT EXISTS") && is_table_not_found)
+                    || (upper.starts_with("CREATE INDEX") && is_table_not_found); // Also handle CREATE INDEX without IF NOT EXISTS
 
                 if is_non_critical {
                     // Non-critical error - table/index might not exist, skip
                     continue;
+                }
+
+                // For CREATE TABLE errors, provide more context but still fail
+                // (CREATE TABLE is critical and should not be skipped)
+                if upper.starts_with("CREATE TABLE") {
+                    return Err(sqlx::Error::Io(std::io::Error::other(format!(
+                        "Failed to execute CREATE TABLE statement {} in migration {:?}: {}\nStatement (first 500 chars): {}",
+                        idx + 1,
+                        migration_file.file_name().unwrap_or_default(),
+                        e,
+                        trimmed.chars().take(500).collect::<String>()
+                    ))));
                 }
 
                 // For other errors, fail with context
