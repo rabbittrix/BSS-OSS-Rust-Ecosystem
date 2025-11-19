@@ -24,9 +24,8 @@ pub async fn create_test_pool() -> Result<PgPool, sqlx::Error> {
             // Database doesn't exist, create it
             // Connect to the default postgres database to create the test database
             let admin_url = database_url
-                .rsplitn(2, '/')
-                .nth(1)
-                .map(|base| format!("{}/postgres", base))
+                .rsplit_once('/')
+                .map(|(base, _)| format!("{}/postgres", base))
                 .unwrap_or_else(|| {
                     // Fallback: replace database name with postgres
                     database_url.replace(&database_name, "postgres")
@@ -77,27 +76,150 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
     // Execute each migration file
     for migration_file in migration_files {
         let sql = fs::read_to_string(&migration_file).map_err(|e| {
-            sqlx::Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                format!("Failed to read migration file {:?}: {}", migration_file, e),
-            ))
+            sqlx::Error::Io(std::io::Error::other(format!(
+                "Failed to read migration file {:?}: {}",
+                migration_file, e
+            )))
         })?;
 
-        // Split SQL by semicolons and execute each statement
-        // PostgreSQL allows multiple statements in a single query
-        sqlx::query(&sql).execute(pool).await?;
+        // Split SQL into individual statements and execute each one
+        // sqlx::query() can only execute one statement at a time
+        let statements = split_sql_statements(&sql);
+        for statement in statements {
+            let trimmed = statement.trim();
+            if trimmed.is_empty() || trimmed.starts_with("--") {
+                continue;
+            }
+            sqlx::query(trimmed).execute(pool).await?;
+        }
     }
 
     Ok(())
 }
 
+/// Split SQL content into individual statements
+/// This is a simple splitter that handles basic cases
+fn split_sql_statements(sql: &str) -> Vec<String> {
+    let mut statements = Vec::new();
+    let mut current = String::new();
+    let mut in_string = false;
+    let mut string_char = '\0';
+    let mut in_comment = false;
+    let mut comment_type = CommentType::None;
+
+    #[derive(PartialEq)]
+    enum CommentType {
+        None,
+        SingleLine,
+        MultiLine,
+    }
+
+    let chars: Vec<char> = sql.chars().collect();
+    let mut i = 0;
+    while i < chars.len() {
+        let ch = chars[i];
+        let next_ch = if i + 1 < chars.len() {
+            Some(chars[i + 1])
+        } else {
+            None
+        };
+
+        // Handle string literals
+        // PostgreSQL uses single quotes and escapes by doubling ('')
+        if !in_comment && (ch == '\'' || ch == '"') {
+            if !in_string {
+                in_string = true;
+                string_char = ch;
+            } else if ch == string_char {
+                // Check if it's an escaped quote (doubled)
+                if ch == '\'' && next_ch == Some('\'') {
+                    // Doubled single quote - still in string
+                    current.push(ch);
+                    current.push(next_ch.unwrap());
+                    i += 2;
+                    continue;
+                } else {
+                    // End of string
+                    in_string = false;
+                }
+            }
+            current.push(ch);
+            i += 1;
+            continue;
+        }
+
+        if in_string {
+            current.push(ch);
+            i += 1;
+            continue;
+        }
+
+        // Handle comments
+        if !in_string {
+            if ch == '-' && next_ch == Some('-') && comment_type == CommentType::None {
+                in_comment = true;
+                comment_type = CommentType::SingleLine;
+                current.push(ch);
+                current.push(next_ch.unwrap());
+                i += 2;
+                continue;
+            } else if ch == '/' && next_ch == Some('*') && comment_type == CommentType::None {
+                in_comment = true;
+                comment_type = CommentType::MultiLine;
+                current.push(ch);
+                current.push(next_ch.unwrap());
+                i += 2;
+                continue;
+            } else if in_comment {
+                if comment_type == CommentType::SingleLine && ch == '\n' {
+                    in_comment = false;
+                    comment_type = CommentType::None;
+                } else if comment_type == CommentType::MultiLine
+                    && ch == '*'
+                    && next_ch == Some('/')
+                {
+                    in_comment = false;
+                    comment_type = CommentType::None;
+                    current.push(ch);
+                    current.push(next_ch.unwrap());
+                    i += 2;
+                    continue;
+                }
+                current.push(ch);
+                i += 1;
+                continue;
+            }
+        }
+
+        // Handle statement termination
+        if ch == ';' && !in_string && !in_comment {
+            current.push(ch);
+            statements.push(current.clone());
+            current.clear();
+            i += 1;
+            continue;
+        }
+
+        current.push(ch);
+        i += 1;
+    }
+
+    // Add remaining content as a statement if it's not empty
+    let trimmed = current.trim();
+    if !trimmed.is_empty() && !trimmed.starts_with("--") {
+        statements.push(current);
+    }
+
+    statements
+}
+
 /// Find the migrations directory by searching from current directory up to project root
 fn find_migrations_dir() -> Result<std::path::PathBuf, sqlx::Error> {
     let mut current_dir = std::env::current_dir().map_err(|e| {
-        sqlx::Error::Io(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            format!("Failed to get current directory: {}", e),
-        ))
+        sqlx::Error::Io(std::io::Error::other(format!(
+            "Failed to get current directory: {}",
+            e
+        )))
     })?;
 
     // Search up to 5 levels for migrations directory
