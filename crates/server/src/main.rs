@@ -392,7 +392,7 @@ use utoipa_swagger_ui::SwaggerUi;
     info(
         title = "BSS/OSS Rust - TM Forum Open APIs",
         description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF679, TMF688, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656)",
-        version = "0.2.0",
+        version = "0.2.5",
         contact(
             name = "Roberto de Souza",
             email = "rabbittrix@hotmail.com"

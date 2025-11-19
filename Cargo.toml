@@ -47,7 +47,7 @@ chrono = { version = "0.4", features = ["serde"] }
 tokio = { version = "1", features = ["full"] }
 
 [workspace.package]
-version = "0.2.0"
+version = "0.2.5"
 edition = "2021"
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "MIT"

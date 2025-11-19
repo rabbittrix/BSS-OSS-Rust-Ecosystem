@@ -21,7 +21,7 @@ This project aims to revolutionize the BSS/OSS landscape by providing:
 6. ✅ Implement **TMF622 - Product Ordering Management API**
 7. ✅ Implement **TMF637 - Product Inventory Management API**
 
-### Current Version: 0.2.0
+### Current Version: 0.2.5
 
 **Phase 2 APIs Completed:** 8. ✅ Implement **TMF629 - Customer Management API** 9. ✅ Implement **TMF678 - Customer Bill Management API** 10. ✅ Implement **TMF679 - Customer Usage Management API** 11. ✅ Implement **TMF688 - Appointment Management API**
 
@@ -194,7 +194,7 @@ bss-oss-rust/
 
 The most strategic choice for interoperability. Adherence to industry standards is crucial for commercial value.
 
-**Current Implementation (v0.2.0):**
+**Current Implementation (v0.2.5):**
 
 - **TMF620** - Product Catalog Management API ✅
 - **TMF622** - Product Ordering Management API ✅

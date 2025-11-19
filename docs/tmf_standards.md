@@ -6,7 +6,7 @@ This document outlines the TM Forum Open API standards implemented in this proje
 
 The TM Forum Open APIs provide standardized interfaces for BSS/OSS systems, enabling interoperability between different vendors and systems. This project implements a comprehensive set of TMF APIs covering Product Management, Customer Management, Service Lifecycle, Resource Management, Revenue Management, and Security & Identity domains.
 
-## Current Version: 0.2.0
+## Current Version: 0.2.5
 
 ## Implemented APIs
 
