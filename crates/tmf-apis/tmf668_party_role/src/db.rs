@@ -61,8 +61,8 @@ pub async fn get_party_roles(pool: &Pool<Postgres>) -> TmfResult<Vec<PartyRole>>
             state: parse_party_role_state(&row.get::<String, _>("state")),
             role: row.get::<String, _>("role"),
             party_type: row.get::<Option<String>, _>("party_type"),
-            contact_medium: None,  // Load separately if needed
-            related_party: None,    // Load separately if needed
+            contact_medium: None, // Load separately if needed
+            related_party: None,  // Load separately if needed
             engagement_date: row.get::<Option<DateTime<Utc>>, _>("engagement_date"),
         });
     }
@@ -71,10 +71,7 @@ pub async fn get_party_roles(pool: &Pool<Postgres>) -> TmfResult<Vec<PartyRole>>
 }
 
 /// Get party role by ID
-pub async fn get_party_role_by_id(
-    pool: &Pool<Postgres>,
-    id: Uuid,
-) -> TmfResult<PartyRole> {
+pub async fn get_party_role_by_id(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<PartyRole> {
     let row = sqlx::query(
         "SELECT id, name, description, version, state, role, party_type, engagement_date, 
          href, last_update
@@ -170,4 +167,3 @@ pub async fn create_party_role(
     // Fetch the created party role
     get_party_role_by_id(pool, id).await
 }
-

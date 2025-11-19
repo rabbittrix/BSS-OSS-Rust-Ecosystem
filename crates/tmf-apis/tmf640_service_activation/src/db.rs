@@ -1,8 +1,6 @@
 //! Database operations for TMF640 Service Activation & Configuration
 
-use crate::models::{
-    CreateServiceActivationRequest, ServiceActivation, ServiceActivationState,
-};
+use crate::models::{CreateServiceActivationRequest, ServiceActivation, ServiceActivationState};
 use chrono::{DateTime, Utc};
 use sqlx::{Pool, Postgres, Row};
 use tmf_apis_core::{TmfError, TmfResult};
@@ -37,9 +35,7 @@ fn service_activation_state_to_string(state: &ServiceActivationState) -> String 
 }
 
 /// Get all service activations
-pub async fn get_service_activations(
-    pool: &Pool<Postgres>,
-) -> TmfResult<Vec<ServiceActivation>> {
+pub async fn get_service_activations(pool: &Pool<Postgres>) -> TmfResult<Vec<ServiceActivation>> {
     let rows = sqlx::query(
         "SELECT id, name, description, version, state, activation_date, 
          completion_date, service_id, service_order_id, href, last_update
@@ -63,7 +59,7 @@ pub async fn get_service_activations(
                 valid_for: None,
             },
             state: parse_service_activation_state(&row.get::<String, _>("state")),
-            service: None,      // Load separately if needed
+            service: None,       // Load separately if needed
             service_order: None, // Load separately if needed
             activation_date: row.get::<Option<DateTime<Utc>>, _>("activation_date"),
             completion_date: row.get::<Option<DateTime<Utc>>, _>("completion_date"),
@@ -158,4 +154,3 @@ pub async fn create_service_activation(
     // Fetch the created service activation
     get_service_activation_by_id(pool, id).await
 }
-

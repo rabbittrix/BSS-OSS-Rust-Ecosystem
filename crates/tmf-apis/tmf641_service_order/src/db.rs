@@ -77,10 +77,7 @@ pub async fn get_service_orders(pool: &Pool<Postgres>) -> TmfResult<Vec<ServiceO
 }
 
 /// Get service order by ID
-pub async fn get_service_order_by_id(
-    pool: &Pool<Postgres>,
-    id: Uuid,
-) -> TmfResult<ServiceOrder> {
+pub async fn get_service_order_by_id(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<ServiceOrder> {
     let row = sqlx::query(
         "SELECT id, name, description, version, state, order_date, 
          expected_completion_date, priority, external_id, href, last_update
@@ -181,4 +178,3 @@ pub async fn create_service_order(
     // Fetch the created service order
     get_service_order_by_id(pool, id).await
 }
-

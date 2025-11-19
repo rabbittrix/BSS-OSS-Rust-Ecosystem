@@ -77,10 +77,10 @@ pub async fn get_parties(pool: &Pool<Postgres>) -> TmfResult<Vec<Party>> {
             },
             state: parse_party_state(&row.get::<String, _>("state")),
             party_type: parse_party_type(&row.get::<String, _>("party_type")),
-            contact_medium: None,  // Load separately if needed
-            related_party: None,   // Load separately if needed
-            account: None,         // Load separately if needed
-            characteristic: None,   // Load separately if needed
+            contact_medium: None, // Load separately if needed
+            related_party: None,  // Load separately if needed
+            account: None,        // Load separately if needed
+            characteristic: None, // Load separately if needed
             registration_date: row.get::<Option<DateTime<Utc>>, _>("registration_date"),
         });
     }
@@ -219,4 +219,3 @@ pub async fn create_party(pool: &Pool<Postgres>, request: CreatePartyRequest) ->
     // Fetch the created party
     get_party_by_id(pool, id).await
 }
-

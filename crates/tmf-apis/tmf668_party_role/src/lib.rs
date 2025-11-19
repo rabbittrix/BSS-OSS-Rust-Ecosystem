@@ -15,7 +15,5 @@ pub use models::*;
 
 // Re-export db functions with explicit names to avoid conflicts
 pub use db::{
-    get_party_role_by_id as db_get_party_role_by_id,
-    get_party_roles as db_get_party_roles,
+    get_party_role_by_id as db_get_party_role_by_id, get_party_roles as db_get_party_roles,
 };
-

@@ -77,10 +77,7 @@ pub async fn get_resource_orders(pool: &Pool<Postgres>) -> TmfResult<Vec<Resourc
 }
 
 /// Get resource order by ID
-pub async fn get_resource_order_by_id(
-    pool: &Pool<Postgres>,
-    id: Uuid,
-) -> TmfResult<ResourceOrder> {
+pub async fn get_resource_order_by_id(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<ResourceOrder> {
     let row = sqlx::query(
         "SELECT id, name, description, version, state, order_date, 
          expected_completion_date, priority, external_id, href, last_update
@@ -181,4 +178,3 @@ pub async fn create_resource_order(
     // Fetch the created resource order
     get_resource_order_by_id(pool, id).await
 }
-

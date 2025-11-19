@@ -15,4 +15,3 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
             .service(web::resource("/partyRole/{id}").route(web::get().to(get_party_role_by_id))),
     );
 }
-

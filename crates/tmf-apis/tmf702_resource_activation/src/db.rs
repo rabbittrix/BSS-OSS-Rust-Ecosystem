@@ -1,8 +1,6 @@
 //! Database operations for TMF702 Resource Activation & Configuration
 
-use crate::models::{
-    CreateResourceActivationRequest, ResourceActivation, ResourceActivationState,
-};
+use crate::models::{CreateResourceActivationRequest, ResourceActivation, ResourceActivationState};
 use chrono::{DateTime, Utc};
 use sqlx::{Pool, Postgres, Row};
 use tmf_apis_core::{TmfError, TmfResult};
@@ -37,9 +35,7 @@ fn resource_activation_state_to_string(state: &ResourceActivationState) -> Strin
 }
 
 /// Get all resource activations
-pub async fn get_resource_activations(
-    pool: &Pool<Postgres>,
-) -> TmfResult<Vec<ResourceActivation>> {
+pub async fn get_resource_activations(pool: &Pool<Postgres>) -> TmfResult<Vec<ResourceActivation>> {
     let rows = sqlx::query(
         "SELECT id, name, description, version, state, activation_date, 
          completion_date, resource_id, service_activation_id, href, last_update
@@ -158,4 +154,3 @@ pub async fn create_resource_activation(
     // Fetch the created resource activation
     get_resource_activation_by_id(pool, id).await
 }
-

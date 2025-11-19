@@ -65,7 +65,7 @@ pub async fn get_usages(pool: &Pool<Postgres>) -> TmfResult<Vec<Usage>> {
             unit: row.get::<Option<String>, _>("unit"),
             product_offering: None, // Load separately if needed
             related_party: None,    // Load separately if needed
-            rating: None,            // Load separately if needed
+            rating: None,           // Load separately if needed
         });
     }
 
@@ -157,4 +157,3 @@ pub async fn create_usage(pool: &Pool<Postgres>, request: CreateUsageRequest) ->
     // Fetch the created usage
     get_usage_by_id(pool, id).await
 }
-

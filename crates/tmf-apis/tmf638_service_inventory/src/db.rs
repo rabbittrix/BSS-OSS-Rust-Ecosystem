@@ -35,9 +35,7 @@ fn service_inventory_state_to_string(state: &ServiceInventoryState) -> String {
 }
 
 /// Get all service inventories
-pub async fn get_service_inventories(
-    pool: &Pool<Postgres>,
-) -> TmfResult<Vec<ServiceInventory>> {
+pub async fn get_service_inventories(pool: &Pool<Postgres>) -> TmfResult<Vec<ServiceInventory>> {
     let rows = sqlx::query(
         "SELECT id, name, description, version, state, activation_date, 
          last_modified_date, href, last_update
@@ -156,4 +154,3 @@ pub async fn create_service_inventory(
     // Fetch the created service inventory
     get_service_inventory_by_id(pool, id).await
 }
-

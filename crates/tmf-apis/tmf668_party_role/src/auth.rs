@@ -57,4 +57,3 @@ pub fn validate_token(req: &HttpRequest) -> Result<String, ActixError> {
         ))
     }
 }
-

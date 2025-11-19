@@ -1,8 +1,6 @@
 //! Database operations for TMF639 Resource Inventory
 
-use crate::models::{
-    CreateResourceInventoryRequest, ResourceInventory, ResourceInventoryState,
-};
+use crate::models::{CreateResourceInventoryRequest, ResourceInventory, ResourceInventoryState};
 use chrono::{DateTime, Utc};
 use sqlx::{Pool, Postgres, Row};
 use tmf_apis_core::{TmfError, TmfResult};
@@ -37,9 +35,7 @@ fn resource_inventory_state_to_string(state: &ResourceInventoryState) -> String 
 }
 
 /// Get all resource inventories
-pub async fn get_resource_inventories(
-    pool: &Pool<Postgres>,
-) -> TmfResult<Vec<ResourceInventory>> {
+pub async fn get_resource_inventories(pool: &Pool<Postgres>) -> TmfResult<Vec<ResourceInventory>> {
     let rows = sqlx::query(
         "SELECT id, name, description, version, state, resource_type, activation_date, 
          last_modified_date, href, last_update
@@ -66,7 +62,7 @@ pub async fn get_resource_inventories(
             resource_specification: None, // Load separately if needed
             resource: None,               // Load separately if needed
             resource_type: row.get::<Option<String>, _>("resource_type"),
-            related_party: None,          // Load separately if needed
+            related_party: None, // Load separately if needed
             activation_date: row.get::<Option<DateTime<Utc>>, _>("activation_date"),
             last_modified_date: row.get::<Option<DateTime<Utc>>, _>("last_modified_date"),
         });
@@ -161,4 +157,3 @@ pub async fn create_resource_inventory(
     // Fetch the created resource inventory
     get_resource_inventory_by_id(pool, id).await
 }
-
