@@ -8,9 +8,13 @@ mod tests {
     use uuid::Uuid;
 
     async fn setup() -> MfaService {
+        use test_utils::database::run_test_migrations;
         let pool = create_test_pool()
             .await
             .expect("Failed to create test pool");
+        run_test_migrations(&pool)
+            .await
+            .expect("Failed to run test migrations");
         MfaService::new(pool, "TestIssuer".to_string())
     }
 

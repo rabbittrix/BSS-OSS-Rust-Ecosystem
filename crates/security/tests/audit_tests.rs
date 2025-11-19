@@ -8,9 +8,13 @@ mod tests {
     use uuid::Uuid;
 
     async fn setup() -> AuditLogger {
+        use test_utils::database::run_test_migrations;
         let pool = create_test_pool()
             .await
             .expect("Failed to create test pool");
+        run_test_migrations(&pool)
+            .await
+            .expect("Failed to run test migrations");
         AuditLogger::new(pool)
     }
 

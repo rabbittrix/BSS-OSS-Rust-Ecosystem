@@ -18,7 +18,9 @@ pub async fn create_test_pool() -> Result<PgPool, sqlx::Error> {
     // Try to connect to the test database first
     match PgPool::connect(&database_url).await {
         Ok(pool) => return Ok(pool),
-        Err(sqlx::Error::Database(db_err)) if db_err.code() == Some(std::borrow::Cow::Borrowed("3D000")) => {
+        Err(sqlx::Error::Database(db_err))
+            if db_err.code() == Some(std::borrow::Cow::Borrowed("3D000")) =>
+        {
             // Database doesn't exist, create it
             // Connect to the default postgres database to create the test database
             let admin_url = database_url
@@ -50,10 +52,71 @@ pub async fn create_test_pool() -> Result<PgPool, sqlx::Error> {
 }
 
 /// Run database migrations for tests
-pub async fn run_test_migrations(_pool: &PgPool) -> Result<(), sqlx::Error> {
-    // In a real implementation, you would run migrations here
-    // For now, we assume migrations are run separately
+pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
+    use std::fs;
+    use std::path::PathBuf;
+
+    // Find migrations directory - try multiple possible locations
+    let migrations_dir = find_migrations_dir()?;
+
+    // Get all migration files and sort them
+    let mut migration_files: Vec<PathBuf> = fs::read_dir(&migrations_dir)?
+        .filter_map(|entry| {
+            let entry = entry.ok()?;
+            let path = entry.path();
+            if path.extension()? == "sql" {
+                Some(path)
+            } else {
+                None
+            }
+        })
+        .collect();
+
+    migration_files.sort();
+
+    // Execute each migration file
+    for migration_file in migration_files {
+        let sql = fs::read_to_string(&migration_file).map_err(|e| {
+            sqlx::Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                format!("Failed to read migration file {:?}: {}", migration_file, e),
+            ))
+        })?;
+
+        // Split SQL by semicolons and execute each statement
+        // PostgreSQL allows multiple statements in a single query
+        sqlx::query(&sql).execute(pool).await?;
+    }
+
     Ok(())
+}
+
+/// Find the migrations directory by searching from current directory up to project root
+fn find_migrations_dir() -> Result<std::path::PathBuf, sqlx::Error> {
+    let mut current_dir = std::env::current_dir().map_err(|e| {
+        sqlx::Error::Io(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            format!("Failed to get current directory: {}", e),
+        ))
+    })?;
+
+    // Search up to 5 levels for migrations directory
+    for _ in 0..5 {
+        let migrations_path = current_dir.join("migrations");
+        if migrations_path.exists() && migrations_path.is_dir() {
+            return Ok(migrations_path);
+        }
+        if let Some(parent) = current_dir.parent() {
+            current_dir = parent.to_path_buf();
+        } else {
+            break;
+        }
+    }
+
+    Err(sqlx::Error::Io(std::io::Error::new(
+        std::io::ErrorKind::NotFound,
+        "Could not find migrations directory",
+    )))
 }
 
 /// Clean up test database

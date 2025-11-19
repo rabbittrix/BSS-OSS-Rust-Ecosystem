@@ -9,9 +9,13 @@ mod tests {
     use uuid::Uuid;
 
     async fn setup() -> (PgPool, OAuthProvider) {
+        use test_utils::database::run_test_migrations;
         let pool = create_test_pool()
             .await
             .expect("Failed to create test pool");
+        run_test_migrations(&pool)
+            .await
+            .expect("Failed to run test migrations");
         let provider = OAuthProvider::new(pool.clone(), "http://localhost:8080".to_string());
         (pool, provider)
     }
