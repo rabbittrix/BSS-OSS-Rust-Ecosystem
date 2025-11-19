@@ -1,13 +1,49 @@
 //! Database test utilities
 
 use sqlx::PgPool;
+
 /// Create a test database pool
 pub async fn create_test_pool() -> Result<PgPool, sqlx::Error> {
     let database_url = std::env::var("TEST_DATABASE_URL")
         .unwrap_or_else(|_| "postgresql://bssoss:bssoss123@localhost:5432/bssoss_test".to_string());
 
-    let pool =
-        PgPool::connect_with(database_url.parse().expect("Invalid TEST_DATABASE_URL")).await?;
+    // Extract database name from URL
+    let database_name = database_url
+        .rsplit('/')
+        .next()
+        .and_then(|s| s.split('?').next())
+        .unwrap_or("bssoss_test")
+        .to_string();
+
+    // Try to connect to the test database first
+    match PgPool::connect(&database_url).await {
+        Ok(pool) => return Ok(pool),
+        Err(sqlx::Error::Database(db_err)) if db_err.code() == Some(std::borrow::Cow::Borrowed("3D000")) => {
+            // Database doesn't exist, create it
+            // Connect to the default postgres database to create the test database
+            let admin_url = database_url
+                .rsplitn(2, '/')
+                .nth(1)
+                .map(|base| format!("{}/postgres", base))
+                .unwrap_or_else(|| {
+                    // Fallback: replace database name with postgres
+                    database_url.replace(&database_name, "postgres")
+                });
+
+            let admin_pool = PgPool::connect(&admin_url).await?;
+
+            // Create the database (ignore error if it already exists)
+            // Use a parameterized query to avoid SQL injection
+            let create_db_query = format!("CREATE DATABASE \"{}\"", database_name);
+            let _ = sqlx::query(&create_db_query).execute(&admin_pool).await;
+
+            drop(admin_pool);
+        }
+        Err(e) => return Err(e),
+    }
+
+    // Now connect to the test database
+    let pool = PgPool::connect(&database_url).await?;
 
     // Set connection pool options
     Ok(pool)
