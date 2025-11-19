@@ -24,6 +24,7 @@ members = [
     "crates/utils",
     "crates/api-gateway",
     "crates/order-orchestrator",
+    "crates/service-orchestrator",
     "crates/event-bus",
     "crates/policy-engine",
     "crates/test-utils",

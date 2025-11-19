@@ -1,0 +1,24 @@
+[package]
+name = "bss-oss-service-orchestrator"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Service Lifecycle Orchestration Service for BSS/OSS Rust ecosystem"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+tokio.workspace = true
+thiserror.workspace = true
+sqlx.workspace = true
+async-trait.workspace = true
+log.workspace = true
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.5" }
+tmf641-service-order = { path = "../tmf-apis/tmf641_service_order", version = "0.2.5" }
+tmf640-service-activation = { path = "../tmf-apis/tmf640_service_activation", version = "0.2.5" }
+tmf638-service-inventory = { path = "../tmf-apis/tmf638_service_inventory", version = "0.2.5" }

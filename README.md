@@ -183,6 +183,7 @@ bss-oss-rust/
 │   │   ├── tmf642_alarm/ # TMF642 Alarm Management API ✅
 │   │   └── tmf656_slice/ # TMF656 Slice Management API ✅
 │   ├── pcm-engine/            # Product Catalog Engine
+│   ├── service-orchestrator/  # Service Lifecycle Orchestrator ✅
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
 └── docs/                      # Documentation
@@ -226,6 +227,18 @@ The heart of the BSS. An efficient catalog allows Telcos to innovate quickly in 
 - Product eligibility validation
 - Bundling and product relationships
 - Catalog versioning and lifecycle management
+
+#### 3. Service Orchestrator ✅
+
+Automates the complete service lifecycle from order to activation to inventory.
+
+**Features:**
+
+- Service orchestration workflows (Service Order → Service Activation → Service Inventory)
+- Service dependency management with dependency graph
+- Automatic service activation when dependencies are met
+- Service lifecycle state tracking
+- Background worker for processing pending workflows
 
 ## 🚀 Getting Started
 
@@ -1005,6 +1018,7 @@ See examples in the [API Endpoints](#-api-endpoints) section above.
 - **`tmf642-alarm`**: TMF642 Alarm Management API implementation
 - **`tmf656-slice`**: TMF656 Slice Management API implementation
 - **`pcm-engine`**: Product Catalog Engine framework (pricing, eligibility, bundling)
+- **`bss-oss-service-orchestrator`**: Service lifecycle orchestrator (workflows, dependencies, activation automation) ✅
 - **`bss-oss-utils`**: Common utilities, logger, and helpers
 - **`bss-oss-server`**: Main application server (binary)
 
