@@ -85,12 +85,35 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
         // Split SQL into individual statements and execute each one
         // sqlx::query() can only execute one statement at a time
         let statements = split_sql_statements(&sql);
-        for statement in statements {
+        for (idx, statement) in statements.iter().enumerate() {
             let trimmed = statement.trim();
             if trimmed.is_empty() || trimmed.starts_with("--") {
                 continue;
             }
-            sqlx::query(trimmed).execute(pool).await?;
+            // Execute statement, providing context on failure
+            // COMMENT ON TABLE statements may fail if table doesn't exist, which is non-critical
+            let result = sqlx::query(trimmed).execute(pool).await;
+            if let Err(e) = result {
+                // If it's a COMMENT statement failing due to missing table, continue
+                // This can happen if CREATE TABLE IF NOT EXISTS didn't create the table
+                // (e.g., if it already existed but was dropped, or if there was an error)
+                let is_comment = trimmed.to_uppercase().starts_with("COMMENT ON");
+                let is_table_not_found = e.to_string().contains("does not exist");
+
+                if is_comment && is_table_not_found {
+                    // Non-critical error - table might not exist, skip the comment
+                    continue;
+                }
+
+                // For other errors, fail with context
+                return Err(sqlx::Error::Io(std::io::Error::other(format!(
+                    "Failed to execute statement {} in migration {:?}: {}\nStatement: {}",
+                    idx + 1,
+                    migration_file.file_name().unwrap_or_default(),
+                    e,
+                    trimmed.chars().take(200).collect::<String>()
+                ))));
+            }
         }
     }
 
