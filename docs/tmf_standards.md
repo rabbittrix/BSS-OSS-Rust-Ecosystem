@@ -383,7 +383,7 @@ Handles digital identities, credentials, OAuth/JWT integration. Your system beco
 
 ## Implementation Summary
 
-**Total Implemented APIs: 17**
+### Total Implemented APIs: 17
 
 - **Phase 1 (Product Domain):** 3 APIs (TMF620, TMF622, TMF637)
 - **Phase 2 (Customer & User Domain):** 4 APIs (TMF629, TMF678, TMF679, TMF688)
