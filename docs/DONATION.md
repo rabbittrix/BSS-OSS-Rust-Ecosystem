@@ -14,6 +14,18 @@ Donations help fund:
 
 **Donation Link:** [https://opencollective.com/bss-oss-rust](https://opencollective.com/bss-oss-rust)
 
+### Bank Transfer
+
+You can also make a direct bank transfer to support the project. Any amount is greatly appreciated!
+
+**Bank Account Details:**
+
+- **IBAN:** BE72 9670 8136 8616
+- **Swift/BIC:** TRWIBEB1XXX
+- **Address:** Rue du Trône 100, 3rd floor, Brussels, 1050, Belgium
+
+**Note:** Please include a reference note with your transfer (e.g., "BSS-OSS-Rust donation") so we can properly acknowledge your contribution.
+
 ## 💪 Other Ways to Contribute
 
 ### Code Contributions
