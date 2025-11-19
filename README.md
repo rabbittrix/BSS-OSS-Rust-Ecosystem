@@ -119,6 +119,37 @@ These APIs manage revenue, charging, and billing:
    - Manages parties, organizations, roles, partners
    - **Why**: Required for partner settlements and ecosystem play
 
+### Phase 5 Revenue Management Features ✅
+
+Beyond the TMF APIs, comprehensive revenue management capabilities have been implemented:
+
+1. ✅ **Real-time Charging Integration**
+
+   - Processes usage events in real-time
+   - Applies rating rules and calculates charges
+   - Automatic tax calculation
+   - Updates usage record states
+
+2. ✅ **Usage Aggregation and Rating**
+
+   - Aggregates usage records by customer, product, and period
+   - Supports multiple rate types: Flat, Tiered, Volume, Time-based
+   - Configurable rating rules per product offering
+   - Tiered rate structures for volume discounts
+
+3. ✅ **Billing Cycle Management**
+
+   - Manages billing cycles (Monthly, Quarterly, Annually, Weekly)
+   - Automatically closes cycles and generates bills
+   - Aggregates usage and applies rating for bill generation
+   - Batch processing of due cycles
+
+4. ✅ **Partner Settlement Workflows**
+   - Handles partner revenue sharing
+   - Configurable settlement rules with revenue share percentages
+   - Calculates settlements for specified periods
+   - Supports approval workflow (Pending → Calculated → Approved → Paid)
+
 ## 🔒 Phase 6 Roadmap – Security, Party & Identity ✅
 
 ### Phase 6 TMF APIs Implemented
@@ -184,6 +215,7 @@ bss-oss-rust/
 │   │   └── tmf656_slice/ # TMF656 Slice Management API ✅
 │   ├── pcm-engine/            # Product Catalog Engine
 │   ├── service-orchestrator/  # Service Lifecycle Orchestrator ✅
+│   ├── revenue-management/   # Revenue Management System ✅
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
 └── docs/                      # Documentation
@@ -239,6 +271,17 @@ Automates the complete service lifecycle from order to activation to inventory.
 - Automatic service activation when dependencies are met
 - Service lifecycle state tracking
 - Background worker for processing pending workflows
+
+#### 4. Revenue Management System ✅
+
+Comprehensive revenue management for charging, billing, and partner settlements.
+
+**Features:**
+
+- Real-time charging integration for usage events
+- Usage aggregation and rating engine with multiple rate types
+- Billing cycle management with automatic bill generation
+- Partner settlement workflows with revenue sharing
 
 ## 🚀 Getting Started
 
@@ -1019,6 +1062,7 @@ See examples in the [API Endpoints](#-api-endpoints) section above.
 - **`tmf656-slice`**: TMF656 Slice Management API implementation
 - **`pcm-engine`**: Product Catalog Engine framework (pricing, eligibility, bundling)
 - **`bss-oss-service-orchestrator`**: Service lifecycle orchestrator (workflows, dependencies, activation automation) ✅
+- **`revenue-management`**: Revenue management system (charging, rating, billing cycles, settlements) ✅
 - **`bss-oss-utils`**: Common utilities, logger, and helpers
 - **`bss-oss-server`**: Main application server (binary)
 
@@ -1111,6 +1155,13 @@ psql -U bssoss -d bssoss -c "SELECT * FROM alarms;"
 
 # Query network slices (TMF656)
 psql -U bssoss -d bssoss -c "SELECT * FROM network_slices;"
+
+# Query revenue management tables
+psql -U bssoss -d bssoss -c "SELECT * FROM charging_results;"
+psql -U bssoss -d bssoss -c "SELECT * FROM rating_rules;"
+psql -U bssoss -d bssoss -c "SELECT * FROM billing_cycles;"
+psql -U bssoss -d bssoss -c "SELECT * FROM partner_settlements;"
+psql -U bssoss -d bssoss -c "SELECT * FROM settlement_rules;"
 ```
 
 ## 🐛 Troubleshooting
