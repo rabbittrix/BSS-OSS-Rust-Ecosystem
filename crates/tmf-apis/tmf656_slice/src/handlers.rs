@@ -194,4 +194,3 @@ pub async fn delete_network_slice(
         }))),
     }
 }
-

@@ -1,8 +1,6 @@
 //! Database operations for TMF656 Slice Management
 
-use crate::models::{
-    CreateNetworkSliceRequest, NetworkSlice, SliceState, SliceType,
-};
+use crate::models::{CreateNetworkSliceRequest, NetworkSlice, SliceState, SliceType};
 use chrono::{DateTime, Utc};
 use sqlx::{Pool, Postgres, Row};
 use tmf_apis_core::{TmfError, TmfResult};
@@ -83,8 +81,8 @@ pub async fn get_network_slices(pool: &Pool<Postgres>) -> TmfResult<Vec<NetworkS
             },
             state: parse_slice_state(&row.get::<String, _>("state")),
             slice_type: parse_slice_type(&row.get::<String, _>("slice_type")),
-            sla_parameters: None,        // Load separately if needed
-            network_functions: None,     // Load separately if needed
+            sla_parameters: None,    // Load separately if needed
+            network_functions: None, // Load separately if needed
             activation_date: row.get::<Option<DateTime<Utc>>, _>("activation_date"),
             termination_date: row.get::<Option<DateTime<Utc>>, _>("termination_date"),
         });
@@ -94,10 +92,7 @@ pub async fn get_network_slices(pool: &Pool<Postgres>) -> TmfResult<Vec<NetworkS
 }
 
 /// Get network slice by ID
-pub async fn get_network_slice_by_id(
-    pool: &Pool<Postgres>,
-    id: Uuid,
-) -> TmfResult<NetworkSlice> {
+pub async fn get_network_slice_by_id(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<NetworkSlice> {
     let row = sqlx::query(
         "SELECT id, name, description, version, state, slice_type, 
          activation_date, termination_date, href, last_update
@@ -122,8 +117,8 @@ pub async fn get_network_slice_by_id(
         },
         state: parse_slice_state(&row.get::<String, _>("state")),
         slice_type: parse_slice_type(&row.get::<String, _>("slice_type")),
-        sla_parameters: None,        // Load separately if needed
-        network_functions: None,     // Load separately if needed
+        sla_parameters: None,    // Load separately if needed
+        network_functions: None, // Load separately if needed
         activation_date: row.get::<Option<DateTime<Utc>>, _>("activation_date"),
         termination_date: row.get::<Option<DateTime<Utc>>, _>("termination_date"),
     })
@@ -203,4 +198,3 @@ pub async fn delete_network_slice(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<
 
     Ok(())
 }
-

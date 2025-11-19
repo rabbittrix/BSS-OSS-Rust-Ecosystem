@@ -166,10 +166,7 @@ pub async fn get_alarm_by_id(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<Alarm
 }
 
 /// Create a new alarm
-pub async fn create_alarm(
-    pool: &Pool<Postgres>,
-    request: CreateAlarmRequest,
-) -> TmfResult<Alarm> {
+pub async fn create_alarm(pool: &Pool<Postgres>, request: CreateAlarmRequest) -> TmfResult<Alarm> {
     let id = Uuid::new_v4();
     let href = Some(format!("/tmf-api/alarmManagement/v4/alarm/{}", id));
     let raised_time = request.raised_time.unwrap_or_else(Utc::now);
@@ -235,9 +232,11 @@ pub async fn delete_alarm(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<()> {
         .map_err(map_sqlx_error)?;
 
     if result.rows_affected() == 0 {
-        return Err(TmfError::NotFound(format!("Alarm with id {} not found", id)));
+        return Err(TmfError::NotFound(format!(
+            "Alarm with id {} not found",
+            id
+        )));
     }
 
     Ok(())
 }
-
