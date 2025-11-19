@@ -31,6 +31,8 @@ services:
       #   017_tmf669_identity_schema.sql (TMF669)
       #   018_tmf642_alarm_schema.sql (TMF642)
       #   019_tmf656_slice_schema.sql (TMF656)
+      #   020_service_orchestration_schema.sql (Service Orchestration)
+      #   021_resource_management_schema.sql (Resource Management)
       - ./migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bssoss -d bssoss"]

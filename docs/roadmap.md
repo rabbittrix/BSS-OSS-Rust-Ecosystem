@@ -39,9 +39,9 @@
 
 - [x] Implement TMF639 - Resource Inventory Management API
 - [x] Implement TMF645 - Resource Order Management API
-- [ ] Add resource capacity management
-- [ ] Implement resource reservation system
-- [ ] Add network topology management
+- [x] Add resource capacity management
+- [x] Implement resource reservation system
+- [x] Add network topology management
 
 ## Phase 5: Revenue Management (Charging & Billing) ✅
 

@@ -2,7 +2,7 @@
 name = "bss-oss-policy-engine"
 version.workspace = true
 edition.workspace = true
-authors.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license.workspace = true
 description = "Policy Engine for pricing, eligibility, bundling, and SLA management"
 repository.workspace = true
