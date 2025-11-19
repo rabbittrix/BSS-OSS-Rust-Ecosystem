@@ -1,0 +1,29 @@
+[package]
+name = "bss-oss-event-bus"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Event Bus abstraction for BSS/OSS Rust ecosystem"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+tokio.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+thiserror.workspace = true
+log.workspace = true
+# For Kafka support (optional)
+# rdkafka = { version = "0.36", optional = true }
+# For NATS support (optional)
+# async-nats = { version = "0.32", optional = true }
+
+[features]
+default = []
+# kafka = ["rdkafka"]
+# nats = ["async-nats"]

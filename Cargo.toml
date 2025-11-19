@@ -22,6 +22,10 @@ members = [
     "crates/tmf-apis/tmf656_slice",
     "crates/pcm-engine",
     "crates/utils",
+    "crates/api-gateway",
+    "crates/order-orchestrator",
+    "crates/event-bus",
+    "crates/policy-engine",
     "crates/server",
 ]
 resolver = "2"
@@ -45,6 +49,17 @@ env_logger = "0.10"
 uuid = { version = "1", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 tokio = { version = "1", features = ["full"] }
+dashmap = "5.5"
+prometheus = "0.13"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+opentelemetry = "0.24"
+opentelemetry_sdk = "0.24"
+opentelemetry-otlp = "0.16"
+opentelemetry-prometheus = "0.13"
+tracing-opentelemetry = "0.24"
+async-trait = "0.1"
+futures = "0.3"
 
 [workspace.package]
 version = "0.2.5"
