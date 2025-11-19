@@ -1,9 +1,7 @@
 //! Network Topology Management
 
 use crate::error::{ResourceManagementError, ResourceManagementResult};
-use crate::models::{
-    CreateNetworkTopologyRequest, NetworkTopology, UpdateNetworkTopologyRequest,
-};
+use crate::models::{CreateNetworkTopologyRequest, NetworkTopology, UpdateNetworkTopologyRequest};
 use chrono::Utc;
 use sqlx::{Pool, Postgres, Row};
 use uuid::Uuid;
@@ -24,7 +22,7 @@ pub async fn get_resource_topology(
     .fetch_all(pool)
     .await?;
 
-    Ok(rows.iter().map(|row| row_to_topology(row)).collect())
+    Ok(rows.iter().map(row_to_topology).collect())
 }
 
 /// Get topology connection by ID
@@ -210,7 +208,10 @@ pub async fn get_connected_resources(
     .fetch_all(pool)
     .await?;
 
-    Ok(rows.iter().map(|row| row.get("connected_resource_id")).collect())
+    Ok(rows
+        .iter()
+        .map(|row| row.get("connected_resource_id"))
+        .collect())
 }
 
 /// Helper to convert database row to NetworkTopology
@@ -229,4 +230,3 @@ fn row_to_topology(row: &sqlx::postgres::PgRow) -> NetworkTopology {
         updated_at: row.get("updated_at"),
     }
 }
-

@@ -71,11 +71,12 @@ impl ServiceDependencyGraph {
         .fetch_all(pool)
         .await?;
 
-        let mut spec_deps: std::collections::HashMap<Uuid, Vec<Uuid>> = std::collections::HashMap::new();
+        let mut spec_deps: std::collections::HashMap<Uuid, Vec<Uuid>> =
+            std::collections::HashMap::new();
         for row in rows {
             let spec_id: Uuid = row.get(0);
             let dep_spec_id: Uuid = row.get(1);
-            spec_deps.entry(spec_id).or_insert_with(Vec::new).push(dep_spec_id);
+            spec_deps.entry(spec_id).or_default().push(dep_spec_id);
         }
 
         // Load service specification states
@@ -86,7 +87,8 @@ impl ServiceDependencyGraph {
         .fetch_all(pool)
         .await?;
 
-        let mut spec_states: std::collections::HashMap<Uuid, (Option<Uuid>, DependencyNodeState)> = std::collections::HashMap::new();
+        let mut spec_states: std::collections::HashMap<Uuid, (Option<Uuid>, DependencyNodeState)> =
+            std::collections::HashMap::new();
         for row in state_rows {
             let spec_id: Uuid = row.get(0);
             let service_id: Option<Uuid> = row.get(1);
@@ -103,7 +105,10 @@ impl ServiceDependencyGraph {
 
         // Build graph nodes
         for (spec_id, deps) in spec_deps {
-            let (service_id, state) = spec_states.get(&spec_id).cloned().unwrap_or((None, DependencyNodeState::NotProvisioned));
+            let (service_id, state) = spec_states
+                .get(&spec_id)
+                .cloned()
+                .unwrap_or((None, DependencyNodeState::NotProvisioned));
             graph.nodes.push(ServiceDependencyNode {
                 service_spec_id: spec_id,
                 service_id,
@@ -121,10 +126,14 @@ impl ServiceDependencyGraph {
                 dependent_pairs.push((node.service_spec_id, *dep_spec_id));
             }
         }
-        
+
         // Then update dependents for each dependency
         for (dependent_id, dep_spec_id) in dependent_pairs {
-            if let Some(dep_node) = graph.nodes.iter_mut().find(|n| n.service_spec_id == dep_spec_id) {
+            if let Some(dep_node) = graph
+                .nodes
+                .iter_mut()
+                .find(|n| n.service_spec_id == dep_spec_id)
+            {
                 dep_node.dependents.push(dependent_id);
             }
         }
@@ -135,7 +144,9 @@ impl ServiceDependencyGraph {
     /// Save dependencies to database
     pub async fn save_to_db(&self, pool: &PgPool) -> Result<(), sqlx::Error> {
         // Clear existing dependencies (in a real implementation, you'd want to merge/update)
-        sqlx::query("DELETE FROM service_dependencies").execute(pool).await?;
+        sqlx::query("DELETE FROM service_dependencies")
+            .execute(pool)
+            .await?;
 
         // Insert all dependencies
         for node in &self.nodes {

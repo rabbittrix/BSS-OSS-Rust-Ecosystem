@@ -26,7 +26,7 @@ pub async fn get_resource_reservations(
     .fetch_all(pool)
     .await?;
 
-    Ok(rows.iter().map(|row| row_to_reservation(row)).collect())
+    Ok(rows.iter().map(row_to_reservation).collect())
 }
 
 /// Get reservation by ID
@@ -235,7 +235,7 @@ async fn check_reservation_conflicts(
     let mut conflicts = Vec::new();
     for row in rows {
         let id: Uuid = row.get("id");
-        if exclude_reservation_id.map_or(true, |exclude| id != exclude) {
+        if exclude_reservation_id != Some(id) {
             conflicts.push(id);
         }
     }
@@ -266,7 +266,7 @@ pub async fn get_active_reservations(
     .fetch_all(pool)
     .await?;
 
-    Ok(rows.iter().map(|row| row_to_reservation(row)).collect())
+    Ok(rows.iter().map(row_to_reservation).collect())
 }
 
 /// Helper to convert database row to ResourceReservation
@@ -290,4 +290,3 @@ fn row_to_reservation(row: &sqlx::postgres::PgRow) -> ResourceReservation {
         cancellation_reason: row.get("cancellation_reason"),
     }
 }
-

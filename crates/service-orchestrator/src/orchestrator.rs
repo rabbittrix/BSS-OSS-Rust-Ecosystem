@@ -17,7 +17,10 @@ pub trait ServiceOrchestratorTrait: Send + Sync {
     async fn orchestrate(&self, service_order: ServiceOrder) -> Result<Uuid, OrchestratorError>;
 
     /// Get workflow context
-    async fn get_context(&self, service_order_id: Uuid) -> Result<ServiceWorkflowContext, OrchestratorError>;
+    async fn get_context(
+        &self,
+        service_order_id: Uuid,
+    ) -> Result<ServiceWorkflowContext, OrchestratorError>;
 
     /// Process ready tasks in workflow
     async fn process_workflow(&self, service_order_id: Uuid) -> Result<(), OrchestratorError>;
@@ -39,9 +42,7 @@ impl ServiceOrchestrator {
         Self {
             pool: Arc::new(pool),
             activation_engine,
-            dependency_graph: Arc::new(tokio::sync::RwLock::new(
-                ServiceDependencyGraph::new(),
-            )),
+            dependency_graph: Arc::new(tokio::sync::RwLock::new(ServiceDependencyGraph::new())),
         }
     }
 
@@ -74,14 +75,14 @@ impl ServiceOrchestrator {
         .await
         .map_err(OrchestratorError::Database)?;
 
-        Ok(rows
-            .iter()
-            .map(|row| (row.get(0), row.get(1)))
-            .collect())
+        Ok(rows.iter().map(|row| (row.get(0), row.get(1))).collect())
     }
 
     /// Store workflow context in database
-    async fn store_context(&self, context: &ServiceWorkflowContext) -> Result<(), OrchestratorError> {
+    async fn store_context(
+        &self,
+        context: &ServiceWorkflowContext,
+    ) -> Result<(), OrchestratorError> {
         let state_str = format!("{:?}", context.state);
         let context_json = serde_json::to_string(context)
             .map_err(|e| OrchestratorError::Serialization(e.to_string()))?;
@@ -105,7 +106,10 @@ impl ServiceOrchestrator {
     }
 
     /// Load workflow context from database
-    async fn load_context(&self, service_order_id: Uuid) -> Result<ServiceWorkflowContext, OrchestratorError> {
+    async fn load_context(
+        &self,
+        service_order_id: Uuid,
+    ) -> Result<ServiceWorkflowContext, OrchestratorError> {
         let row = sqlx::query(
             "SELECT context_data FROM service_workflow_contexts WHERE service_order_id = $1",
         )
@@ -138,16 +142,13 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
         let service_specs = if let Some(order_items) = &service_order.order_item {
             order_items
                 .iter()
-                .filter_map(|item| {
-                    item.service_specification
-                        .as_ref()
-                        .map(|spec| spec.id)
-                })
+                .filter_map(|item| item.service_specification.as_ref().map(|spec| spec.id))
                 .collect::<Vec<_>>()
         } else {
             // Load from database if not in the object
             let items = self.load_service_order_items(service_order_id).await?;
-            items.iter()
+            items
+                .iter()
                 .filter_map(|(spec_id, _)| {
                     if *spec_id != Uuid::nil() {
                         Some(*spec_id)
@@ -160,12 +161,10 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
 
         // Load dependencies for each service specification
         for spec_id in &service_specs {
-            let dependencies = ServiceDependencyGraph::load_dependencies_for_spec(
-                self.pool.as_ref(),
-                *spec_id,
-            )
-            .await
-            .map_err(OrchestratorError::Database)?;
+            let dependencies =
+                ServiceDependencyGraph::load_dependencies_for_spec(self.pool.as_ref(), *spec_id)
+                    .await
+                    .map_err(OrchestratorError::Database)?;
 
             let mut dependency_graph = self.dependency_graph.write().await;
             dependency_graph.add_service_spec(*spec_id, dependencies);
@@ -190,7 +189,10 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
         Ok(service_order_id)
     }
 
-    async fn get_context(&self, service_order_id: Uuid) -> Result<ServiceWorkflowContext, OrchestratorError> {
+    async fn get_context(
+        &self,
+        service_order_id: Uuid,
+    ) -> Result<ServiceWorkflowContext, OrchestratorError> {
         self.load_context(service_order_id).await
     }
 
@@ -199,13 +201,15 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
 
         // Advance workflow
         ServiceWorkflowEngine::advance_workflow(&mut context)
-            .map_err(|e| OrchestratorError::Workflow(e))?;
+            .map_err(OrchestratorError::Workflow)?;
 
         // Process ready tasks - collect IDs first to avoid borrow checker issues
         let ready_task_ids: Vec<Uuid> = context.get_ready_tasks().iter().map(|t| t.id).collect();
 
         for task_id in ready_task_ids {
-            let task = context.get_task(task_id).ok_or(OrchestratorError::InvalidStateTransition)?;
+            let task = context
+                .get_task(task_id)
+                .ok_or(OrchestratorError::InvalidStateTransition)?;
             match task.task_type.clone() {
                 crate::state::ServiceTaskType::ValidateOrder => {
                     // Validate service order
@@ -220,7 +224,10 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
                             context.update_task_state(task_id, ServiceLifecycleState::Completed);
                         }
                         Err(OrchestratorError::DependenciesNotMet) => {
-                            context.update_task_state(task_id, ServiceLifecycleState::WaitingForDependencies);
+                            context.update_task_state(
+                                task_id,
+                                ServiceLifecycleState::WaitingForDependencies,
+                            );
                         }
                         Err(e) => {
                             context.update_task_state(task_id, ServiceLifecycleState::Failed);
@@ -231,11 +238,11 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
                 crate::state::ServiceTaskType::CreateActivation => {
                     // Get service specification IDs from service order
                     let service_specs = self.load_service_order_items(service_order_id).await?;
-                    
+
                     // Process each service specification
                     let mut activation_succeeded = true;
                     let mut activation_error = None;
-                    
+
                     for (service_spec_id, _service_id) in service_specs {
                         if service_spec_id == Uuid::nil() {
                             continue;
@@ -253,7 +260,10 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
                             Err(e) => {
                                 // If dependencies not met, wait and retry later
                                 if matches!(e, ActivationError::DependenciesNotMet) {
-                                    context.update_task_state(task_id, ServiceLifecycleState::WaitingForDependencies);
+                                    context.update_task_state(
+                                        task_id,
+                                        ServiceLifecycleState::WaitingForDependencies,
+                                    );
                                     activation_succeeded = false;
                                     break;
                                 }
@@ -263,7 +273,7 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
                             }
                         }
                     }
-                    
+
                     // Mark task based on result
                     if activation_succeeded {
                         context.update_task_state(task_id, ServiceLifecycleState::Completed);
@@ -279,19 +289,24 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
                 crate::state::ServiceTaskType::CreateInventory => {
                     // Get service specification IDs from service order
                     let service_specs = self.load_service_order_items(service_order_id).await?;
-                    
+
                     // Get activation ID from the execute activation task
                     let activation_id = context
                         .tasks
                         .iter()
-                        .find(|t| matches!(t.task_type, crate::state::ServiceTaskType::ExecuteActivation))
+                        .find(|t| {
+                            matches!(
+                                t.task_type,
+                                crate::state::ServiceTaskType::ExecuteActivation
+                            )
+                        })
                         .and_then(|t| t.activation_id)
                         .ok_or_else(|| OrchestratorError::InvalidStateTransition)?;
 
                     // Create service inventory for each service specification
                     let mut all_succeeded = true;
                     let mut inventory_error = None;
-                    
+
                     for (service_spec_id, _service_id) in service_specs {
                         if service_spec_id == Uuid::nil() {
                             continue;
@@ -299,7 +314,12 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
 
                         match self
                             .activation_engine
-                            .create_service_inventory(&mut context, service_order_id, service_spec_id, activation_id)
+                            .create_service_inventory(
+                                &mut context,
+                                service_order_id,
+                                service_spec_id,
+                                activation_id,
+                            )
                             .await
                         {
                             Ok(_) => {
@@ -339,7 +359,7 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
         let service_specs = self.load_service_order_items(service_order_id).await?;
 
         let dependency_graph = self.dependency_graph.read().await;
-        
+
         // Check if all service specifications can be provisioned
         let mut all_ready = true;
         for (spec_id, _) in &service_specs {
@@ -376,7 +396,11 @@ impl ServiceOrchestrator {
         for row in rows {
             let service_order_id: Uuid = row.get(0);
             if let Err(e) = self.process_workflow(service_order_id).await {
-                log::warn!("Failed to process workflow for service order {}: {}", service_order_id, e);
+                log::warn!(
+                    "Failed to process workflow for service order {}: {}",
+                    service_order_id,
+                    e
+                );
             } else {
                 processed += 1;
             }
@@ -391,7 +415,8 @@ impl ServiceOrchestrator {
         interval_seconds: u64,
     ) -> tokio::task::JoinHandle<()> {
         tokio::spawn(async move {
-            let mut interval = tokio::time::interval(tokio::time::Duration::from_secs(interval_seconds));
+            let mut interval =
+                tokio::time::interval(tokio::time::Duration::from_secs(interval_seconds));
             loop {
                 interval.tick().await;
                 match self.process_pending_workflows().await {

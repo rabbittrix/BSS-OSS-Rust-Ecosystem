@@ -2,6 +2,7 @@
 
 use actix_web::{HttpRequest, HttpResponse, Result};
 use serde::{Deserialize, Serialize};
+use std::fmt;
 
 /// API Version
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
@@ -18,9 +19,11 @@ impl ApiVersion {
     pub fn v4() -> Self {
         Self { major: 4, minor: 0 }
     }
+}
 
-    pub fn to_string(&self) -> String {
-        format!("v{}.{}", self.major, self.minor)
+impl fmt::Display for ApiVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "v{}.{}", self.major, self.minor)
     }
 }
 
@@ -54,13 +57,9 @@ pub fn extract_version_from_header(req: &HttpRequest) -> Option<ApiVersion> {
         .and_then(|accept| {
             accept.split(';').find_map(|part| {
                 let part = part.trim();
-                if part.starts_with("version=") {
-                    let version_str = &part[8..];
-                    if version_str.starts_with('v') {
-                        version_str[1..]
-                            .parse::<u8>()
-                            .ok()
-                            .map(|v| ApiVersion::new(v, 0))
+                if let Some(version_str) = part.strip_prefix("version=") {
+                    if let Some(stripped) = version_str.strip_prefix('v') {
+                        stripped.parse::<u8>().ok().map(|v| ApiVersion::new(v, 0))
                     } else {
                         version_str
                             .parse::<u8>()

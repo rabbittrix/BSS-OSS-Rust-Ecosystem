@@ -214,10 +214,18 @@ bss-oss-rust/
 │   │   ├── tmf642_alarm/ # TMF642 Alarm Management API ✅
 │   │   └── tmf656_slice/ # TMF656 Slice Management API ✅
 │   ├── pcm-engine/            # Product Catalog Engine
+│   ├── policy-engine/         # Policy Engine (bundling, eligibility, pricing, SLA)
+│   ├── api-gateway/           # API Gateway (auth, middleware, rate limiting, validation)
+│   ├── event-bus/             # Event Bus abstraction (publisher/subscriber)
+│   ├── order-orchestrator/    # Order Orchestration (decomposition, dependencies)
 │   ├── service-orchestrator/  # Service Lifecycle Orchestrator ✅
+│   ├── resource-management/  # Resource Management (capacity, reservation, topology)
 │   ├── revenue-management/   # Revenue Management System ✅
+│   ├── test-utils/            # Test utilities and fixtures
+│   ├── benchmarks/            # Performance benchmarks
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
+├── migrations/                # Database migration scripts
 └── docs/                      # Documentation
 ```
 
@@ -1040,6 +1048,8 @@ See examples in the [API Endpoints](#-api-endpoints) section above.
 
 ## 📦 Workspace Crates
 
+### TMF API Crates
+
 - **`tmf-apis-core`**: Shared models and error types for all TMF APIs
 - **`tmf620-catalog`**: TMF620 Product Catalog Management API implementation
 - **`tmf622-ordering`**: TMF622 Product Ordering Management API implementation
@@ -1060,11 +1070,24 @@ See examples in the [API Endpoints](#-api-endpoints) section above.
 - **`tmf669-identity`**: TMF669 Identity & Credential Management API implementation
 - **`tmf642-alarm`**: TMF642 Alarm Management API implementation
 - **`tmf656-slice`**: TMF656 Slice Management API implementation
+
+### Core Engine Crates
+
 - **`pcm-engine`**: Product Catalog Engine framework (pricing, eligibility, bundling)
-- **`bss-oss-service-orchestrator`**: Service lifecycle orchestrator (workflows, dependencies, activation automation) ✅
+- **`policy-engine`**: Policy Engine (bundling, eligibility, pricing, network, SLA policies)
+- **`order-orchestrator`**: Order orchestration (decomposition, dependencies, state management)
+- **`service-orchestrator`**: Service lifecycle orchestrator (workflows, dependencies, activation automation) ✅
+- **`resource-management`**: Resource management (capacity, reservation, network topology)
 - **`revenue-management`**: Revenue management system (charging, rating, billing cycles, settlements) ✅
-- **`bss-oss-utils`**: Common utilities, logger, and helpers
-- **`bss-oss-server`**: Main application server (binary)
+
+### Infrastructure Crates
+
+- **`api-gateway`**: API Gateway (authentication, middleware, rate limiting, validation, versioning)
+- **`event-bus`**: Event Bus abstraction (publisher/subscriber for event-driven architecture)
+- **`utils`**: Common utilities, logger, and observability helpers
+- **`test-utils`**: Test utilities, fixtures, and integration test helpers
+- **`benchmarks`**: Performance benchmarking utilities
+- **`server`**: Main application server (binary)
 
 ## 🛠️ Development
 

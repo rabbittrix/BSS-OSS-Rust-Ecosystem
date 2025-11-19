@@ -1,7 +1,7 @@
 //! Event Publisher
 
-use async_trait::async_trait;
 use crate::events::EventEnvelope;
+use async_trait::async_trait;
 use thiserror::Error;
 
 /// Event publisher trait
@@ -22,13 +22,14 @@ pub enum PublishError {
 }
 
 /// In-memory publisher (for development)
+#[derive(Default)]
 pub struct InMemoryPublisher {
     // In production, this would publish to Kafka/NATS/etc.
 }
 
 impl InMemoryPublisher {
     pub fn new() -> Self {
-        Self {}
+        Self::default()
     }
 }
 
@@ -40,4 +41,3 @@ impl EventPublisher for InMemoryPublisher {
         Ok(())
     }
 }
-
