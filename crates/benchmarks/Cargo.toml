@@ -1,0 +1,25 @@
+[package]
+name = "benchmarks"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Performance benchmarks for BSS/OSS Rust ecosystem"
+repository.workspace = true
+documentation.workspace = true
+
+[[bench]]
+name = "api_throughput"
+harness = false
+
+[[bench]]
+name = "api_performance"
+harness = false
+
+[dependencies]
+actix-web.workspace = true
+tokio.workspace = true
+criterion = { version = "0.5", features = ["async_tokio", "html_reports"] }
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true

@@ -13,6 +13,7 @@ pub mod gateway;
 pub mod metrics;
 pub mod middleware;
 pub mod rate_limit;
+pub mod validation;
 pub mod versioning;
 
 pub use gateway::ApiGateway;

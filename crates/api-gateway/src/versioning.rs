@@ -98,3 +98,50 @@ pub fn validate_version(
         })))
     }
 }
+
+/// Check if version is backward compatible
+/// Returns true if the requested version is compatible with the supported version
+pub fn is_backward_compatible(requested: &ApiVersion, supported: &ApiVersion) -> bool {
+    // Same major version means backward compatible
+    // Minor version differences are considered compatible
+    requested.major == supported.major && requested.minor <= supported.minor
+}
+
+/// Find the best matching version from supported versions
+/// Returns the highest compatible version or None if no match
+pub fn find_compatible_version(
+    requested: &ApiVersion,
+    supported: &[ApiVersion],
+) -> Option<ApiVersion> {
+    supported
+        .iter()
+        .filter(|v| is_backward_compatible(requested, v))
+        .max_by_key(|v| (v.major, v.minor))
+        .copied()
+}
+
+/// Version negotiation - finds the best version match
+pub fn negotiate_version(
+    req: &HttpRequest,
+    supported_versions: &[ApiVersion],
+) -> Result<ApiVersion, HttpResponse> {
+    let requested_version = get_api_version(req);
+
+    // Exact match
+    if supported_versions.contains(&requested_version) {
+        return Ok(requested_version);
+    }
+
+    // Try backward compatibility
+    if let Some(compatible) = find_compatible_version(&requested_version, supported_versions) {
+        return Ok(compatible);
+    }
+
+    // No compatible version found
+    Err(HttpResponse::BadRequest().json(serde_json::json!({
+        "error": "Unsupported API version",
+        "requested": requested_version.to_string(),
+        "supported": supported_versions.iter().map(|v| v.to_string()).collect::<Vec<_>>(),
+        "message": "No compatible version found. Please use one of the supported versions."
+    })))
+}

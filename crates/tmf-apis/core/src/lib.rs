@@ -5,6 +5,8 @@
 
 pub mod error;
 pub mod models;
+pub mod validation;
 
 pub use error::{TmfError, TmfResult};
 pub use models::*;
+pub use validation::*;

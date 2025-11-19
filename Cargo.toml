@@ -26,6 +26,7 @@ members = [
     "crates/order-orchestrator",
     "crates/event-bus",
     "crates/policy-engine",
+    "crates/test-utils",
     "crates/server",
 ]
 resolver = "2"

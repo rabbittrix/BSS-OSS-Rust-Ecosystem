@@ -2,6 +2,7 @@
 
 use crate::middleware::{AuthMiddleware, LoggingMiddleware, RateLimitMiddleware};
 use crate::rate_limit::{RateLimitConfig, RateLimitIdentifier};
+use crate::validation::ValidationMiddleware;
 use crate::versioning::ApiVersion;
 use actix_web::App;
 
@@ -83,8 +84,10 @@ impl ApiGateway {
                 Error = actix_web::Error,
             > + 'static,
     {
-        let app = app.wrap(LoggingMiddleware);
-
+        let app = app
+            .wrap(LoggingMiddleware)
+            .wrap(ValidationMiddleware::default());
+        
         // Conditionally apply auth middleware
         // Note: This requires all middleware to be applied due to type constraints
         let app = if self.config.require_auth {

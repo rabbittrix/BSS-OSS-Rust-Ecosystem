@@ -1,0 +1,23 @@
+[package]
+name = "test-utils"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Test utilities and helpers for BSS/OSS Rust ecosystem"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+actix-web.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+sqlx.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+jsonwebtoken.workspace = true
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.5" }
+
+[dev-dependencies]
+actix-rt = "2"
