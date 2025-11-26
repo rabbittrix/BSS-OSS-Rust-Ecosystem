@@ -96,30 +96,13 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
             let result = sqlx::query(trimmed).execute(pool).await;
             if let Err(e) = result {
                 let error_msg = e.to_string();
-                let is_table_not_found = error_msg.contains("does not exist");
-                let upper = trimmed.to_uppercase();
+                let is_table_not_found = error_msg.contains("does not exist")
+                    || error_msg.contains("relation") && error_msg.contains("does not exist");
+                let upper = trimmed.trim().to_uppercase();
 
-                // Non-critical statements that can fail if table doesn't exist:
-                // - COMMENT ON TABLE/INDEX (documentation)
-                // - CREATE INDEX IF NOT EXISTS (indexes can be recreated)
-                // - CREATE UNIQUE INDEX (unique indexes can be recreated)
-                // Note: CREATE TABLE IF NOT EXISTS should not fail silently, but if it does
-                // due to table already existing, that's okay
-                // Check CREATE UNIQUE INDEX before CREATE INDEX (more specific first)
-                let is_non_critical = is_table_not_found
-                    && (upper.starts_with("COMMENT ON")
-                        || upper.starts_with("CREATE UNIQUE INDEX")
-                        || upper.starts_with("CREATE INDEX IF NOT EXISTS")
-                        || upper.starts_with("CREATE INDEX")); // Also handle CREATE INDEX without IF NOT EXISTS
-
-                if is_non_critical {
-                    // Non-critical error - table/index might not exist, skip
-                    continue;
-                }
-
-                // For CREATE TABLE errors, provide more context but still fail
-                // (CREATE TABLE is critical and should not be skipped)
+                // Check if this is a CREATE TABLE statement first (critical)
                 if upper.starts_with("CREATE TABLE") {
+                    // CREATE TABLE is critical - always fail with detailed error
                     return Err(sqlx::Error::Io(std::io::Error::other(format!(
                         "Failed to execute CREATE TABLE statement {} in migration {:?}: {}\nStatement (first 500 chars): {}",
                         idx + 1,
@@ -127,6 +110,25 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
                         e,
                         trimmed.chars().take(500).collect::<String>()
                     ))));
+                }
+
+                // Non-critical statements that can fail if table doesn't exist:
+                // - COMMENT ON TABLE/INDEX (documentation)
+                // - CREATE UNIQUE INDEX (unique indexes can be recreated)
+                // - CREATE INDEX IF NOT EXISTS (indexes can be recreated)
+                // - CREATE INDEX (indexes can be recreated)
+                // Check in order from most specific to least specific
+                let is_index_statement = upper.starts_with("CREATE UNIQUE INDEX")
+                    || upper.starts_with("CREATE INDEX IF NOT EXISTS")
+                    || upper.starts_with("CREATE INDEX");
+                let is_comment_statement = upper.starts_with("COMMENT ON");
+
+                let is_non_critical =
+                    is_table_not_found && (is_comment_statement || is_index_statement);
+
+                if is_non_critical {
+                    // Non-critical error - table/index might not exist, skip
+                    continue;
                 }
 
                 // For other errors, fail with context
