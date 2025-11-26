@@ -1,0 +1,91 @@
+{{- if .Values.redis.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bss-oss-rust.fullname" . }}-redis
+  labels:
+    {{- include "bss-oss-rust.labels" . | nindent 4 }}
+    component: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "bss-oss-rust.selectorLabels" . | nindent 6 }}
+      component: redis
+  template:
+    metadata:
+      labels:
+        {{- include "bss-oss-rust.selectorLabels" . | nindent 8 }}
+        component: redis
+    spec:
+      containers:
+      - name: redis
+        image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
+        ports:
+        - containerPort: 6379
+        command:
+        - redis-server
+        - --appendonly
+        - "yes"
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          {{- toYaml .Values.redis.resources | nindent 12 }}
+      volumes:
+      {{- if .Values.redis.persistence.enabled }}
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: {{ include "bss-oss-rust.fullname" . }}-redis-pvc
+      {{- else }}
+      - name: redis-data
+        emptyDir: {}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bss-oss-rust.fullname" . }}-redis
+  labels:
+    {{- include "bss-oss-rust.labels" . | nindent 4 }}
+    component: redis
+spec:
+  selector:
+    {{- include "bss-oss-rust.selectorLabels" . | nindent 4 }}
+    component: redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+  type: ClusterIP
+{{- if .Values.redis.persistence.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "bss-oss-rust.fullname" . }}-redis-pvc
+  labels:
+    {{- include "bss-oss-rust.labels" . | nindent 4 }}
+    component: redis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.redis.persistence.size }}
+{{- end }}
+{{- end }}
+

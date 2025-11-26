@@ -106,11 +106,12 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl -f http://localhost:8080/swagger-ui/ || curl -f http://localhost:8080/graphql || exit 1",
-        ]
+      # Available health endpoints:
+      # - /health: General health status
+      # - /ready: Readiness probe (checks database connectivity)
+      # - /live: Liveness probe
+      # - /metrics: Prometheus metrics
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3

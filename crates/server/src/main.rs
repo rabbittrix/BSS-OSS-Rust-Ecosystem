@@ -8,6 +8,7 @@ use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Result a
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
 use bss_oss_utils::init_logger;
 use graphql_api::create_schema;
+use prometheus::{Counter, Gauge, Histogram, Registry, TextEncoder};
 use tmf620_catalog::{db::init_db, models::*};
 use tmf622_ordering::models::{
     CreateOrderItemRequest, CreateProductOrderRequest, OrderItem, OrderState,
@@ -427,6 +428,55 @@ async fn graphql_handler(
     schema.execute(req).await.into()
 }
 
+/// Health check endpoint
+async fn health_check() -> HttpResponse {
+    HttpResponse::Ok().json(serde_json::json!({
+        "status": "healthy",
+        "service": "bss-oss-rust",
+        "version": env!("CARGO_PKG_VERSION")
+    }))
+}
+
+/// Readiness probe endpoint - checks database connectivity
+async fn readiness_check(pool: web::Data<sqlx::PgPool>) -> HttpResponse {
+    match sqlx::query("SELECT 1").execute(pool.get_ref()).await {
+        Ok(_) => HttpResponse::Ok().json(serde_json::json!({
+            "status": "ready",
+            "database": "connected"
+        })),
+        Err(e) => {
+            log::error!("Database health check failed: {}", e);
+            HttpResponse::ServiceUnavailable().json(serde_json::json!({
+                "status": "not_ready",
+                "database": "disconnected",
+                "error": e.to_string()
+            }))
+        }
+    }
+}
+
+/// Liveness probe endpoint
+async fn liveness_check() -> HttpResponse {
+    HttpResponse::Ok().json(serde_json::json!({
+        "status": "alive"
+    }))
+}
+
+/// Prometheus metrics endpoint
+async fn metrics_handler(registry: web::Data<Registry>) -> HttpResponse {
+    let encoder = TextEncoder::new();
+    let metric_families = registry.gather();
+    match encoder.encode_to_string(&metric_families) {
+        Ok(metrics) => HttpResponse::Ok()
+            .content_type("text/plain; version=0.0.4")
+            .body(metrics),
+        Err(e) => {
+            log::error!("Failed to encode metrics: {}", e);
+            HttpResponse::InternalServerError().body("Failed to encode metrics")
+        }
+    }
+}
+
 /// GraphQL Playground handler
 async fn graphql_playground() -> HttpResponse {
     HttpResponse::Ok()
@@ -520,12 +570,56 @@ async fn main() -> std::io::Result<()> {
     // Create GraphQL schema
     let schema = create_schema();
 
-    HttpServer::new(move || {
+    // Initialize Prometheus metrics registry
+    let registry = Registry::new();
+
+    // Register common metrics
+    let http_requests_total = Counter::with_opts(
+        prometheus::Opts::new("http_requests_total", "Total number of HTTP requests")
+            .namespace("bss_oss"),
+    )
+    .unwrap();
+    let http_request_duration_seconds = Histogram::with_opts(
+        prometheus::HistogramOpts::new(
+            "http_request_duration_seconds",
+            "HTTP request duration in seconds",
+        )
+        .namespace("bss_oss")
+        .buckets(vec![
+            0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0,
+        ]),
+    )
+    .unwrap();
+    let active_connections = Gauge::with_opts(
+        prometheus::Opts::new("active_connections", "Number of active connections")
+            .namespace("bss_oss"),
+    )
+    .unwrap();
+
+    registry
+        .register(Box::new(http_requests_total.clone()))
+        .unwrap();
+    registry
+        .register(Box::new(http_request_duration_seconds.clone()))
+        .unwrap();
+    registry
+        .register(Box::new(active_connections.clone()))
+        .unwrap();
+
+    let registry_data = web::Data::new(registry.clone());
+
+    let server = HttpServer::new(move || {
         let schema = schema.clone();
+        let registry = registry_data.clone();
         App::new()
             .app_data(actix_web::web::Data::new(pool.clone()))
             .app_data(actix_web::web::Data::new(schema))
+            .app_data(registry.clone())
             .wrap(Logger::default())
+            .route("/health", web::get().to(health_check))
+            .route("/ready", web::get().to(readiness_check))
+            .route("/live", web::get().to(liveness_check))
+            .route("/metrics", web::get().to(metrics_handler))
             .route("/swagger-ui", web::get().to(redirect_to_swagger))
             .service(
                 SwaggerUi::new("/swagger-ui/{_:.*}")
@@ -557,6 +651,16 @@ async fn main() -> std::io::Result<()> {
             .configure(tmf656_slice::api::configure_routes)
     })
     .bind((host.as_str(), port))?
-    .run()
-    .await
+    .shutdown_timeout(30); // 30 seconds for graceful shutdown
+
+    log::info!("✅ Server started successfully");
+    log::info!("   - Health: http://{}:{}/health", host, port);
+    log::info!("   - Readiness: http://{}:{}/ready", host, port);
+    log::info!("   - Liveness: http://{}:{}/live", host, port);
+    log::info!("   - Metrics: http://{}:{}/metrics", host, port);
+
+    // Setup graceful shutdown - Actix Web handles SIGTERM/SIGINT automatically
+    // The shutdown_timeout(30) above ensures graceful shutdown with 30s timeout
+    server.run().await?;
+    Ok(())
 }

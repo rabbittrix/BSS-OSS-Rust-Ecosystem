@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bss-oss
+  labels:
+    name: bss-oss
+    app: bss-oss-rust
+

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bss-oss-config
+  namespace: bss-oss
+data:
+  HOST: "0.0.0.0"
+  PORT: "8080"
+  RUST_LOG: "info"
+  DATABASE_URL: "postgresql://bssoss:bssoss123@postgres:5432/bssoss"
+  REDIS_URL: "redis://redis:6379"
+

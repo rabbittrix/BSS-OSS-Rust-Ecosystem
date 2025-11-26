@@ -1,0 +1,16 @@
+apiVersion: v2
+name: bss-oss-rust
+description: A Helm chart for BSS/OSS Rust Ecosystem
+type: application
+version: 0.2.5
+appVersion: "0.2.5"
+keywords:
+  - bss
+  - oss
+  - tm-forum
+  - rust
+  - telecom
+maintainers:
+  - name: Roberto de Souza
+    email: rabbittrix@hotmail.com
+

@@ -460,8 +460,10 @@ Modern capabilities for enhanced functionality and performance.
 
 - Rust 1.70+ (2021 edition)
 - PostgreSQL 12+ database
+- Redis (for caching, optional but recommended)
 - Cargo (comes with Rust)
 - Docker and Docker Compose (optional, for containerized setup)
+- Kubernetes and Helm (optional, for production deployment)
 
 ### Quick Start with Docker Compose (Recommended)
 
@@ -534,9 +536,11 @@ The Docker Compose setup includes:
 
 - **PostgreSQL** database on port `5432` (main database)
 - **PostgreSQL Test** database on port `5433` (for running tests, use `--profile test`)
-- **Application** server on port `8080` with Swagger UI
+- **Redis** cache on port `6379` (for caching layer)
+- **Application** server on port `8080` with Swagger UI and GraphQL Playground
 - Automatic database migrations on startup
 - Health checks for all services
+- Production-ready configuration
 
 1. **Manual Setup - Run database migrations:**
 

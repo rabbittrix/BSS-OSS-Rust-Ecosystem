@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "bss-oss-rust.fullname" . }}-config
+  labels:
+    {{- include "bss-oss-rust.labels" . | nindent 4 }}
+data:
+  HOST: {{ .Values.env.HOST | quote }}
+  PORT: {{ .Values.env.PORT | quote }}
+  RUST_LOG: {{ .Values.env.RUST_LOG | quote }}
+  DATABASE_URL: "postgresql://bssoss:{{ .Values.secrets.DATABASE_PASSWORD }}@{{ include "bss-oss-rust.fullname" . }}-postgres:5432/bssoss"
+  REDIS_URL: "redis://{{ include "bss-oss-rust.fullname" . }}-redis:6379"
+

@@ -1,0 +1,103 @@
+{{- if .Values.postgres.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bss-oss-rust.fullname" . }}-postgres
+  labels:
+    {{- include "bss-oss-rust.labels" . | nindent 4 }}
+    component: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "bss-oss-rust.selectorLabels" . | nindent 6 }}
+      component: postgres
+  template:
+    metadata:
+      labels:
+        {{- include "bss-oss-rust.selectorLabels" . | nindent 8 }}
+        component: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: "bssoss"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "bss-oss-rust.fullname" . }}-secrets
+              key: DATABASE_PASSWORD
+        - name: POSTGRES_DB
+          value: "bssoss"
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - bssoss
+            - -d
+            - bssoss
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - bssoss
+            - -d
+            - bssoss
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          {{- toYaml .Values.postgres.resources | nindent 12 }}
+      volumes:
+      {{- if .Values.postgres.persistence.enabled }}
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: {{ include "bss-oss-rust.fullname" . }}-postgres-pvc
+      {{- else }}
+      - name: postgres-data
+        emptyDir: {}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bss-oss-rust.fullname" . }}-postgres
+  labels:
+    {{- include "bss-oss-rust.labels" . | nindent 4 }}
+    component: postgres
+spec:
+  selector:
+    {{- include "bss-oss-rust.selectorLabels" . | nindent 4 }}
+    component: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+  type: ClusterIP
+{{- if .Values.postgres.persistence.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "bss-oss-rust.fullname" . }}-postgres-pvc
+  labels:
+    {{- include "bss-oss-rust.labels" . | nindent 4 }}
+    component: postgres
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.postgres.persistence.size }}
+{{- end }}
+{{- end }}
+
