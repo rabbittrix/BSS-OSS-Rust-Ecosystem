@@ -1,5 +1,5 @@
 [package]
-name = "cache"
+name = "bss-oss-cache"
 version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
