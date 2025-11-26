@@ -34,7 +34,7 @@ helm install bss-oss-rust ./helm/bss-oss-rust --create-namespace --namespace bss
 
 ```bash
 helm install bss-oss-rust ./helm/bss-oss-rust \
-  --set image.tag=v0.2.5 \
+  --set image.tag=v0.3.0 \
   --set replicaCount=3 \
   --set secrets.JWT_SECRET=your-secret-key \
   --set postgres.persistence.size=20Gi

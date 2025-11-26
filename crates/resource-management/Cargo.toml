@@ -3,7 +3,7 @@ name = "bss-oss-resource-management"
 version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
-license.workspace = true
+license = "Proprietary"
 description = "Resource Management Service - Capacity, Reservations, and Network Topology for BSS/OSS Rust ecosystem"
 repository.workspace = true
 documentation.workspace = true
@@ -19,5 +19,5 @@ sqlx.workspace = true
 async-trait.workspace = true
 log.workspace = true
 utoipa.workspace = true
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.5" }
-tmf639-resource-inventory = { path = "../tmf-apis/tmf639_resource_inventory", version = "0.2.5" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.0" }
+tmf639-resource-inventory = { path = "../tmf-apis/tmf639_resource_inventory", version = "0.3.0" }

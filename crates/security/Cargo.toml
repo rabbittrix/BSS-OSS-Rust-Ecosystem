@@ -3,15 +3,15 @@ name = "security"
 version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
-license.workspace = true
+license = "Proprietary"
 description = "Security System for OAuth 2.0/OIDC, MFA, RBAC, and Audit Logging"
 repository.workspace = true
 documentation.workspace = true
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.5" }
-tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.2.5" }
-tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.2.5" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.0" }
+tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.3.0" }
+tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.3.0" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
@@ -32,7 +32,7 @@ qrcode = "0.14"
 image = "0.25"
 
 [dev-dependencies]
-test-utils = { path = "../test-utils", version = "0.2.5" }
+test-utils = { path = "../test-utils", version = "0.3.0" }
 sqlx.workspace = true
 tokio-test = "0.4"
 actix-rt = "2"

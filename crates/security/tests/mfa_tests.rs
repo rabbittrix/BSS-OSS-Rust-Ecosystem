@@ -19,6 +19,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore] // Requires database connection
     async fn test_enable_totp() {
         let mfa = setup().await;
         let identity_id = Uuid::new_v4();
@@ -33,6 +34,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore] // Requires database connection
     async fn test_enable_sms() {
         let mfa = setup().await;
         let identity_id = Uuid::new_v4();
@@ -50,6 +52,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore] // Requires database connection
     async fn test_enable_email() {
         let mfa = setup().await;
         let identity_id = Uuid::new_v4();
@@ -67,6 +70,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore] // Requires database connection
     async fn test_get_mfa_status() {
         let mfa = setup().await;
         let identity_id = Uuid::new_v4();

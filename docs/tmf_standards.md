@@ -6,7 +6,7 @@ This document outlines the TM Forum Open API standards implemented in this proje
 
 The TM Forum Open APIs provide standardized interfaces for BSS/OSS systems, enabling interoperability between different vendors and systems. This project implements a comprehensive set of TMF APIs covering Product Management, Customer Management, Service Lifecycle, Resource Management, Revenue Management, and Security & Identity domains.
 
-## Current Version: 0.2.5
+## Current Version: 0.3.0
 
 ## Implemented APIs
 
@@ -381,9 +381,55 @@ Handles digital identities, credentials, OAuth/JWT integration. Your system beco
 - `PATCH /tmf-api/identityAndCredentialManagement/v4/identity/{id}` - Update identity
 - `DELETE /tmf-api/identityAndCredentialManagement/v4/identity/{id}` - Delete identity
 
+### Phase 7: Additional TMF APIs ✅
+
+#### TMF633 - Trouble Ticket Management API
+
+**Status:** ✅ Implemented
+
+Manages customer service tickets and issues. Provides standardized interface for tracking and resolving customer problems.
+
+**Key Features:**
+
+- Trouble ticket creation and management
+- Ticket status tracking (Submitted, Acknowledged, InProgress, Resolved, Closed, Cancelled)
+- Priority management (Critical, High, Medium, Low)
+- Related entity associations
+- Resolution tracking
+
+**Endpoints:**
+
+- `GET /tmf-api/troubleTicket/v4/troubleTicket` - List trouble tickets
+- `GET /tmf-api/troubleTicket/v4/troubleTicket/{id}` - Get trouble ticket by ID
+- `POST /tmf-api/troubleTicket/v4/troubleTicket` - Create trouble ticket
+- `PATCH /tmf-api/troubleTicket/v4/troubleTicket/{id}` - Update trouble ticket
+- `DELETE /tmf-api/troubleTicket/v4/troubleTicket/{id}` - Delete trouble ticket
+
+#### TMF634 - Quote Management API
+
+**Status:** ✅ Implemented
+
+Manages price quotes for products and services before orders are placed. Enables customers to review pricing and terms before committing to purchases.
+
+**Key Features:**
+
+- Quote creation and management
+- Quote state tracking (InProgress, Ready, Cancelled, Accepted, Rejected, Expired)
+- Quote items with pricing
+- Validity period management
+- Related party associations
+
+**Endpoints:**
+
+- `GET /tmf-api/quoteManagement/v4/quote` - List quotes
+- `GET /tmf-api/quoteManagement/v4/quote/{id}` - Get quote by ID
+- `POST /tmf-api/quoteManagement/v4/quote` - Create quote
+- `PATCH /tmf-api/quoteManagement/v4/quote/{id}` - Update quote
+- `DELETE /tmf-api/quoteManagement/v4/quote/{id}` - Delete quote
+
 ## Implementation Summary
 
-### Total Implemented APIs: 17
+### Total Implemented APIs: 21
 
 - **Phase 1 (Product Domain):** 3 APIs (TMF620, TMF622, TMF637)
 - **Phase 2 (Customer & User Domain):** 4 APIs (TMF629, TMF678, TMF679, TMF688)
@@ -391,6 +437,8 @@ Handles digital identities, credentials, OAuth/JWT integration. Your system beco
 - **Phase 4 (Resource Domain):** 2 APIs (TMF639, TMF645)
 - **Phase 5 (Revenue Management):** 2 APIs (TMF635, TMF668)
 - **Phase 6 (Security, Party & Identity):** 2 APIs (TMF632, TMF669)
+- **Phase 7 (Additional APIs):** 2 APIs (TMF633, TMF634)
+- **Other APIs:** 2 APIs (TMF642, TMF656)
 
 ## Compliance
 

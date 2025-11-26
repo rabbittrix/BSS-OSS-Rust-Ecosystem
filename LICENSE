@@ -1,22 +1,44 @@
-# MIT License
+# DUAL LICENSING MODEL
 
-Copyright (c) 2025 BSS/OSS Rust
+This project uses a dual licensing model:
 
-All rights reserved. Created by: Roberto de Souza, email: <rabbittrix@hotmail.com>
+1. TMF APIs (Apache 2.0 with Authorization/Donation Requirement)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, subject to the following conditions:
+   - Location: All crates under crates/tmf-apis/
+   - License: Apache License 2.0 (see LICENSE-TMF-APIS)
+   - Commercial use requires authorization and donation
+   - See LICENSE-TMF-APIS for full terms
 
-- Commercial use requires a visible link to the BSS/OSS Rust repository
-  and a commitment to contribute via donation or feature feedback.
+2. Commercial Components (Proprietary License Required)
+   - Location: All other crates (PCM Engine, Policy Engine, Revenue Management, etc.)
+   - License: Proprietary Commercial License (see LICENSE-COMMERCIAL)
+   - Requires paid license for commercial use
+   - Contact: <rabbittrix@hotmail.com> for licensing inquiries
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## LICENSING SUMMARY
+
+### TMF API Implementations
+
+- Licensed under Apache 2.0
+- Commercial use requires authorization and donation
+- Non-commercial use is permitted without restrictions
+- See LICENSE-TMF-APIS for complete terms
+
+### Commercial Components (Require Paid License)
+
+- Product Catalog Engine (PCM Engine)
+- Policy Engine (including PCRF)
+- Revenue Management System
+- Order Orchestrator
+- Service Orchestrator
+- Resource Management
+- API Gateway
+- Analytics and Reporting
+- Multi-Tenant Support
+- Security System
+- And other non-TMF components
+
+For licensing inquiries, please contact:
+Roberto de Souza <rabbittrix@hotmail.com>
+
+Donation Link: <https://opencollective.com/bss-oss-rust>

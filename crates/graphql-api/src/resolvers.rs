@@ -18,7 +18,7 @@ impl QueryRoot {
     /// Get catalog by ID
     async fn catalog(&self, ctx: &Context<'_>, id: ID) -> Result<Option<Catalog>> {
         let pool = ctx.data::<PgPool>()?;
-        let uuid = Uuid::parse_str(&id.to_string())
+        let uuid = Uuid::parse_str(id.as_ref())
             .map_err(|e| async_graphql::Error::new(format!("Invalid UUID: {}", e)))?;
 
         let row = sqlx::query_as::<_, CatalogRow>(
@@ -51,7 +51,7 @@ impl QueryRoot {
     /// Get product offering by ID
     async fn product_offering(&self, ctx: &Context<'_>, id: ID) -> Result<Option<ProductOffering>> {
         let pool = ctx.data::<PgPool>()?;
-        let uuid = Uuid::parse_str(&id.to_string())
+        let uuid = Uuid::parse_str(id.as_ref())
             .map_err(|e| async_graphql::Error::new(format!("Invalid UUID: {}", e)))?;
 
         let row = sqlx::query_as::<_, ProductOfferingRow>(
@@ -90,7 +90,7 @@ impl QueryRoot {
     /// Get customer by ID
     async fn customer(&self, ctx: &Context<'_>, id: ID) -> Result<Option<Customer>> {
         let pool = ctx.data::<PgPool>()?;
-        let uuid = Uuid::parse_str(&id.to_string())
+        let uuid = Uuid::parse_str(id.as_ref())
             .map_err(|e| async_graphql::Error::new(format!("Invalid UUID: {}", e)))?;
 
         let row = sqlx::query_as::<_, CustomerRow>(

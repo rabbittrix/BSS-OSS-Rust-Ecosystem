@@ -19,6 +19,8 @@ members = [
     "crates/tmf-apis/tmf632_party",
     "crates/tmf-apis/tmf669_identity",
     "crates/tmf-apis/tmf642_alarm",
+    "crates/tmf-apis/tmf633_trouble_ticket",
+    "crates/tmf-apis/tmf634_quote",
     "crates/tmf-apis/tmf656_slice",
     "crates/pcm-engine",
     "crates/utils",
@@ -39,6 +41,12 @@ members = [
     "crates/multi-tenant",
     "crates/analytics",
     "crates/data-export",
+    "crates/iot-management",
+    "crates/realtime-analytics",
+    "crates/ml-predictive-analytics",
+    "crates/blockchain-audit",
+    "crates/edge-computing",
+    "crates/mobile-sdk",
 ]
 resolver = "2"
 
@@ -74,10 +82,12 @@ async-trait = "0.1"
 futures = "0.3"
 
 [workspace.package]
-version = "0.2.5"
+version = "0.3.0"
 edition = "2021"
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
-license = "MIT"
+# Note: Individual crates specify their own licenses
+# TMF APIs: Apache-2.0 (see LICENSE-TMF-APIS)
+# Commercial components: Proprietary (see LICENSE-COMMERCIAL)
 repository = "https://github.com/rabbittrix/BSS-OSS-Rust-Ecosystem.git"
 documentation = "https://github.com/rabbittrix/BSS-OSS-Rust-Ecosystem/blob/main/README.md"
 

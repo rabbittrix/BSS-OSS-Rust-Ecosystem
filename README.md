@@ -17,11 +17,11 @@ This project aims to revolutionize the BSS/OSS landscape by providing:
 2. ✅ Add **PostgreSQL (via sqlx)** for real data persistence
 3. ✅ Integrate **JWT Authentication** using `jsonwebtoken`
 4. ✅ Add **OpenAPI/Swagger** auto-generation using `utoipa` and `utoipa-swagger-ui`
-5. ✅ License: **MIT + Donation Link**
+5. ✅ License: **Dual Licensing Model** (TMF APIs: Apache 2.0 with Authorization/Donation; Commercial Components: Proprietary)
 6. ✅ Implement **TMF622 - Product Ordering Management API**
 7. ✅ Implement **TMF637 - Product Inventory Management API**
 
-### Current Version: 0.2.5
+### Current Version: 0.3.0
 
 **Phase 2 APIs Completed:**
 
@@ -377,7 +377,7 @@ bss-oss-rust/
 
 The most strategic choice for interoperability. Adherence to industry standards is crucial for commercial value.
 
-**Current Implementation (v0.2.5):**
+**Current Implementation (v0.3.0):**
 
 - **TMF620** - Product Catalog Management API ✅
 - **TMF622** - Product Ordering Management API ✅
@@ -1683,7 +1683,37 @@ The BSS/OSS Rust ecosystem is community-driven. See [DONATION.md](docs/DONATION.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project uses a **dual licensing model**:
+
+### TMF API Implementations (Apache 2.0)
+
+All TM Forum API implementations (`crates/tmf-apis/*`) are licensed under **Apache License 2.0** with additional terms:
+
+- **Commercial use requires authorization and donation**
+- Non-commercial use is permitted without restrictions
+- See [LICENSE-TMF-APIS](LICENSE-TMF-APIS) for complete terms
+
+### Commercial Components (Proprietary License Required)
+
+The following components require a **paid commercial license**:
+
+- Product Catalog Engine (PCM Engine)
+- Policy Engine (including PCRF - Policy and Charging Rules Function)
+- Revenue Management System
+- Order Orchestrator
+- Service Orchestrator
+- Resource Management
+- API Gateway
+- Analytics and Reporting
+- Multi-Tenant Support
+- Security System
+- And other non-TMF components
+
+**For licensing inquiries, please contact:** Roberto de Souza <rabbittrix@hotmail.com>
+
+**Donation Link:** [https://opencollective.com/bss-oss-rust](https://opencollective.com/bss-oss-rust)
+
+See [LICENSE](LICENSE) for licensing overview and [LICENSE-COMMERCIAL](LICENSE-COMMERCIAL) for commercial license terms.
 
 ## 👤 Author
 

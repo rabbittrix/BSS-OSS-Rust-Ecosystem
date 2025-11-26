@@ -3,7 +3,7 @@ name = "test-utils"
 version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
-license.workspace = true
+license = "Proprietary"
 description = "Test utilities and helpers for BSS/OSS Rust ecosystem"
 repository.workspace = true
 documentation.workspace = true
@@ -17,7 +17,7 @@ sqlx.workspace = true
 uuid.workspace = true
 chrono.workspace = true
 jsonwebtoken.workspace = true
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.5" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.0" }
 async-trait.workspace = true
 futures.workspace = true
 

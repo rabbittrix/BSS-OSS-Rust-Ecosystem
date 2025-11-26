@@ -2,8 +2,8 @@ apiVersion: v2
 name: bss-oss-rust
 description: A Helm chart for BSS/OSS Rust Ecosystem
 type: application
-version: 0.2.5
-appVersion: "0.2.5"
+version: 0.3.0
+appVersion: "0.3.0"
 keywords:
   - bss
   - oss

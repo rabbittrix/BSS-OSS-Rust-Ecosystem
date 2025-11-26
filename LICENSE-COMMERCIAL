@@ -1,0 +1,97 @@
+# PROPRIETARY LICENSE - COMMERCIAL COMPONENTS
+
+Copyright (c) 2025 BSS/OSS Rust Ecosystem
+Copyright (c) 2025 Roberto de Souza <rabbittrix@hotmail.com>
+
+All rights reserved.
+
+NOTICE: This software and associated documentation files (the "Software") are
+proprietary and confidential. Unauthorized copying, modification, distribution,
+or use of this Software, via any medium, is strictly prohibited.
+
+## COMMERCIAL LICENSE REQUIRED
+
+The following components of this project require a paid commercial license:
+
+- Product Catalog Engine (PCM Engine)
+- Policy Engine (including PCRF - Policy and Charging Rules Function)
+- Revenue Management System
+- Order Orchestrator
+- Service Orchestrator
+- Resource Management
+- API Gateway (commercial features)
+- Analytics and Reporting
+- Multi-Tenant Support
+- Security System (commercial features)
+- Data Export/Import
+- Edge Computing
+- Machine Learning Predictive Analytics
+- Blockchain Audit
+- Mobile SDK
+- Real-time Analytics
+- IoT Management
+- GraphQL API
+- Webhooks
+- Event Bus
+- Cache
+- Audit Logging
+- Test Utils
+- Benchmarks
+- Utils
+
+## TERMS AND CONDITIONS
+
+1. LICENSE GRANT: Subject to payment of applicable license fees and
+   compliance with all terms of this License, Licensor grants to Licensee
+   a non-exclusive, non-transferable, limited license to use the Software
+   solely for Licensee's internal business operations.
+
+2. RESTRICTIONS: Licensee shall NOT:
+   a) Copy, modify, adapt, alter, translate, or create derivative works
+   of the Software except as expressly permitted;
+   b) Reverse engineer, decompile, disassemble, or otherwise attempt to
+   derive the source code of the Software;
+   c) Remove, alter, or obscure any proprietary notices, labels, or marks
+   on the Software;
+   d) Rent, lease, loan, sell, sublicense, assign, or otherwise transfer
+   the Software or any rights therein;
+   e) Use the Software to provide services to third parties without
+   explicit written permission;
+   f) Publish, distribute, or make available the Software to any third party.
+
+3. OWNERSHIP: The Software is licensed, not sold. All rights, title, and
+   interest in and to the Software, including all intellectual property
+   rights, remain with Licensor.
+
+4. TERM AND TERMINATION: This License is effective until terminated.
+   Licensor may terminate this License immediately upon breach of any
+   term. Upon termination, Licensee must destroy all copies of the Software.
+
+5. WARRANTY DISCLAIMER: THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY
+   OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+   WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+   NONINFRINGEMENT.
+
+6. LIMITATION OF LIABILITY: IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY
+   DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE SOFTWARE.
+
+## LICENSING INQUIRIES
+
+For commercial licensing, please contact:
+
+Roberto de Souza  
+Email: <rabbittrix@hotmail.com>
+
+Please include:
+
+- Company name and contact information
+- Intended use case
+- Deployment scale
+- Support requirements
+
+License fees are determined based on:
+
+- Number of users/endpoints
+- Deployment environment (on-premise, cloud, hybrid)
+- Support and maintenance requirements
+- Customization needs

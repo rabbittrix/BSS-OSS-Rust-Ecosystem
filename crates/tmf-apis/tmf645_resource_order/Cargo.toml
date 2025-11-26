@@ -3,13 +3,13 @@ name = "tmf645-resource-order"
 version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
-license.workspace = true
+license = "Apache-2.0"
 description = "TM Forum TMF645 Resource Order Management API implementation in Rust"
 repository.workspace = true
 documentation.workspace = true
 
 [dependencies]
-tmf-apis-core = { path = "../core", version = "0.2.5" }
+tmf-apis-core = { path = "../core", version = "0.3.0" }
 actix-web.workspace = true
 sqlx.workspace = true
 jsonwebtoken.workspace = true

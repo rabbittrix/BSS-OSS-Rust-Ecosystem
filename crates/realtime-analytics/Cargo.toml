@@ -1,0 +1,26 @@
+[package]
+name = "realtime-analytics"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license = "Proprietary"
+description = "Real-time Analytics Dashboard with WebSocket support for BSS/OSS Rust Ecosystem"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+analytics = { path = "../analytics", version = "0.3.0" }
+actix-web.workspace = true
+actix-ws = "0.2"
+actix = "0.13"
+sqlx.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+tokio.workspace = true
+log.workspace = true
+thiserror.workspace = true
+utoipa.workspace = true
+futures = "0.3"
+futures-util = "0.3"

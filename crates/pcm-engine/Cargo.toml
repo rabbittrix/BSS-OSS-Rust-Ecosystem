@@ -3,13 +3,13 @@ name = "pcm-engine"
 version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
-license.workspace = true
+license = "Proprietary"
 description = "Product Catalog Engine (PCM) Framework for pricing, eligibility, and bundling rules"
 repository.workspace = true
 documentation.workspace = true
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.5" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.0" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true

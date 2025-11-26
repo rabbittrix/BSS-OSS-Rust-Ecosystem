@@ -2,6 +2,15 @@
 
 The BSS/OSS Rust ecosystem is community-driven and maintained by professionals who believe in open interoperability.
 
+## Licensing Model
+
+This project uses a dual licensing model:
+
+- **TMF APIs:** Apache 2.0 (commercial use requires authorization and donation)
+- **Commercial Components:** Proprietary license required (contact for pricing)
+
+See [LICENSING.md](LICENSING.md) for complete licensing information.
+
 ## 💸 How to Contribute Financially
 
 Donations help fund:

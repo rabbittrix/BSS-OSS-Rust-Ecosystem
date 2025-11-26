@@ -1,0 +1,20 @@
+[package]
+name = "ml-predictive-analytics"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license = "Proprietary"
+description = "Machine learning integration for predictive analytics"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+analytics = { path = "../analytics", version = "0.3.0" }
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+log.workspace = true
+tokio.workspace = true
+async-trait = "0.1"

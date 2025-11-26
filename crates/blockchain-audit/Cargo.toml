@@ -1,0 +1,22 @@
+[package]
+name = "blockchain-audit"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license = "Proprietary"
+description = "Blockchain integration for immutable audit trails"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+audit-logging = { path = "../audit-logging", version = "0.3.0" }
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+log.workspace = true
+tokio.workspace = true
+sha2 = "0.10"
+hex = "0.4"
+async-trait = "0.1"
