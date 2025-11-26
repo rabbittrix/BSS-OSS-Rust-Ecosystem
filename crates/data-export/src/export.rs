@@ -63,7 +63,7 @@ impl DataExporter {
                 .await?
         };
 
-        let catalogs: Vec<Value> = rows.iter().map(|row| row_to_json_value(row)).collect();
+        let catalogs: Vec<Value> = rows.iter().map(row_to_json_value).collect();
 
         Ok(Value::Array(catalogs))
     }
