@@ -66,7 +66,7 @@ impl IoTService {
         .bind(&serde_json::to_value(&request.location)?)
         .bind(&serde_json::to_value(&request.capabilities)?)
         .bind(&request.configuration)
-        .bind(&request.tenant_id)
+        .bind(request.tenant_id)
         .bind(now)
         .execute(&self.pool)
         .await?;
@@ -152,31 +152,31 @@ impl IoTService {
         let mut updates = Vec::new();
         let mut bind_index = 1;
 
-        if let Some(_) = &request.name {
+        if request.name.is_some() {
             updates.push(format!("name = ${}", bind_index));
             bind_index += 1;
         }
-        if let Some(_) = &request.description {
+        if request.description.is_some() {
             updates.push(format!("description = ${}", bind_index));
             bind_index += 1;
         }
-        if let Some(_) = &request.status {
+        if request.status.is_some() {
             updates.push(format!("status = ${}", bind_index));
             bind_index += 1;
         }
-        if let Some(_) = &request.firmware_version {
+        if request.firmware_version.is_some() {
             updates.push(format!("firmware_version = ${}", bind_index));
             bind_index += 1;
         }
-        if let Some(_) = &request.ip_address {
+        if request.ip_address.is_some() {
             updates.push(format!("ip_address = ${}", bind_index));
             bind_index += 1;
         }
-        if let Some(_) = &request.location {
+        if request.location.is_some() {
             updates.push(format!("location = ${}", bind_index));
             bind_index += 1;
         }
-        if let Some(_) = &request.configuration {
+        if request.configuration.is_some() {
             updates.push(format!("configuration = ${}", bind_index));
             bind_index += 1;
         }
@@ -296,14 +296,14 @@ impl IoTService {
             .map_err(|e| IoTError::SerializationError(format!("Invalid status: {}", e)))?;
 
         let location = location_json
-            .map(|v| serde_json::from_value(v))
+            .map(serde_json::from_value)
             .transpose()
             .map_err(|e| IoTError::SerializationError(format!("Invalid location: {}", e)))?;
 
         let capabilities = capabilities_json
-            .map(|v| serde_json::from_value(v))
+            .map(serde_json::from_value)
             .transpose()
-            .map(|opt| opt.unwrap_or_else(|| Vec::new()))
+            .map(|opt| opt.unwrap_or_else(Vec::new))
             .map_err(|e| IoTError::SerializationError(format!("Invalid capabilities: {}", e)))?;
 
         Ok(IoTDevice {

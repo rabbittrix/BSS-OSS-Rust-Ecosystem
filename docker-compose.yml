@@ -2,6 +2,9 @@ services:
   postgres:
     image: postgres:15-alpine
     container_name: bss-oss-postgres
+    labels:
+      - "com.bssoss.version=0.3.0"
+      - "com.bssoss.service=postgres"
     environment:
       POSTGRES_USER: bssoss
       POSTGRES_PASSWORD: bssoss123
@@ -35,6 +38,12 @@ services:
       #   021_resource_management_schema.sql (Resource Management)
       #   022_revenue_management_schema.sql (Revenue Management: Charging, Rating, Billing Cycles, Settlements)
       #   023_security_schema.sql (Security: OAuth 2.0/OIDC, MFA, RBAC, Audit Logging)
+      #   024_multi_tenant_schema.sql (Multi-Tenant Support)
+      #   025_analytics_schema.sql (Analytics and Reporting)
+      #   026_backup_recovery_schema.sql (Backup and Recovery)
+      #   027_iot_management_schema.sql (IoT Device Management)
+      #   028_tmf633_trouble_ticket_schema.sql (TMF633 - Trouble Ticket Management)
+      #   029_tmf634_quote_schema.sql (TMF634 - Quote Management)
       - ./migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bssoss -d bssoss"]
@@ -89,7 +98,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - RUST_VERSION=1.75
     container_name: bss-oss-app
+    labels:
+      - "com.bssoss.version=0.3.0"
+      - "com.bssoss.service=app"
     environment:
       DATABASE_URL: "postgresql://bssoss:bssoss123@postgres:5432/bssoss"
       TEST_DATABASE_URL: "postgresql://bssoss:bssoss123@postgres_test:5432/bssoss_test"
