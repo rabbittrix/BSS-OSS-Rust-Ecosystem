@@ -68,6 +68,23 @@ services:
     profiles:
       - test
 
+  redis:
+    image: redis:7-alpine
+    container_name: bss-oss-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - bss-oss-network
+    restart: unless-stopped
+
   app:
     build:
       context: .
@@ -76,6 +93,7 @@ services:
     environment:
       DATABASE_URL: "postgresql://bssoss:bssoss123@postgres:5432/bssoss"
       TEST_DATABASE_URL: "postgresql://bssoss:bssoss123@postgres_test:5432/bssoss_test"
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       JWT_SECRET: ${JWT_SECRET:-dev-secret-key-change-in-production}
       RUST_LOG: ${RUST_LOG:-info}
       HOST: ${HOST:-0.0.0.0}
@@ -85,8 +103,14 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/swagger-ui/ || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:8080/swagger-ui/ || curl -f http://localhost:8080/graphql || exit 1",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -98,6 +122,7 @@ services:
 volumes:
   postgres_data:
   postgres_test_data:
+  redis_data:
 
 networks:
   bss-oss-network:
