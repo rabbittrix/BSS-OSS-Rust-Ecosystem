@@ -90,6 +90,7 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
             if trimmed.is_empty() || trimmed.starts_with("--") {
                 continue;
             }
+
             // Execute statement, providing context on failure
             // Some statements may fail if table doesn't exist, which is non-critical for IF NOT EXISTS
             let result = sqlx::query(trimmed).execute(pool).await;
@@ -103,9 +104,10 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
                 // - CREATE INDEX IF NOT EXISTS (indexes can be recreated)
                 // Note: CREATE TABLE IF NOT EXISTS should not fail silently, but if it does
                 // due to table already existing, that's okay
-                let is_non_critical = (upper.starts_with("COMMENT ON") && is_table_not_found)
-                    || (upper.starts_with("CREATE INDEX IF NOT EXISTS") && is_table_not_found)
-                    || (upper.starts_with("CREATE INDEX") && is_table_not_found); // Also handle CREATE INDEX without IF NOT EXISTS
+                let is_non_critical = is_table_not_found
+                    && (upper.starts_with("COMMENT ON")
+                        || upper.starts_with("CREATE INDEX IF NOT EXISTS")
+                        || upper.starts_with("CREATE INDEX")); // Also handle CREATE INDEX without IF NOT EXISTS
 
                 if is_non_critical {
                     // Non-critical error - table/index might not exist, skip
