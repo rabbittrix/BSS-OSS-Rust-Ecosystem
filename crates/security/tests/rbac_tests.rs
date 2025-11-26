@@ -15,6 +15,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore] // Requires database connection
     async fn test_create_role() {
         let rbac = setup().await;
 
@@ -37,6 +38,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore] // Requires database connection
     async fn test_assign_role() {
         let rbac = setup().await;
         let identity_id = Uuid::new_v4();
@@ -57,6 +59,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore] // Requires database connection
     async fn test_has_permission() {
         let rbac = setup().await;
         let identity_id = Uuid::new_v4();
@@ -80,6 +83,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore] // Requires database connection
     async fn test_get_identity_roles() {
         let rbac = setup().await;
         let identity_id = Uuid::new_v4();

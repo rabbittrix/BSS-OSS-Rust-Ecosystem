@@ -236,7 +236,7 @@ fn calculate_dynamic_price(dynamic: &DynamicPricing, context: &PricingContext) -
                 .map(|d| d * factor.weight * factor.adjustment_percentage / 100.0),
             FactorType::TimeOfDay => {
                 let hour = context.timestamp.hour();
-                if hour >= 9 && hour <= 17 {
+                if (9..=17).contains(&hour) {
                     Some(factor.adjustment_percentage / 100.0)
                 } else {
                     Some(-factor.adjustment_percentage / 100.0)
