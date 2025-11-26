@@ -97,14 +97,16 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
             if let Err(e) = result {
                 let error_msg = e.to_string();
                 let is_table_not_found = error_msg.contains("does not exist")
-                    || error_msg.contains("relation") && error_msg.contains("does not exist");
+                    || (error_msg.contains("relation") && error_msg.contains("does not exist"));
                 let upper = trimmed.trim().to_uppercase();
 
                 // Check if this is a CREATE TABLE statement first (critical)
+                // CREATE TABLE must succeed - any error (foreign key, syntax, etc.) is critical
                 if upper.starts_with("CREATE TABLE") {
                     // CREATE TABLE is critical - always fail with detailed error
+                    // This includes foreign key constraint errors, syntax errors, etc.
                     return Err(sqlx::Error::Io(std::io::Error::other(format!(
-                        "Failed to execute CREATE TABLE statement {} in migration {:?}: {}\nStatement (first 500 chars): {}",
+                        "Failed to execute CREATE TABLE statement {} in migration {:?}: {}\nStatement (first 500 chars): {}\n\nThis is a critical error. The table was not created.",
                         idx + 1,
                         migration_file.file_name().unwrap_or_default(),
                         e,
@@ -140,6 +142,27 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
                     trimmed.chars().take(200).collect::<String>()
                 ))));
             }
+        }
+    }
+
+    // Verify that critical tables exist after migrations
+    // This helps catch cases where CREATE TABLE statements fail silently
+    let critical_tables = vec!["identities", "audit_logs", "roles", "user_roles"];
+    for table in critical_tables {
+        let check_query = format!(
+            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '{}')",
+            table
+        );
+        let exists: bool = sqlx::query_scalar(&check_query)
+            .fetch_one(pool)
+            .await
+            .unwrap_or(false);
+
+        if !exists {
+            return Err(sqlx::Error::Io(std::io::Error::other(format!(
+                "Critical table '{}' does not exist after running migrations. This indicates a CREATE TABLE statement failed or was not executed.",
+                table
+            ))));
         }
     }
 
