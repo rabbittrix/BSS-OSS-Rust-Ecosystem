@@ -20,6 +20,7 @@ impl BlockchainAuditService {
     }
 
     /// Record an audit event to the blockchain
+    #[allow(clippy::too_many_arguments)]
     pub async fn record_audit_event(
         &self,
         event_type: AuditEventType,

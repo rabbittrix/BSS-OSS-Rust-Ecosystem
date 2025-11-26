@@ -15,14 +15,12 @@ pub struct BlockchainAuditChain {
 impl BlockchainAuditChain {
     /// Create a new blockchain
     pub fn new(difficulty: usize) -> Self {
-        let chain = Self {
+        // Create genesis block (will be added on first access)
+        Self {
             chain: Arc::new(RwLock::new(Vec::new())),
             difficulty,
             pending_entries: Arc::new(RwLock::new(Vec::new())),
-        };
-
-        // Create genesis block (will be added on first access)
-        chain
+        }
     }
 
     /// Initialize with genesis block
