@@ -1,8 +1,8 @@
 //! Mobile API Client
 
+use crate::cache::MobileCache;
 use crate::error::MobileSdkError;
 use crate::models::{ApiConfig, ApiRequest, ApiResponse, AuthToken, HttpMethod};
-use crate::cache::MobileCache;
 use chrono::Utc;
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -112,12 +112,7 @@ impl MobileApiClient {
         let headers: std::collections::HashMap<String, String> = response
             .headers()
             .iter()
-            .map(|(k, v)| {
-                (
-                    k.to_string(),
-                    v.to_str().unwrap_or("").to_string(),
-                )
-            })
+            .map(|(k, v)| (k.to_string(), v.to_str().unwrap_or("").to_string()))
             .collect();
 
         let body = response
@@ -147,4 +142,3 @@ impl MobileApiClient {
         }
     }
 }
-

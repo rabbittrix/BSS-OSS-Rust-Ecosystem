@@ -96,10 +96,7 @@ pub async fn get_quote_by_id(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<Optio
 }
 
 /// Create a new quote
-pub async fn create_quote(
-    pool: &Pool<Postgres>,
-    request: CreateQuoteRequest,
-) -> TmfResult<Quote> {
+pub async fn create_quote(pool: &Pool<Postgres>, request: CreateQuoteRequest) -> TmfResult<Quote> {
     let id = Uuid::new_v4();
     let now = Utc::now();
     let href = format!("/tmf-api/quoteManagement/v4/quote/{}", id);
@@ -133,14 +130,21 @@ pub async fn create_quote(
     if let Some(items) = request.quote_item {
         for item in items {
             let item_id = Uuid::new_v4();
-            let unit_price_json = item.unit_price.as_ref().map(|m| serde_json::to_value(m).ok()).flatten();
+            let unit_price_json = item
+                .unit_price
+                .as_ref()
+                .map(|m| serde_json::to_value(m).ok())
+                .flatten();
             let item_total_price = item.unit_price.as_ref().and_then(|up| {
                 item.quantity.map(|q| crate::models::Money {
                     value: up.value * q as f64,
                     unit: up.unit.clone(),
                 })
             });
-            let item_total_price_json = item_total_price.as_ref().map(|m| serde_json::to_value(m).ok()).flatten();
+            let item_total_price_json = item_total_price
+                .as_ref()
+                .map(|m| serde_json::to_value(m).ok())
+                .flatten();
 
             sqlx::query(
                 "INSERT INTO quote_items (
@@ -227,4 +231,3 @@ pub async fn delete_quote(pool: &Pool<Postgres>, id: Uuid) -> TmfResult<()> {
 
     Ok(())
 }
-

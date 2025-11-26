@@ -186,4 +186,3 @@ pub async fn delete_quote(
         }))),
     }
 }
-

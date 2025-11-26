@@ -27,7 +27,7 @@ impl ModelTrainer {
 
         // Simplified training - in production, this would use actual ML libraries
         // like ONNX Runtime, TensorFlow, or PyTorch
-        
+
         let model_id = Uuid::new_v4();
         let sample_count = training_data.len();
 
@@ -102,4 +102,3 @@ impl Default for ModelTrainer {
         Self::new()
     }
 }
-

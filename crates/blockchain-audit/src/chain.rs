@@ -20,7 +20,7 @@ impl BlockchainAuditChain {
             difficulty,
             pending_entries: Arc::new(RwLock::new(Vec::new())),
         };
-        
+
         // Create genesis block (will be added on first access)
         chain
     }
@@ -62,7 +62,7 @@ impl BlockchainAuditChain {
         let previous_block = chain.last().ok_or_else(|| {
             BlockchainAuditError::ChainValidationFailed("No previous block found".to_string())
         })?;
-        
+
         let previous_hash = previous_block.hash.clone();
         let index = chain.len() as u64;
         drop(chain);
@@ -79,7 +79,7 @@ impl BlockchainAuditChain {
     /// Validate the entire chain
     pub async fn validate_chain(&self) -> Result<(), BlockchainAuditError> {
         let chain = self.chain.read().await;
-        
+
         if chain.is_empty() {
             return Err(BlockchainAuditError::ChainValidationFailed(
                 "Chain is empty".to_string(),
@@ -98,7 +98,7 @@ impl BlockchainAuditChain {
         for i in 1..chain.len() {
             let block = &chain[i];
             let previous_block = &chain[i - 1];
-            
+
             block.validate(&previous_block.hash)?;
         }
 
@@ -139,4 +139,3 @@ impl BlockchainAuditChain {
         self.chain.read().await.len()
     }
 }
-

@@ -1,8 +1,8 @@
 //! Database operations for TMF633 Trouble Ticket Management
 
 use crate::models::{
-    CreateTroubleTicketRequest, TroubleTicket, TroubleTicketPriority,
-    TroubleTicketStatus, TroubleTicketType, UpdateTroubleTicketRequest,
+    CreateTroubleTicketRequest, TroubleTicket, TroubleTicketPriority, TroubleTicketStatus,
+    TroubleTicketType, UpdateTroubleTicketRequest,
 };
 use chrono::{DateTime, Utc};
 use sqlx::{Pool, Postgres, Row};
@@ -254,4 +254,3 @@ pub async fn delete_trouble_ticket(pool: &Pool<Postgres>, id: Uuid) -> TmfResult
 
     Ok(())
 }
-

@@ -45,10 +45,7 @@ impl EdgeNodeManager {
     }
 
     /// Update node heartbeat
-    pub async fn update_heartbeat(
-        &self,
-        node_id: Uuid,
-    ) -> Result<(), EdgeComputingError> {
+    pub async fn update_heartbeat(&self, node_id: Uuid) -> Result<(), EdgeComputingError> {
         let mut nodes = self.nodes.write().await;
         if let Some(node) = nodes.get_mut(&node_id) {
             node.last_heartbeat = Utc::now();
@@ -120,4 +117,3 @@ impl Default for EdgeNodeManager {
         Self::new()
     }
 }
-

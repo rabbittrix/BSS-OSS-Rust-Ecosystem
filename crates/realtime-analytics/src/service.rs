@@ -84,10 +84,17 @@ impl RealtimeAnalyticsService {
         let mut updates = Vec::new();
 
         for metric_type in metric_types {
-            match self.generate_metric_update(metric_type.clone(), tenant_id).await {
+            match self
+                .generate_metric_update(metric_type.clone(), tenant_id)
+                .await
+            {
                 Ok(update) => updates.push(update),
                 Err(e) => {
-                    log::warn!("Failed to generate metric update for {:?}: {}", metric_type, e);
+                    log::warn!(
+                        "Failed to generate metric update for {:?}: {}",
+                        metric_type,
+                        e
+                    );
                 }
             }
         }
@@ -95,4 +102,3 @@ impl RealtimeAnalyticsService {
         Ok(updates)
     }
 }
-
