@@ -222,7 +222,7 @@ Comprehensive testing infrastructure for quality assurance:
 
 2. ✅ **Integration Tests for All TMF APIs**
 
-   - Integration tests for all 17 TMF APIs
+   - Integration tests for all 21 TMF APIs
    - Database-backed integration tests
    - API endpoint testing utilities
 
@@ -398,8 +398,10 @@ The most strategic choice for interoperability. Adherence to industry standards 
 - **TMF669** - Identity & Credential Management API ✅
 - **TMF642** - Alarm Management API ✅
 - **TMF656** - Slice Management API ✅
+- **TMF633** - Trouble Ticket Management API ✅
+- **TMF634** - Quote Management API ✅
 
-**Total:** 19 TM Forum APIs Implemented
+**Total:** 21 TM Forum APIs Implemented
 
 #### 2. Product Catalog Engine (PCM) Framework
 
@@ -776,6 +778,30 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 - **POST** `/networkSlice` - Create a new network slice
 - **PATCH** `/networkSlice/{id}` - Update a network slice (state, activation_date, termination_date)
 - **DELETE** `/networkSlice/{id}` - Delete a network slice
+
+### TMF633 Trouble Ticket Management API
+
+**Base URL:** `/tmf-api/troubleTicket/v4`
+
+#### Trouble Tickets
+
+- **GET** `/troubleTicket` - List all trouble tickets
+- **GET** `/troubleTicket/{id}` - Get trouble ticket by ID (UUID)
+- **POST** `/troubleTicket` - Create a new trouble ticket
+- **PATCH** `/troubleTicket/{id}` - Update a trouble ticket (status, priority, resolution)
+- **DELETE** `/troubleTicket/{id}` - Delete a trouble ticket
+
+### TMF634 Quote Management API
+
+**Base URL:** `/tmf-api/quoteManagement/v4`
+
+#### Quotes
+
+- **GET** `/quote` - List all quotes
+- **GET** `/quote/{id}` - Get quote by ID (UUID)
+- **POST** `/quote` - Create a new quote
+- **PATCH** `/quote/{id}` - Update a quote (state, items, pricing)
+- **DELETE** `/quote/{id}` - Delete a quote
 
 ### Example Requests
 
@@ -1200,6 +1226,60 @@ curl -X POST http://localhost:8080/tmf-api/sliceManagement/v4/networkSlice \
   }'
 ```
 
+**Create a trouble ticket (TMF633):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/troubleTicket/v4/troubleTicket \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Network Connectivity Issue",
+    "description": "Customer reporting intermittent connectivity",
+    "version": "1.0.0",
+    "status": "SUBMITTED",
+    "priority": "HIGH",
+    "trouble_ticket_type": "TECHNICAL_ISSUE",
+    "related_entity": [
+      {
+        "id": "service-instance-uuid",
+        "role": "AFFECTED_SERVICE",
+        "name": "5G Service Instance"
+      }
+    ]
+  }'
+```
+
+**Create a quote (TMF634):**
+
+```bash
+curl -X POST http://localhost:8080/tmf-api/quoteManagement/v4/quote \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Quote-2025-01",
+    "description": "Quote for 5G Premium Plan",
+    "version": "1.0.0",
+    "state": "IN_PROGRESS",
+    "quote_item": [
+      {
+        "name": "5G Premium Plan",
+        "quantity": 1,
+        "unit_price": {
+          "value": 99.99,
+          "unit": "USD"
+        }
+      }
+    ],
+    "related_party": [
+      {
+        "name": "John Doe",
+        "role": "CUSTOMER"
+      }
+    ],
+    "valid_until": "2025-02-01T00:00:00Z"
+  }'
+```
+
 ## 📚 API Documentation
 
 ### Swagger UI
@@ -1352,7 +1432,7 @@ Swagger UI provides an interactive interface to test all TMF APIs:
 
    - **Swagger UI**: <http://localhost:8080/swagger-ui> - Interactive REST API documentation
    - **GraphQL Playground**: <http://localhost:8080/graphql> - Interactive GraphQL interface
-   - All 17 TMF APIs are available via REST
+   - All 21 TMF APIs are available via REST
    - GraphQL interface provides flexible query access to catalogs, products, and customers
 
 3. **Test Endpoints:**
@@ -1391,8 +1471,10 @@ Swagger UI provides an interactive interface to test all TMF APIs:
    - **TMF669**: Identity & Credential Management (OAuth, JWT)
    - **TMF642**: Alarm Management (network alarms, NOC workflows)
    - **TMF656**: Slice Management (5G network slicing)
+   - **TMF633**: Trouble Ticket Management (trouble ticket lifecycle)
+   - **TMF634**: Quote Management (price quotes and quote items)
 
-   **Total: 19 TM Forum APIs available via REST and GraphQL**
+   **Total: 21 TM Forum APIs available via REST and GraphQL**
 
 6. **View OpenAPI Specification:**
    - Access the raw OpenAPI JSON at <http://localhost:8080/api-doc/openapi.json>
@@ -1438,6 +1520,8 @@ You can use Swagger UI to manually test all endpoints and verify:
 - **`tmf669-identity`**: TMF669 Identity & Credential Management API implementation
 - **`tmf642-alarm`**: TMF642 Alarm Management API implementation
 - **`tmf656-slice`**: TMF656 Slice Management API implementation
+- **`tmf633-trouble-ticket`**: TMF633 Trouble Ticket Management API implementation
+- **`tmf634-quote`**: TMF634 Quote Management API implementation
 
 ### Core Engine Crates
 

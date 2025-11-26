@@ -34,6 +34,8 @@ tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.3.0" }
 tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.3.0" }
 tmf642-alarm = { path = "../tmf-apis/tmf642_alarm", version = "0.3.0" }
 tmf656-slice = { path = "../tmf-apis/tmf656_slice", version = "0.3.0" }
+tmf633-trouble-ticket = { path = "../tmf-apis/tmf633_trouble_ticket", version = "0.3.0" }
+tmf634-quote = { path = "../tmf-apis/tmf634_quote", version = "0.3.0" }
 bss-oss-utils = { path = "../utils", version = "0.3.0" }
 graphql-api = { path = "../graphql-api", version = "0.3.0" }
 async-graphql = "7.0"

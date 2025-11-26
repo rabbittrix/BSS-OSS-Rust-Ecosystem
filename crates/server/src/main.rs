@@ -107,6 +107,14 @@ use tmf702_resource_activation::models::{
     CreateResourceActivationRequest, ResourceActivation, ResourceActivationState,
     ResourceRef as Tmf702ResourceRef, ServiceActivationRef as Tmf702ServiceActivationRef,
 };
+use tmf633_trouble_ticket::models::{
+    CreateTroubleTicketRequest, TroubleTicket, TroubleTicketPriority, TroubleTicketStatus,
+    TroubleTicketType, UpdateTroubleTicketRequest,
+};
+use tmf634_quote::models::{
+    CreateQuoteRequest, Quote, QuoteItem, QuoteState, RelatedParty as Tmf634RelatedParty,
+    UpdateQuoteRequest,
+};
 use tmf_apis_core::{BaseEntity, LifecycleStatus, TimePeriod};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
@@ -196,6 +204,18 @@ use utoipa_swagger_ui::SwaggerUi;
         tmf656_slice::handlers::create_network_slice,
         tmf656_slice::handlers::update_network_slice,
         tmf656_slice::handlers::delete_network_slice,
+        // TMF633
+        tmf633_trouble_ticket::handlers::get_trouble_tickets,
+        tmf633_trouble_ticket::handlers::get_trouble_ticket_by_id,
+        tmf633_trouble_ticket::handlers::create_trouble_ticket,
+        tmf633_trouble_ticket::handlers::update_trouble_ticket,
+        tmf633_trouble_ticket::handlers::delete_trouble_ticket,
+        // TMF634
+        tmf634_quote::handlers::get_quotes,
+        tmf634_quote::handlers::get_quote_by_id,
+        tmf634_quote::handlers::create_quote,
+        tmf634_quote::handlers::update_quote,
+        tmf634_quote::handlers::delete_quote,
     ),
     components(schemas(
         // TMF620
@@ -366,6 +386,20 @@ use utoipa_swagger_ui::SwaggerUi;
         CreateSLAParametersRequest,
         NetworkFunctionRef,
         CreateNetworkFunctionRefRequest,
+        // TMF633
+        TroubleTicket,
+        CreateTroubleTicketRequest,
+        UpdateTroubleTicketRequest,
+        TroubleTicketStatus,
+        TroubleTicketPriority,
+        TroubleTicketType,
+        // TMF634
+        Quote,
+        CreateQuoteRequest,
+        UpdateQuoteRequest,
+        QuoteState,
+        QuoteItem,
+        Tmf634RelatedParty,
         // Common
         BaseEntity,
         LifecycleStatus,
@@ -390,11 +424,13 @@ use utoipa_swagger_ui::SwaggerUi;
         (name = "TMF632", description = "Party Management API"),
         (name = "TMF669", description = "Identity & Credential Management API"),
         (name = "TMF642", description = "Alarm Management API"),
-        (name = "TMF656", description = "Slice Management API")
+        (name = "TMF656", description = "Slice Management API"),
+        (name = "TMF633", description = "Trouble Ticket Management API"),
+        (name = "TMF634", description = "Quote Management API")
     ),
     info(
         title = "BSS/OSS Rust - TM Forum Open APIs",
-        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF679, TMF688, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656)",
+        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF679, TMF688, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF633, TMF634)",
         version = "0.3.0",
         contact(
             name = "Roberto de Souza",
@@ -560,6 +596,8 @@ async fn main() -> std::io::Result<()> {
     log::info!("   - TMF669: Identity & Credential Management");
     log::info!("   - TMF642: Alarm Management");
     log::info!("   - TMF656: Slice Management");
+    log::info!("   - TMF633: Trouble Ticket Management");
+    log::info!("   - TMF634: Quote Management");
     log::info!("   - GraphQL: http://{}:{}/graphql", host, port);
     log::info!(
         "📚 Swagger UI will be available at http://{}:{}/swagger-ui",
@@ -649,6 +687,8 @@ async fn main() -> std::io::Result<()> {
             .configure(tmf669_identity::api::configure_routes)
             .configure(tmf642_alarm::api::configure_routes)
             .configure(tmf656_slice::api::configure_routes)
+            .configure(tmf633_trouble_ticket::api::configure_routes)
+            .configure(tmf634_quote::api::configure_routes)
     })
     .bind((host.as_str(), port))?
     .shutdown_timeout(30); // 30 seconds for graceful shutdown
