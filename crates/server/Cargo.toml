@@ -35,6 +35,10 @@ tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.2.5" }
 tmf642-alarm = { path = "../tmf-apis/tmf642_alarm", version = "0.2.5" }
 tmf656-slice = { path = "../tmf-apis/tmf656_slice", version = "0.2.5" }
 bss-oss-utils = { path = "../utils", version = "0.2.5" }
+graphql-api = { path = "../graphql-api", version = "0.2.5" }
+async-graphql = "7.0"
+async-graphql-actix-web = "7.0"
+sqlx = { workspace = true }
 actix-web.workspace = true
 utoipa.workspace = true
 utoipa-swagger-ui.workspace = true

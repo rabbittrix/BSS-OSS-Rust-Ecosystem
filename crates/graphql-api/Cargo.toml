@@ -1,0 +1,19 @@
+[package]
+name = "graphql-api"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license.workspace = true
+description = "GraphQL API layer for BSS/OSS Rust Ecosystem"
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+async-graphql = "7.0"
+async-graphql-actix-web = "7.0"
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+sqlx = { workspace = true }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.2.5" }

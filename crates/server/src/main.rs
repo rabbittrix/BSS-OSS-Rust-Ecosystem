@@ -5,7 +5,9 @@
 //! with OpenAPI documentation, authentication, and database connectivity.
 
 use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Result as ActixResult};
+use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
 use bss_oss_utils::init_logger;
+use graphql_api::create_schema;
 use tmf620_catalog::{db::init_db, models::*};
 use tmf622_ordering::models::{
     CreateOrderItemRequest, CreateProductOrderRequest, OrderItem, OrderState,
@@ -408,6 +410,65 @@ async fn redirect_to_swagger() -> ActixResult<HttpResponse> {
         .finish())
 }
 
+/// GraphQL handler
+async fn graphql_handler(
+    schema: web::Data<
+        async_graphql::Schema<
+            graphql_api::resolvers::QueryRoot,
+            async_graphql::EmptyMutation,
+            async_graphql::EmptySubscription,
+        >,
+    >,
+    pool: web::Data<sqlx::PgPool>,
+    req: GraphQLRequest,
+) -> GraphQLResponse {
+    let mut req = req.into_inner();
+    req = req.data(pool.get_ref().clone());
+    schema.execute(req).await.into()
+}
+
+/// GraphQL Playground handler
+async fn graphql_playground() -> HttpResponse {
+    HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(
+            r#"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GraphQL Playground</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/graphql-playground-react/build/static/css/index.css" />
+    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/npm/graphql-playground-react/build/favicon.png" />
+    <script src="https://cdn.jsdelivr.net/npm/graphql-playground-react/build/static/js/middleware.js"></script>
+</head>
+<body>
+    <div id="root">
+        <style>
+            body {
+                margin: 0;
+                background-color: rgb(23, 42, 58);
+                font-family: Open Sans, sans-serif;
+                overflow: hidden;
+            }
+            #root {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+        <script>
+            window.addEventListener('load', function (event) {
+                GraphQLPlayground.init(document.getElementById('root'), {
+                    endpoint: '/graphql'
+                })
+            });
+        </script>
+    </div>
+</body>
+</html>
+            "#,
+        )
+}
+
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     // Initialize logger
@@ -449,20 +510,31 @@ async fn main() -> std::io::Result<()> {
     log::info!("   - TMF669: Identity & Credential Management");
     log::info!("   - TMF642: Alarm Management");
     log::info!("   - TMF656: Slice Management");
+    log::info!("   - GraphQL: http://{}:{}/graphql", host, port);
     log::info!(
         "📚 Swagger UI will be available at http://{}:{}/swagger-ui",
         host,
         port
     );
 
+    // Create GraphQL schema
+    let schema = create_schema();
+
     HttpServer::new(move || {
+        let schema = schema.clone();
         App::new()
             .app_data(actix_web::web::Data::new(pool.clone()))
+            .app_data(actix_web::web::Data::new(schema))
             .wrap(Logger::default())
             .route("/swagger-ui", web::get().to(redirect_to_swagger))
             .service(
                 SwaggerUi::new("/swagger-ui/{_:.*}")
                     .url("/api-doc/openapi.json", ApiDoc::openapi()),
+            )
+            .service(
+                web::resource("/graphql")
+                    .route(web::post().to(graphql_handler))
+                    .route(web::get().to(graphql_playground)),
             )
             .configure(tmf620_catalog::api::configure_routes)
             .configure(tmf622_ordering::api::configure_routes)

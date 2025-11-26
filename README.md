@@ -251,9 +251,59 @@ Comprehensive testing infrastructure for quality assurance:
    - Code formatting checks with `rustfmt`
    - CI/CD integration for quality gates
 
-## 📡 Phase 8 Roadmap – Open Digital Architecture (MDM, AI, Orchestration) ✅
+## 📡 Phase 8 Roadmap – Advanced Features ✅
 
-### Phase 7 TMF APIs Implemented
+### Phase 8 Advanced Features Implemented
+
+These features enhance the BSS/OSS ecosystem with modern capabilities:
+
+1. ✅ **PCM Engine with Full Rule Engine**
+
+   - Complete Product Catalog Engine implementation
+   - Rule engine for catalog management
+   - **Why**: Enables rapid product innovation and flexible catalog management
+
+2. ✅ **Complex Pricing Models**
+
+   - Support for flat, tiered, volume, and time-based pricing
+   - Configurable pricing rules per product offering
+   - **Why**: Essential for modern telecom pricing strategies
+
+3. ✅ **Catalog Versioning**
+
+   - Version and lifecycle management for product catalogs
+   - **Why**: Enables catalog evolution without breaking existing integrations
+
+4. ✅ **Comprehensive Audit Logging**
+
+   - Audit logging system for all operations
+   - Security event logging, operation tracking, compliance-ready audit trail
+   - **Why**: Required for compliance, debugging, and security forensics
+
+5. ✅ **Redis Caching Layer**
+
+   - High-performance caching with TTL and invalidation support
+   - Pattern-based cache invalidation
+   - **Why**: Dramatically improves API response times and reduces database load
+
+6. ✅ **Event-Driven Architecture**
+
+   - Event bus abstraction for publisher/subscriber patterns
+   - Support for multiple backends (Kafka, NATS, Redpanda, in-memory)
+   - **Why**: Enables loose coupling and scalable microservices architecture
+
+7. ✅ **Webhook Notifications**
+
+   - Webhook delivery system for event notifications
+   - Subscription management and delivery tracking
+   - **Why**: Enables real-time integration with external systems
+
+8. ✅ **GraphQL API Layer**
+   - GraphQL interface with interactive playground
+   - Available at `/graphql` endpoint
+   - **Why**: Provides flexible, efficient API access for modern clients
+
+### Phase 8 TMF APIs Implemented (Open Digital Architecture)
 
 These APIs manage alarms, network slicing, and orchestration:
 
@@ -389,6 +439,21 @@ Enterprise-grade security system for authentication, authorization, and complian
 - Role-based access control (RBAC) with fine-grained permissions
 - Comprehensive audit logging for security events and compliance
 
+#### 6. Advanced Features (Phase 8) ✅
+
+Modern capabilities for enhanced functionality and performance.
+
+**Features:**
+
+- **GraphQL API**: Flexible GraphQL interface with interactive playground at `/graphql`
+- **Redis Caching**: High-performance caching with TTL and pattern-based invalidation
+- **Event-Driven Architecture**: Event bus abstraction for scalable microservices
+- **Webhook Notifications**: Real-time event delivery to external systems
+- **Comprehensive Audit Logging**: Full operation tracking for compliance and debugging
+- **PCM Engine**: Complete Product Catalog Engine with rule engine
+- **Complex Pricing Models**: Support for flat, tiered, volume, and time-based pricing
+- **Catalog Versioning**: Version and lifecycle management for product catalogs
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -520,6 +585,7 @@ cargo run --bin bss-oss-rust
 
 - **API Base URL**: <http://localhost:8080>
 - **Swagger UI**: <http://localhost:8080/swagger-ui>
+- **GraphQL Playground**: <http://localhost:8080/graphql>
 - **OpenAPI JSON**: <http://localhost:8080/api-doc/openapi.json>
 
 ## 📚 Documentation
@@ -1271,10 +1337,12 @@ Swagger UI provides an interactive interface to test all TMF APIs:
    cargo run --bin bss-oss-rust
    ```
 
-2. **Access Swagger UI:**
+2. **Access API Interfaces:**
 
-   - Open <http://localhost:8080/swagger-ui> in your browser
-   - All 17 TMF APIs are available and documented
+   - **Swagger UI**: <http://localhost:8080/swagger-ui> - Interactive REST API documentation
+   - **GraphQL Playground**: <http://localhost:8080/graphql> - Interactive GraphQL interface
+   - All 17 TMF APIs are available via REST
+   - GraphQL interface provides flexible query access to catalogs, products, and customers
 
 3. **Test Endpoints:**
 
@@ -1371,7 +1439,11 @@ You can use Swagger UI to manually test all endpoints and verify:
 ### Infrastructure Crates
 
 - **`api-gateway`**: API Gateway (authentication, middleware, rate limiting, validation, versioning)
-- **`event-bus`**: Event Bus abstraction (publisher/subscriber for event-driven architecture)
+- **`event-bus`**: Event Bus abstraction (publisher/subscriber for event-driven architecture) ✅
+- **`cache`**: Redis Caching Layer (TTL, invalidation, pattern matching) ✅
+- **`webhooks`**: Webhook Notification System (subscription management, delivery tracking) ✅
+- **`audit-logging`**: Comprehensive Audit Logging (operation tracking, compliance) ✅
+- **`graphql-api`**: GraphQL API Layer (query interface, interactive playground) ✅
 - **`utils`**: Common utilities, logger, and observability helpers
 - **`test-utils`**: Test utilities, fixtures, and integration test helpers
 - **`benchmarks`**: Performance benchmarking utilities

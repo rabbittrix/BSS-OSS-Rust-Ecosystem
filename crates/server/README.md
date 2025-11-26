@@ -30,6 +30,11 @@ This project provides a complete, production-ready implementation of TM Forum's 
 - PostgreSQL database integration via `sqlx`
 - JWT authentication for secure API access
 - Auto-generated OpenAPI/Swagger documentation
+- GraphQL API with interactive playground
+- Redis caching layer for improved performance
+- Event-driven architecture support
+- Webhook notification system
+- Comprehensive audit logging
 - Async/await support with Actix Web
 - Type-safe Rust implementation
 - Docker Compose setup included
@@ -98,29 +103,44 @@ bss-oss-rust/
 
 All APIs follow TM Forum Open API standards and are accessible via REST:
 
-| API    | Endpoint                                         | Description                 |
-| ------ | ------------------------------------------------ | --------------------------- |
-| TMF620 | `/tmf-api/productCatalogManagement/v4`           | Product catalog management  |
-| TMF622 | `/tmf-api/productOrderingManagement/v4`          | Product order management    |
-| TMF637 | `/tmf-api/productInventoryManagement/v4`         | Product inventory tracking  |
-| TMF629 | `/tmf-api/customerManagement/v4`                 | Customer profile management |
-| TMF678 | `/tmf-api/customerBillManagement/v4`             | Customer billing            |
-| TMF679 | `/tmf-api/customerUsageManagement/v4`            | Usage records (CDRs)        |
-| TMF688 | `/tmf-api/appointmentManagement/v4`              | Appointment scheduling      |
-| TMF641 | `/tmf-api/serviceOrderingManagement/v4`          | Service order management    |
-| TMF638 | `/tmf-api/serviceInventoryManagement/v4`         | Service inventory           |
-| TMF640 | `/tmf-api/serviceActivationAndConfiguration/v4`  | Service activation          |
-| TMF702 | `/tmf-api/resourceActivationAndConfiguration/v4` | Resource activation         |
-| TMF639 | `/tmf-api/resourceInventoryManagement/v4`        | Resource inventory          |
-| TMF645 | `/tmf-api/resourceOrderingManagement/v4`         | Resource order management   |
-| TMF635 | `/tmf-api/usageManagement/v4`                    | Usage management            |
-| TMF668 | `/tmf-api/partyRoleManagement/v4`                | Party role management       |
-| TMF632 | `/tmf-api/partyManagement/v4`                    | Party management            |
-| TMF669 | `/tmf-api/identityManagement/v4`                 | Identity & credential mgmt  |
+| API     | Endpoint                                         | Description                 |
+| ------- | ------------------------------------------------ | --------------------------- |
+| TMF620  | `/tmf-api/productCatalogManagement/v4`           | Product catalog management  |
+| TMF622  | `/tmf-api/productOrderingManagement/v4`          | Product order management    |
+| TMF637  | `/tmf-api/productInventoryManagement/v4`         | Product inventory tracking  |
+| TMF629  | `/tmf-api/customerManagement/v4`                 | Customer profile management |
+| TMF678  | `/tmf-api/customerBillManagement/v4`             | Customer billing            |
+| TMF679  | `/tmf-api/customerUsageManagement/v4`            | Usage records (CDRs)        |
+| TMF688  | `/tmf-api/appointmentManagement/v4`              | Appointment scheduling      |
+| TMF641  | `/tmf-api/serviceOrderingManagement/v4`          | Service order management    |
+| TMF638  | `/tmf-api/serviceInventoryManagement/v4`         | Service inventory           |
+| TMF640  | `/tmf-api/serviceActivationAndConfiguration/v4`  | Service activation          |
+| TMF702  | `/tmf-api/resourceActivationAndConfiguration/v4` | Resource activation         |
+| TMF639  | `/tmf-api/resourceInventoryManagement/v4`        | Resource inventory          |
+| TMF645  | `/tmf-api/resourceOrderingManagement/v4`         | Resource order management   |
+| TMF635  | `/tmf-api/usageManagement/v4`                    | Usage management            |
+| TMF668  | `/tmf-api/partyRoleManagement/v4`                | Party role management       |
+| TMF632  | `/tmf-api/partyManagement/v4`                    | Party management            |
+| TMF669  | `/tmf-api/identityManagement/v4`                 | Identity & credential mgmt  |
+| GraphQL | `/graphql`                                       | GraphQL API interface       |
+
+## Advanced Features
+
+✅ **Phase 8 Advanced Features:**
+
+- **GraphQL API**: Interactive GraphQL interface at `/graphql` with playground
+- **Redis Caching**: High-performance caching layer for improved response times
+- **Event-Driven Architecture**: Event bus for scalable microservices
+- **Webhook Notifications**: Real-time event delivery to external systems
+- **Comprehensive Audit Logging**: Full operation tracking and compliance
+- **PCM Engine**: Complete Product Catalog Engine with rule engine
+- **Complex Pricing Models**: Support for multiple pricing strategies
+- **Catalog Versioning**: Version and lifecycle management
 
 ## Documentation
 
 - **Swagger UI**: `http://localhost:8080/swagger-ui/` (when server is running)
+- **GraphQL Playground**: `http://localhost:8080/graphql` (when server is running)
 - **Full Documentation**: See [README.md](https://github.com/rabbittrix/BSS-OSS-Rust-Ecosystem/blob/main/README.md) for complete setup and usage guide
 - **TM Forum Standards**: [TM Forum Open APIs](https://www.tmforum.org/open-apis/)
 

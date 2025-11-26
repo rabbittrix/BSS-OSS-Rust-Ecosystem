@@ -90,6 +90,42 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
             migration_file.file_name().unwrap_or_default(),
             statements.len()
         );
+
+        // Debug: Log all statement types
+        for (idx, statement) in statements.iter().enumerate() {
+            let trimmed = statement.trim();
+            if !trimmed.is_empty() && !trimmed.starts_with("--") {
+                let upper = trimmed.to_uppercase();
+                if upper.starts_with("CREATE TABLE") {
+                    eprintln!(
+                        "  Statement {}: CREATE TABLE (length: {})",
+                        idx + 1,
+                        trimmed.len()
+                    );
+                } else if upper.starts_with("CREATE INDEX")
+                    || upper.starts_with("CREATE UNIQUE INDEX")
+                {
+                    eprintln!(
+                        "  Statement {}: CREATE INDEX (length: {})",
+                        idx + 1,
+                        trimmed.len()
+                    );
+                } else if upper.starts_with("COMMENT") {
+                    eprintln!(
+                        "  Statement {}: COMMENT (length: {})",
+                        idx + 1,
+                        trimmed.len()
+                    );
+                } else {
+                    eprintln!(
+                        "  Statement {}: OTHER - {}",
+                        idx + 1,
+                        trimmed.chars().take(50).collect::<String>()
+                    );
+                }
+            }
+        }
+
         for (idx, statement) in statements.iter().enumerate() {
             let trimmed = statement.trim();
             if trimmed.is_empty() || trimmed.starts_with("--") {
@@ -126,11 +162,61 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
 
             // Execute statement, providing context on failure
             // Some statements may fail if table doesn't exist, which is non-critical for IF NOT EXISTS
+            // For DDL statements, we need to ensure they're executed properly
+            // sqlx::query().execute() works for both DDL and DML
+            // Use execute() which properly handles DDL statements like CREATE TABLE
             let result = sqlx::query(trimmed).execute(pool).await;
 
-            // Log successful execution for CREATE TABLE to verify they're running
+            // For CREATE TABLE, ensure we wait for the statement to complete
+            // and verify it succeeded
+            if upper.starts_with("CREATE TABLE") {
+                match &result {
+                    Ok(_) => {
+                        eprintln!("  ✓ CREATE TABLE executed successfully");
+                    }
+                    Err(e) => {
+                        eprintln!("  ✗ CREATE TABLE failed: {}", e);
+                    }
+                }
+            }
+
+            // Log successful execution for CREATE TABLE and verify table was created
             if result.is_ok() && upper.starts_with("CREATE TABLE") {
                 eprintln!("  ✓ CREATE TABLE executed successfully");
+
+                // Extract table name and verify it exists
+                if let Some(table_start) = upper.find("CREATE TABLE") {
+                    let rest = &trimmed[table_start + "CREATE TABLE".len()..];
+                    if let Some(table_name) = rest.split_whitespace().find(|s| {
+                        !s.eq_ignore_ascii_case("IF")
+                            && !s.eq_ignore_ascii_case("NOT")
+                            && !s.eq_ignore_ascii_case("EXISTS")
+                    }) {
+                        // Verify table was actually created
+                        let check_query = format!(
+                            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '{}')",
+                            table_name
+                        );
+                        match sqlx::query_scalar::<_, bool>(&check_query)
+                            .fetch_one(pool)
+                            .await
+                        {
+                            Ok(exists) => {
+                                if exists {
+                                    eprintln!("  ✓ Verified table '{}' exists", table_name);
+                                } else {
+                                    eprintln!(
+                                        "  ⚠ WARNING: Table '{}' was not created!",
+                                        table_name
+                                    );
+                                }
+                            }
+                            Err(e) => {
+                                eprintln!("  ⚠ Could not verify table '{}': {}", table_name, e);
+                            }
+                        }
+                    }
+                }
             }
             if let Err(e) = result {
                 let error_msg = e.to_string();

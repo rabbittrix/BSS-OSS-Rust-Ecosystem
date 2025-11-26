@@ -32,6 +32,10 @@ members = [
     "crates/security",
     "crates/test-utils",
     "crates/server",
+    "crates/cache",
+    "crates/webhooks",
+    "crates/graphql-api",
+    "crates/audit-logging",
 ]
 resolver = "2"
 
