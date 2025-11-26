@@ -117,9 +117,9 @@ pub async fn create_quote(pool: &Pool<Postgres>, request: CreateQuoteRequest) ->
     .bind(request.version.as_deref().unwrap_or("1.0.0"))
     .bind(&state)
     .bind(now)
-    .bind(&request.valid_until)
+    .bind(request.valid_until)
     .bind(total_price_json)
-    .bind(&request.expected_order_date)
+    .bind(request.expected_order_date)
     .bind(now)
     .bind(now)
     .execute(pool)
@@ -133,8 +133,7 @@ pub async fn create_quote(pool: &Pool<Postgres>, request: CreateQuoteRequest) ->
             let unit_price_json = item
                 .unit_price
                 .as_ref()
-                .map(|m| serde_json::to_value(m).ok())
-                .flatten();
+                .and_then(|m| serde_json::to_value(m).ok());
             let item_total_price = item.unit_price.as_ref().and_then(|up| {
                 item.quantity.map(|q| crate::models::Money {
                     value: up.value * q as f64,
@@ -143,8 +142,7 @@ pub async fn create_quote(pool: &Pool<Postgres>, request: CreateQuoteRequest) ->
             });
             let item_total_price_json = item_total_price
                 .as_ref()
-                .map(|m| serde_json::to_value(m).ok())
-                .flatten();
+                .and_then(|m| serde_json::to_value(m).ok());
 
             sqlx::query(
                 "INSERT INTO quote_items (
@@ -206,7 +204,7 @@ pub async fn update_quote(
     )
     .bind(state_str)
     .bind(&request.description)
-    .bind(&request.valid_until)
+    .bind(request.valid_until)
     .bind(id)
     .execute(pool)
     .await
