@@ -102,10 +102,13 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
                 // Non-critical statements that can fail if table doesn't exist:
                 // - COMMENT ON TABLE/INDEX (documentation)
                 // - CREATE INDEX IF NOT EXISTS (indexes can be recreated)
+                // - CREATE UNIQUE INDEX (unique indexes can be recreated)
                 // Note: CREATE TABLE IF NOT EXISTS should not fail silently, but if it does
                 // due to table already existing, that's okay
+                // Check CREATE UNIQUE INDEX before CREATE INDEX (more specific first)
                 let is_non_critical = is_table_not_found
                     && (upper.starts_with("COMMENT ON")
+                        || upper.starts_with("CREATE UNIQUE INDEX")
                         || upper.starts_with("CREATE INDEX IF NOT EXISTS")
                         || upper.starts_with("CREATE INDEX")); // Also handle CREATE INDEX without IF NOT EXISTS
 
