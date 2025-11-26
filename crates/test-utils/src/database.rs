@@ -85,15 +85,53 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
         // Split SQL into individual statements and execute each one
         // sqlx::query() can only execute one statement at a time
         let statements = split_sql_statements(&sql);
+        eprintln!(
+            "Processing migration {:?}: found {} statements",
+            migration_file.file_name().unwrap_or_default(),
+            statements.len()
+        );
         for (idx, statement) in statements.iter().enumerate() {
             let trimmed = statement.trim();
             if trimmed.is_empty() || trimmed.starts_with("--") {
                 continue;
             }
 
+            // Log CREATE TABLE statements for debugging
+            let upper = trimmed.trim().to_uppercase();
+            if upper.starts_with("CREATE TABLE") {
+                eprintln!(
+                    "Executing CREATE TABLE statement {} in {:?}",
+                    idx + 1,
+                    migration_file.file_name().unwrap_or_default()
+                );
+                // Extract table name for logging
+                if let Some(table_start) = upper.find("CREATE TABLE") {
+                    let rest = &trimmed[table_start + "CREATE TABLE".len()..];
+                    let table_name = rest
+                        .split_whitespace()
+                        .find(|s| {
+                            !s.eq_ignore_ascii_case("IF")
+                                && !s.eq_ignore_ascii_case("NOT")
+                                && !s.eq_ignore_ascii_case("EXISTS")
+                        })
+                        .unwrap_or("unknown");
+                    eprintln!("  Creating table: {}", table_name);
+                    // Log first 200 chars of statement for debugging
+                    eprintln!(
+                        "  Statement preview: {}",
+                        trimmed.chars().take(200).collect::<String>()
+                    );
+                }
+            }
+
             // Execute statement, providing context on failure
             // Some statements may fail if table doesn't exist, which is non-critical for IF NOT EXISTS
             let result = sqlx::query(trimmed).execute(pool).await;
+
+            // Log successful execution for CREATE TABLE to verify they're running
+            if result.is_ok() && upper.starts_with("CREATE TABLE") {
+                eprintln!("  ✓ CREATE TABLE executed successfully");
+            }
             if let Err(e) = result {
                 let error_msg = e.to_string();
                 let is_table_not_found = error_msg.contains("does not exist")
@@ -105,12 +143,17 @@ pub async fn run_test_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
                 if upper.starts_with("CREATE TABLE") {
                     // CREATE TABLE is critical - always fail with detailed error
                     // This includes foreign key constraint errors, syntax errors, etc.
+                    // Print the full statement for debugging
+                    eprintln!(
+                        "CREATE TABLE statement failed:\nFull statement:\n{}\n",
+                        trimmed
+                    );
                     return Err(sqlx::Error::Io(std::io::Error::other(format!(
-                        "Failed to execute CREATE TABLE statement {} in migration {:?}: {}\nStatement (first 500 chars): {}\n\nThis is a critical error. The table was not created.",
+                        "Failed to execute CREATE TABLE statement {} in migration {:?}: {}\n\nFull statement:\n{}\n\nThis is a critical error. The table was not created.",
                         idx + 1,
                         migration_file.file_name().unwrap_or_default(),
                         e,
-                        trimmed.chars().take(500).collect::<String>()
+                        trimmed
                     ))));
                 }
 

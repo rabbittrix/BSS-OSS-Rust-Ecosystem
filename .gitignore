@@ -23,7 +23,7 @@ Thumbs.db
 
 # Documentation
 .cursorrc.md
-
+error.md
 # Publish scripts (temporary helper scripts)
 publish_remaining.ps1
 publish_remaining.sh
