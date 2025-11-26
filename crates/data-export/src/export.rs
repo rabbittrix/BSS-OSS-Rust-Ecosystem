@@ -29,10 +29,12 @@ impl DataExporter {
                 "customers" => self.export_customers(request.tenant_id).await?,
                 "orders" => self.export_orders(request.tenant_id).await?,
                 "products" => self.export_products(request.tenant_id).await?,
-                _ => return Err(DataExportError::InvalidFormat(format!(
-                    "Unknown entity type: {}",
-                    entity_type
-                ))),
+                _ => {
+                    return Err(DataExportError::InvalidFormat(format!(
+                        "Unknown entity type: {}",
+                        entity_type
+                    )))
+                }
             };
 
             data.insert(entity_type.clone(), entity_data);
@@ -46,7 +48,10 @@ impl DataExporter {
     }
 
     /// Export catalogs
-    async fn export_catalogs(&self, tenant_id: Option<uuid::Uuid>) -> Result<Value, DataExportError> {
+    async fn export_catalogs(
+        &self,
+        tenant_id: Option<uuid::Uuid>,
+    ) -> Result<Value, DataExportError> {
         let rows = if let Some(tid) = tenant_id {
             sqlx::query("SELECT * FROM catalogs WHERE tenant_id = $1")
                 .bind(tid)
@@ -58,28 +63,34 @@ impl DataExporter {
                 .await?
         };
 
-        let catalogs: Vec<Value> = rows
-            .iter()
-            .map(|row| row_to_json_value(row))
-            .collect();
+        let catalogs: Vec<Value> = rows.iter().map(|row| row_to_json_value(row)).collect();
 
         Ok(Value::Array(catalogs))
     }
 
     /// Export customers
-    async fn export_customers(&self, _tenant_id: Option<uuid::Uuid>) -> Result<Value, DataExportError> {
+    async fn export_customers(
+        &self,
+        _tenant_id: Option<uuid::Uuid>,
+    ) -> Result<Value, DataExportError> {
         // Similar to export_catalogs
         Ok(Value::Array(vec![]))
     }
 
     /// Export orders
-    async fn export_orders(&self, _tenant_id: Option<uuid::Uuid>) -> Result<Value, DataExportError> {
+    async fn export_orders(
+        &self,
+        _tenant_id: Option<uuid::Uuid>,
+    ) -> Result<Value, DataExportError> {
         // Similar to export_catalogs
         Ok(Value::Array(vec![]))
     }
 
     /// Export products
-    async fn export_products(&self, _tenant_id: Option<uuid::Uuid>) -> Result<Value, DataExportError> {
+    async fn export_products(
+        &self,
+        _tenant_id: Option<uuid::Uuid>,
+    ) -> Result<Value, DataExportError> {
         // Similar to export_catalogs
         Ok(Value::Array(vec![]))
     }
@@ -126,7 +137,9 @@ fn get_column_value(row: &PgRow, column_name: &str) -> Value {
         return v.map(Value::Bool).unwrap_or(Value::Null);
     }
     if let Ok(v) = row.try_get::<Option<Uuid>, _>(column_name) {
-        return v.map(|u| Value::String(u.to_string())).unwrap_or(Value::Null);
+        return v
+            .map(|u| Value::String(u.to_string()))
+            .unwrap_or(Value::Null);
     }
     if let Ok(v) = row.try_get::<Option<DateTime<Utc>>, _>(column_name) {
         return v
@@ -139,4 +152,3 @@ fn get_column_value(row: &PgRow, column_name: &str) -> Value {
     // Fallback to string representation
     Value::Null
 }
-

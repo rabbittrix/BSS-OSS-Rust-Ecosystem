@@ -21,13 +21,12 @@ impl TenantService {
     pub async fn create_tenant(&self, req: CreateTenantRequest) -> Result<Tenant, TenantError> {
         // Check if tenant with same name or domain already exists
         if let Some(ref domain) = req.domain {
-            let existing = sqlx::query_as::<_, Tenant>(
-                "SELECT * FROM tenants WHERE domain = $1 OR name = $2",
-            )
-            .bind(domain)
-            .bind(&req.name)
-            .fetch_optional(&self.pool)
-            .await?;
+            let existing =
+                sqlx::query_as::<_, Tenant>("SELECT * FROM tenants WHERE domain = $1 OR name = $2")
+                    .bind(domain)
+                    .bind(&req.name)
+                    .fetch_optional(&self.pool)
+                    .await?;
 
             if existing.is_some() {
                 return Err(TenantError::AlreadyExists(format!(
@@ -57,20 +56,17 @@ impl TenantService {
             custom_settings: serde_json::json!({}),
         });
 
-        let tenant = sqlx::query_as::<_, Tenant>(
-            "INSERT INTO tenants (id, name, domain, status, config, created_at, updated_at)
-             VALUES ($1, $2, $3, $4, $5, $6, $7)
-             RETURNING *",
-        )
-        .bind(id)
-        .bind(&req.name)
-        .bind(&req.domain)
-        .bind(TenantStatus::Active)
-        .bind(serde_json::to_value(&config)?)
-        .bind(Utc::now())
-        .bind(Utc::now())
-        .fetch_one(&self.pool)
-        .await?;
+        let tenant =
+            sqlx::query_as::<_, Tenant>("INSERT INTO tenants (id, name, domain, status, config, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *")
+                .bind(id)
+                .bind(&req.name)
+                .bind(&req.domain)
+                .bind(TenantStatus::Active)
+                .bind(serde_json::to_value(&config)?)
+                .bind(Utc::now())
+                .bind(Utc::now())
+                .fetch_one(&self.pool)
+                .await?;
 
         log::info!("Created tenant: {} ({})", tenant.name, tenant.id);
         Ok(tenant)
@@ -173,4 +169,3 @@ impl TenantService {
         Ok(())
     }
 }
-

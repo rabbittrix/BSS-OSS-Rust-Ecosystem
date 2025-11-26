@@ -147,7 +147,10 @@ impl AnalyticsService {
         }
 
         let total_customers: i64 = if let Some(tid) = tenant_id {
-            sqlx::query_scalar(&query).bind(tid).fetch_one(&self.pool).await?
+            sqlx::query_scalar(&query)
+                .bind(tid)
+                .fetch_one(&self.pool)
+                .await?
         } else {
             sqlx::query_scalar(&query).fetch_one(&self.pool).await?
         };
@@ -251,4 +254,3 @@ impl AnalyticsService {
         })
     }
 }
-
