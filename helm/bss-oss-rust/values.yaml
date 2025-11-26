@@ -63,7 +63,22 @@ nodeSelector: {}
 
 tolerations: []
 
-affinity: {}
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - bss-oss-rust
+          topologyKey: kubernetes.io/zone
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
 
 postgres:
   enabled: true
@@ -120,4 +135,8 @@ probes:
     periodSeconds: 5
     timeoutSeconds: 3
     failureThreshold: 3
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
 

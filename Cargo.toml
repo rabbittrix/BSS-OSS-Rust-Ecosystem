@@ -36,6 +36,9 @@ members = [
     "crates/webhooks",
     "crates/graphql-api",
     "crates/audit-logging",
+    "crates/multi-tenant",
+    "crates/analytics",
+    "crates/data-export",
 ]
 resolver = "2"
 
