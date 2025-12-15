@@ -11,13 +11,8 @@ keywords = [
     "pcf",
     "pcrf",
     "policy",
-    "charging",
-    "quota",
-    "diameter",
-    "5g",
-    "6g",
     "telecom",
-    "mobile",
+    "5g",
 ]
 categories = ["network-programming", "telecom", "bss", "oss"]
 
