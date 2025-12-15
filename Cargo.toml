@@ -30,6 +30,7 @@ members = [
     "crates/resource-management",
     "crates/event-bus",
     "crates/policy-engine",
+    "crates/pcf",
     "crates/revenue-management",
     "crates/security",
     "crates/test-utils",
