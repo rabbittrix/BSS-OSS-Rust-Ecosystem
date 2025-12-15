@@ -1,0 +1,42 @@
+[package]
+name = "bss-oss-pcf"
+version.workspace = true
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license = "MIT"
+description = "Policy Control Function (PCF/PCRF) for 3G/4G/5G/6G networks - Policy Control, Charging Rules, and Quota Management with Diameter protocol support"
+repository.workspace = true
+documentation.workspace = true
+keywords = [
+    "pcf",
+    "pcrf",
+    "policy",
+    "charging",
+    "quota",
+    "diameter",
+    "5g",
+    "6g",
+    "telecom",
+    "mobile",
+]
+categories = ["network-programming", "telecom", "bss", "oss"]
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+thiserror.workspace = true
+async-trait.workspace = true
+tokio.workspace = true
+sqlx.workspace = true
+log.workspace = true
+dashmap.workspace = true
+futures.workspace = true
+# Note: Diameter protocol implementation is provided in the diameter module
+# but does not require external dependencies. For production use, you may
+# want to integrate with a full Diameter stack library.
+
+[dev-dependencies]
+tokio-test = "0.4"
+rand = "0.9.2"
