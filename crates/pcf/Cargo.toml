@@ -3,17 +3,11 @@ name = "bss-oss-pcf"
 version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
-license = "MIT"
+license = "Apache-2.0"
 description = "Policy Control Function (PCF/PCRF) for 3G/4G/5G/6G networks - Policy Control, Charging Rules, and Quota Management with Diameter protocol support"
 repository.workspace = true
 documentation.workspace = true
-keywords = [
-    "pcf",
-    "pcrf",
-    "policy",
-    "telecom",
-    "5g",
-]
+keywords = ["pcf", "pcrf", "policy", "telecom", "5g"]
 categories = ["network-programming", "telecom", "bss", "oss"]
 
 [dependencies]
