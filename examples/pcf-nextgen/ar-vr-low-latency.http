@@ -1,0 +1,83 @@
+### PCF Next-Gen — AR / VR ultra-low latency examples
+### Base URL (local): http://localhost:9080
+
+@base = http://localhost:9080
+
+### 1) Pre-seeded demo subscriber (GET)
+GET {{base}}/demo/ar-vr/policy
+Accept: application/json
+
+### 2) Intent-based policy — stadium AR (POST)
+POST {{base}}/npcf-sba/v1/policy/intent
+Content-Type: application/json
+
+{
+  "intent": {
+    "intent_id": "ULTRA_LOW_LATENCY_AR",
+    "description": "Immersive AR for venue slice",
+    "target_latency_ms_p99": 12,
+    "min_downlink_mbps": 80,
+    "slice_hint": "stadium-urllc",
+    "application_id": "com.example.ar.stadium"
+  },
+  "session": {
+    "subscriber_id": "ar-demo-001",
+    "imsi": "001010987654321",
+    "network_generation": "5G",
+    "apn": "ims.enterprise-ar",
+    "service_type": "web_browsing",
+    "application_id": "com.example.ar.stadium",
+    "location": "stadium-42"
+  }
+}
+
+### 3) SBA-style flat policy decision (POST)
+POST {{base}}/npcf-sba/v1/policy/decision
+Content-Type: application/json
+
+{
+  "subscriber_id": "ar-demo-001",
+  "imsi": "001010987654321",
+  "network_generation": "5G",
+  "apn": "ims.enterprise-ar",
+  "service_type": "low_latency",
+  "application_id": "com.example.ar.stadium",
+  "location": "stadium-42"
+}
+
+### 4) Closed-loop telemetry → adjustment suggestion
+POST {{base}}/npcf-sba/v1/closed-loop/telemetry
+Content-Type: application/json
+
+{
+  "cell_id": "nr-cell-stadium-01",
+  "congestion_score": 0.91,
+  "mean_user_throughput_mbps": 42,
+  "mean_latency_ms": 55,
+  "active_ues": 812
+}
+
+### 5) Monetization quote (CHF-ready keys)
+POST {{base}}/nchf-ready/v1/quote
+Content-Type: application/json
+
+{
+  "service_class": "ar",
+  "requested_downlink_mbps": 100,
+  "expected_latency_ms_p99": 12,
+  "duration_seconds": 3600,
+  "currency": "USD"
+}
+
+### 6) Digital twin simulation (shadow decision)
+POST {{base}}/npcf-sba/v1/simulation/run
+Content-Type: application/json
+
+{
+  "subscriber_id": "ar-demo-001",
+  "imsi": "001010987654321",
+  "network_generation": "5G",
+  "apn": "ims.enterprise-ar",
+  "service_type": "low_latency",
+  "application_id": "com.example.ar.stadium"
+}

@@ -19,6 +19,7 @@ on:
           - tmf620-catalog
           - pcm-engine
           - bss-oss-utils
+          - bss-oss-pcf-nextgen
 
 env:
   CARGO_TERM_COLOR: always
@@ -127,6 +128,15 @@ jobs:
           cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
           cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
 
+      - name: Publish bss-oss-pcf-nextgen
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' && 
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'bss-oss-pcf-nextgen'))
+        run: |
+          cargo publish -p bss-oss-pcf-nextgen --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish -p bss-oss-pcf-nextgen --token ${{ secrets.CRATES_IO_TOKEN }}
+
       - name: Verify publication
         run: |
           echo "✅ All crates published successfully to crates.io"
@@ -134,6 +144,7 @@ jobs:
           echo "🔗 Check: https://crates.io/crates/tmf620-catalog"
           echo "🔗 Check: https://crates.io/crates/pcm-engine"
           echo "🔗 Check: https://crates.io/crates/bss-oss-utils"
+          echo "🔗 Check: https://crates.io/crates/bss-oss-pcf-nextgen"
 
       - name: Create GitHub release notes
         if: github.event_name == 'release'
@@ -145,7 +156,8 @@ jobs:
               'tmf-apis-core',
               'tmf620-catalog',
               'pcm-engine',
-              'bss-oss-utils'
+              'bss-oss-utils',
+              'bss-oss-pcf-nextgen'
             ];
             
             let notes = `# Release ${{ steps.version.outputs.version }}\n\n`;

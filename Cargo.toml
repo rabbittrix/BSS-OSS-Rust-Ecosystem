@@ -31,6 +31,7 @@ members = [
     "crates/event-bus",
     "crates/policy-engine",
     "crates/pcf",
+    "crates/pcf-nextgen",
     "crates/revenue-management",
     "crates/security",
     "crates/test-utils",

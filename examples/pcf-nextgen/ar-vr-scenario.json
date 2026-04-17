@@ -1,0 +1,31 @@
+{
+  "title": "Stadium AR — ultra-low latency",
+  "narrative": "Enterprise tenant offers immersive AR on a dedicated DNN. PCF maps URLLC-style intent to low-latency service type, applies premium QoS, and exposes CHF-ready rating keys.",
+  "actors": {
+    "subscriber_id": "ar-demo-001",
+    "tenant": "enterprise-stadium",
+    "application": "com.example.ar.stadium"
+  },
+  "intent": {
+    "intent_id": "ULTRA_LOW_LATENCY_AR",
+    "description": "Immersive AR for venue slice",
+    "target_latency_ms_p99": 12,
+    "min_downlink_mbps": 80,
+    "slice_hint": "stadium-urllc",
+    "application_id": "com.example.ar.stadium"
+  },
+  "session_template": {
+    "subscriber_id": "ar-demo-001",
+    "imsi": "001010987654321",
+    "network_generation": "5G",
+    "apn": "ims.enterprise-ar",
+    "service_type": "web_browsing",
+    "application_id": "com.example.ar.stadium",
+    "location": "stadium-42"
+  },
+  "expected_outcomes": [
+    "Intent maps to service_type low_latency with 5QI-style hint applied on decision",
+    "Prometheus histogram pcf_policy_decision_seconds shows sub-10ms on idle hot path",
+    "CHF quote returns rating_group and charging_key for session charging"
+  ]
+}

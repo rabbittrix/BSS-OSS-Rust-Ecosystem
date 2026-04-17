@@ -1,0 +1,394 @@
+openapi: 3.0.3
+info:
+  title: BSS-OSS Next-Gen PCF (SBA-aligned control plane)
+  description: |
+    REST surface for cloud-native PCF capabilities: real-time policy decision,
+    intent translation, Policy-as-a-Service (multi-tenant), monetization quotes (CHF-ready),
+    digital twin simulation, closed-loop telemetry, and marketplace flows.
+    **Note:** 3GPP Npcf_* JSON models are intentionally abstracted here; align payloads
+    with your SMF/NEF integration contract before production interop.
+  version: 0.3.0
+servers:
+  - url: http://localhost:9080
+    description: Local development
+tags:
+  - name: Policy
+  - name: Intent
+  - name: PaaS
+  - name: Monetization
+  - name: Marketplace
+  - name: Simulation
+  - name: ClosedLoop
+  - name: Health
+paths:
+  /npcf-sba/v1/policy/decision:
+    post:
+      tags: [Policy]
+      summary: Evaluate policy (SBA-style session context)
+      operationId: sbaPolicyDecision
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SbaPolicyDecisionRequest"
+      responses:
+        "200":
+          description: Policy decision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PolicyDecision"
+        "422":
+          description: Evaluation error (e.g. unknown subscriber)
+  /npcf-sba/v1/policy/intent:
+    post:
+      tags: [Intent]
+      summary: Intent-based policy decision
+      operationId: sbaPolicyIntent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IntentPolicyRequest"
+      responses:
+        "200":
+          description: Policy decision after intent translation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PolicyDecision"
+  /paas/v1/tenants/{tenant_id}/policy/decision:
+    post:
+      tags: [PaaS]
+      summary: Tenant-scoped policy with enterprise overlay
+      operationId: paasTenantPolicyDecision
+      parameters:
+        - in: path
+          name: tenant_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PolicyRequest"
+      responses:
+        "200":
+          description: Policy decision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PolicyDecision"
+  /nchf-ready/v1/quote:
+    post:
+      tags: [Monetization]
+      summary: Dynamic price quote for premium QoS (CHF integration-ready)
+      operationId: monetizationQuote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MonetizationQuoteRequest"
+      responses:
+        "200":
+          description: Quote
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MonetizationQuoteResponse"
+  /marketplace/v1/listings:
+    get:
+      tags: [Marketplace]
+      summary: List QoS policy listings
+      operationId: marketplaceListings
+      responses:
+        "200":
+          description: Listings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MarketplaceListing"
+  /marketplace/v1/orders:
+    post:
+      tags: [Marketplace]
+      summary: Place order for a marketplace QoS bundle
+      operationId: marketplaceOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderQoSPolicyRequest"
+      responses:
+        "200":
+          description: Order accepted
+        "404":
+          description: Listing not found
+  /npcf-sba/v1/simulation/run:
+    post:
+      tags: [Simulation]
+      summary: Digital twin — shadow policy evaluation
+      operationId: simulationRun
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PolicyRequest"
+      responses:
+        "200":
+          description: Simulation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TwinSimulationResult"
+  /npcf-sba/v1/closed-loop/telemetry:
+    post:
+      tags: [ClosedLoop]
+      summary: Ingest telemetry and return adjustment suggestion
+      operationId: closedLoopTelemetry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NetworkTelemetrySample"
+      responses:
+        "200":
+          description: Suggested adjustment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PolicyAdjustmentSuggestion"
+  /demo/ar-vr/policy:
+    get:
+      tags: [Policy]
+      summary: Demo AR/VR policy for pre-seeded subscriber
+      operationId: demoArVrPolicy
+      responses:
+        "200":
+          description: Policy decision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PolicyDecision"
+  /health/live:
+    get:
+      tags: [Health]
+      summary: Liveness
+      operationId: live
+      responses:
+        "200":
+          description: OK
+  /health/ready:
+    get:
+      tags: [Health]
+      summary: Readiness
+      operationId: ready
+      responses:
+        "200":
+          description: Ready
+  /metrics:
+    get:
+      tags: [Health]
+      summary: Prometheus metrics
+      operationId: metrics
+      responses:
+        "200":
+          description: Prometheus text exposition format
+components:
+  schemas:
+    SbaPolicyDecisionRequest:
+      allOf:
+        - $ref: "#/components/schemas/PolicyRequest"
+        - type: object
+          properties:
+            tenant_id:
+              type: string
+              format: uuid
+              nullable: true
+    PolicyRequest:
+      type: object
+      required: [subscriber_id, imsi, network_generation, apn, service_type]
+      properties:
+        subscriber_id:
+          type: string
+        imsi:
+          type: string
+        network_generation:
+          type: string
+          enum: ["3G", "4G", "5G", "6G"]
+        apn:
+          type: string
+        service_type:
+          type: string
+        application_id:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+    PolicyDecision:
+      type: object
+      properties:
+        subscriber_id:
+          type: string
+        imsi:
+          type: string
+        qos:
+          $ref: "#/components/schemas/QoS"
+        access_granted:
+          type: boolean
+        policy_rule_name:
+          type: string
+    QoS:
+      type: object
+      properties:
+        max_download_bandwidth_kbps:
+          type: integer
+          format: int64
+        max_upload_bandwidth_kbps:
+          type: integer
+          format: int64
+        qci:
+          type: integer
+          nullable: true
+        arp:
+          type: integer
+          nullable: true
+        priority:
+          type: integer
+        gating:
+          type: boolean
+    IntentPolicyRequest:
+      type: object
+      required: [intent, session]
+      properties:
+        intent:
+          $ref: "#/components/schemas/PolicyIntent"
+        session:
+          $ref: "#/components/schemas/PolicyRequest"
+        tenant_id:
+          type: string
+          format: uuid
+          nullable: true
+    PolicyIntent:
+      type: object
+      required: [intent_id, description]
+      properties:
+        intent_id:
+          type: string
+        description:
+          type: string
+        target_latency_ms_p99:
+          type: number
+          format: float
+          nullable: true
+        min_downlink_mbps:
+          type: number
+          format: float
+          nullable: true
+        slice_hint:
+          type: string
+          nullable: true
+        application_id:
+          type: string
+          nullable: true
+    MonetizationQuoteRequest:
+      type: object
+      required: [service_class, requested_downlink_mbps, expected_latency_ms_p99, duration_seconds, currency]
+      properties:
+        service_class:
+          type: string
+        requested_downlink_mbps:
+          type: number
+        expected_latency_ms_p99:
+          type: number
+        duration_seconds:
+          type: integer
+          format: int64
+        currency:
+          type: string
+    MonetizationQuoteResponse:
+      type: object
+      properties:
+        price_minor_units:
+          type: integer
+          format: int64
+        currency:
+          type: string
+        rating_group:
+          type: integer
+        charging_key:
+          type: string
+        explanation:
+          type: string
+    MarketplaceListing:
+      type: object
+      properties:
+        listing_id:
+          type: string
+          format: uuid
+        seller_tenant_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        base_price_minor_units:
+          type: integer
+          format: int64
+        currency:
+          type: string
+        qos_bundle_id:
+          type: string
+    OrderQoSPolicyRequest:
+      type: object
+      required: [listing_id, buyer_tenant_id, dnn]
+      properties:
+        listing_id:
+          type: string
+          format: uuid
+        buyer_tenant_id:
+          type: string
+          format: uuid
+        dnn:
+          type: string
+    NetworkTelemetrySample:
+      type: object
+      properties:
+        cell_id:
+          type: string
+        congestion_score:
+          type: number
+        mean_user_throughput_mbps:
+          type: number
+        mean_latency_ms:
+          type: number
+        active_ues:
+          type: integer
+    PolicyAdjustmentSuggestion:
+      type: object
+      properties:
+        scale_mbr_factor:
+          type: number
+        priority_delta:
+          type: integer
+        rationale:
+          type: string
+    TwinSimulationResult:
+      type: object
+      properties:
+        mode:
+          type: string
+        decision:
+          $ref: "#/components/schemas/PolicyDecision"
+        would_publish:
+          type: boolean

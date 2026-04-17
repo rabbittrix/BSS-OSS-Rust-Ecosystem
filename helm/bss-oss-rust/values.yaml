@@ -140,3 +140,32 @@ podDisruptionBudget:
   enabled: true
   minAvailable: 1
 
+# Next-generation PCF HTTP edge (bss-oss-pcf-nextgen)
+pcfNextgen:
+  enabled: false
+  replicaCount: 2
+  image:
+    repository: bss-oss-pcf-nextgen
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 9080
+    targetPort: 9080
+  kafka:
+    brokers: "kafka:9092"
+  redis:
+    url: "redis://redis-master:6379"
+  postgres:
+    url: "postgres://bssoss:bssoss123@postgres:5432/bssoss"
+  security:
+    requireBearer: false
+  logLevel: "info,bss_oss_pcf_nextgen=debug"
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  extraEnv: {}

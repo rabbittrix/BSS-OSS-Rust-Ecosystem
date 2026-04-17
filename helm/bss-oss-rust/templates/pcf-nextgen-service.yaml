@@ -1,0 +1,19 @@
+{{- if .Values.pcfNextgen.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bss-oss-rust.fullname" . }}-pcf-nextgen
+  labels:
+    {{- include "bss-oss-rust.labels" . | nindent 4 }}
+    app.kubernetes.io/component: pcf-nextgen
+spec:
+  type: {{ .Values.pcfNextgen.service.type }}
+  selector:
+    app.kubernetes.io/name: {{ include "bss-oss-rust.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: pcf-nextgen
+  ports:
+    - name: http
+      port: {{ .Values.pcfNextgen.service.port }}
+      targetPort: http
+{{- end }}
