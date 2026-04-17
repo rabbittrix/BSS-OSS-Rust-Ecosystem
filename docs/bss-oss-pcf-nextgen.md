@@ -182,7 +182,7 @@ Use histogram buckets to track **p99 latency** against a sub-10 ms SLO on idle p
 Add to your `Cargo.toml`:
 
 ```toml
-bss-oss-pcf-nextgen = "0.3.0"  # align with workspace / crates.io
+bss-oss-pcf-nextgen = "0.3.1"  # use latest published patch from crates.io
 bss-oss-pcf = "0.3.0"
 ```
 
@@ -274,7 +274,7 @@ Templates: **`pcf-nextgen-deployment.yaml`**, **`pcf-nextgen-service.yaml`**. Po
 
 ## 10. Versioning and license
 
-- **Version** follows the workspace `[workspace.package]` unless overridden per crate.
+- **`bss-oss-pcf-nextgen`** uses an **explicit `version` in `crates/pcf-nextgen/Cargo.toml`** so each crates.io release can bump the patch (e.g. `0.3.0` → `0.3.1`) without changing the whole workspace meta-version.
 - **License:** Apache-2.0 (see crate `Cargo.toml`).
 
 For release and **crates.io** publishing, see **`.github/workflows/publish.yml`** and the crate README.
