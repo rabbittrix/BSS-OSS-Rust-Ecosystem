@@ -1,6 +1,7 @@
 [package]
 name = "bss-oss-pcf-nextgen"
-version.workspace = true
+# Published independently of the workspace meta-version; bump for each crates.io release.
+version = "0.3.1"
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "Apache-2.0"
