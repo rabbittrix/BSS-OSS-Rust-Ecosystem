@@ -2,6 +2,8 @@
 
 This document describes the **cloud-native Policy Control Function (PCF)** implementation in this repository: the `bss-oss-pcf-nextgen` service and the reusable `bss_oss_pcf_nextgen` library, composed on top of the existing `bss-oss-pcf` policy engine.
 
+**Operator and API guide:** [bss-oss-pcf-nextgen.md](bss-oss-pcf-nextgen.md) (environment variables, HTTP routes, metrics, embedding, Helm, limitations).
+
 ## 1. High-level architecture (textual diagram)
 
 ```mermaid

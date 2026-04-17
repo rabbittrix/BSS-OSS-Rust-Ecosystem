@@ -5,6 +5,8 @@
 
 Cloud-native **5G PCF** edge: SBA-style REST APIs on top of `bss-oss-pcf`, with intent translation, Policy-as-a-Service tenant overlays, monetization quotes, digital twin simulation, closed-loop suggestions, and a marketplace stub.
 
+**Full documentation:** [docs/bss-oss-pcf-nextgen.md](https://github.com/rabbittrix/BSS-OSS-Rust-Ecosystem/blob/main/docs/bss-oss-pcf-nextgen.md) (user guide, HTTP API, metrics, embedding, deployment, limitations).
+
 ## Install from crates.io
 
 ```bash
@@ -57,5 +59,6 @@ Build a container image that runs the `bss-oss-pcf-nextgen` binary and point `pc
 
 ## Further reading
 
-- `docs/pcf_nextgen_architecture.md` — full architecture, HA, security, and observability
-- `examples/pcf-nextgen/` — AR/VR low-latency HTTP examples
+- **[docs/bss-oss-pcf-nextgen.md](../../docs/bss-oss-pcf-nextgen.md)** — manual: API, env vars, metrics, library usage, Helm
+- **[docs/pcf_nextgen_architecture.md](../../docs/pcf_nextgen_architecture.md)** — architecture, HA, security, observability
+- **[examples/pcf-nextgen/](../../examples/pcf-nextgen/)** — AR/VR low-latency HTTP examples
