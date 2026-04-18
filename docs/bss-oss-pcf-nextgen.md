@@ -15,6 +15,15 @@ This document is the **primary reference** for the [`bss-oss-pcf-nextgen`](https
 
 ## Quick testing & OpenAPI (no Docker required)
 
+### Embedded Swagger UI (recommended for “Try it out”)
+
+1. Start the server: `cargo run -p bss-oss-pcf-nextgen`
+2. Open **http://127.0.0.1:9080/swagger-ui/** in a browser (trailing slash required).
+
+The page loads **Swagger UI** from **unpkg.com** and the OpenAPI document from **`GET /openapi/pcf-nextgen-sba.yaml`** on the same host, so **CORS does not block** calls to your local API.
+
+This avoids **Docker** entirely (no `dockerDesktopLinuxEngine` / API 500 issues).
+
 ### Automated HTTP smoke tests (recommended)
 
 From the repository root:

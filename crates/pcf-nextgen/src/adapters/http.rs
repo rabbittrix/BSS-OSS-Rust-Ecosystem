@@ -283,6 +283,7 @@ pub async fn demo_ar_vr(state: web::Data<AppState>) -> impl Responder {
 }
 
 pub fn configure_routes(cfg: &mut web::ServiceConfig) {
+    super::swagger_ui::configure_swagger(cfg);
     cfg.service(monetization_quote)
         .service(marketplace_list)
         .service(marketplace_order)

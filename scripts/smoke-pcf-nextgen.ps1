@@ -32,6 +32,12 @@ function Invoke-PcfGetRaw([string] $Path) {
 Write-Host "=== bss-oss-pcf-nextgen smoke ===" -ForegroundColor Cyan
 Write-Host "BaseUrl: $BaseUrl`n"
 
+$swagger = Invoke-WebRequest -Uri "$BaseUrl/swagger-ui/" -Method Get -UseBasicParsing
+if ($swagger.StatusCode -ne 200 -or $swagger.Content -notmatch "SwaggerUIBundle") {
+    throw "swagger-ui/ missing shell"
+}
+Write-Host "swagger-ui/: OK (open in browser: $BaseUrl/swagger-ui/)" -ForegroundColor Green
+
 $liveUri = "$BaseUrl/health/live"
 Write-Host "GET $liveUri"
 $liveResp = Invoke-WebRequest -Uri $liveUri -Method Get -UseBasicParsing

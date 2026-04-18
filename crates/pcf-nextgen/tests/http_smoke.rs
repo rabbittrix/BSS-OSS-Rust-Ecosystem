@@ -32,6 +32,40 @@ fn test_app_data() -> web::Data<AppState> {
 }
 
 #[actix_web::test]
+async fn get_openapi_yaml_returns_yaml() {
+    let app = test::init_service(
+        App::new()
+            .app_data(test_app_data())
+            .configure(configure_routes),
+    )
+    .await;
+    let req = test::TestRequest::get()
+        .uri("/openapi/pcf-nextgen-sba.yaml")
+        .to_request();
+    let resp = test::call_service(&app, req).await;
+    assert_eq!(resp.status(), StatusCode::OK);
+    let bytes = test::read_body(resp).await;
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains("openapi:"), "expected yaml preamble");
+}
+
+#[actix_web::test]
+async fn get_swagger_ui_returns_html() {
+    let app = test::init_service(
+        App::new()
+            .app_data(test_app_data())
+            .configure(configure_routes),
+    )
+    .await;
+    let req = test::TestRequest::get().uri("/swagger-ui/").to_request();
+    let resp = test::call_service(&app, req).await;
+    assert_eq!(resp.status(), StatusCode::OK);
+    let bytes = test::read_body(resp).await;
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains("SwaggerUIBundle"), "expected swagger shell");
+}
+
+#[actix_web::test]
 async fn get_health_live_returns_200() {
     let app = test::init_service(
         App::new()
