@@ -48,11 +48,9 @@ With the server running, open in a browser:
 
 **<http://127.0.0.1:9080/swagger-ui/>**
 
-The UI loads the spec from **<http://127.0.0.1:9080/openapi/pcf-nextgen-sba.yaml>** (same origin, no CORS). The YAML is embedded from the repo file `openapi/pcf-nextgen-sba.yaml` at build time.
+The UI loads the spec from **<http://127.0.0.1:9080/openapi/pcf-nextgen-sba.yaml>** (same origin, no CORS). The YAML is embedded at build time from **`crates/pcf-nextgen/openapi/pcf-nextgen-sba.yaml`** (so `cargo publish` includes it); keep that file in sync with **`openapi/pcf-nextgen-sba.yaml`** at the repository root.
 
 Swagger assets are loaded from **unpkg.com** (needs network in the browser). Offline: use Postman with the YAML file, or `cargo test -p bss-oss-pcf-nextgen --test http_smoke`.
-
-The canonical spec on disk remains: `openapi/pcf-nextgen-sba.yaml` at the repository root.
 
 ## Kubernetes (Helm)
 

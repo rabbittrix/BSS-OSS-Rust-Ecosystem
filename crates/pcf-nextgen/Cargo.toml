@@ -3,6 +3,8 @@ name = "bss-oss-pcf-nextgen"
 # Published independently of the workspace meta-version; bump for each crates.io release.
 version = "0.3.2"
 edition.workspace = true
+# `openapi/**` is required for `include_str!` in `swagger_ui.rs` during `cargo publish` packaging.
+include = ["Cargo.toml", "README.md", "src/**", "openapi/**", "tests/**"]
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "Apache-2.0"
 readme = "README.md"

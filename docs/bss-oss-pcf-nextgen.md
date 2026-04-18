@@ -6,7 +6,7 @@ This document is the **primary reference** for the [`bss-oss-pcf-nextgen`](https
 |----------|----------|
 | Crate README (quick start) | [`crates/pcf-nextgen/README.md`](../crates/pcf-nextgen/README.md) |
 | Architecture (diagrams, HA, security) | [`pcf_nextgen_architecture.md`](pcf_nextgen_architecture.md) |
-| OpenAPI 3.0 | [`openapi/pcf-nextgen-sba.yaml`](../openapi/pcf-nextgen-sba.yaml) |
+| OpenAPI 3.0 | Repo: [`openapi/pcf-nextgen-sba.yaml`](../openapi/pcf-nextgen-sba.yaml) — **embedded copy for `cargo publish`:** [`crates/pcf-nextgen/openapi/pcf-nextgen-sba.yaml`](../crates/pcf-nextgen/openapi/pcf-nextgen-sba.yaml) (keep identical) |
 | REST examples | [`examples/pcf-nextgen/`](../examples/pcf-nextgen/) |
 | TypeScript client | [`sdk/typescript/pcf-nextgen-client.ts`](../sdk/typescript/pcf-nextgen-client.ts) |
 | Rust API (docs.rs) | [docs.rs/bss-oss-pcf-nextgen](https://docs.rs/bss-oss-pcf-nextgen) |

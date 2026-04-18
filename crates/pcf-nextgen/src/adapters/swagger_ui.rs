@@ -4,9 +4,11 @@
 use actix_web::web::{self, ServiceConfig};
 use actix_web::{HttpRequest, HttpResponse, Responder};
 
+// Packaged with the crate (under `openapi/`) so `cargo publish` verification works; keep in sync
+// with repo root `openapi/pcf-nextgen-sba.yaml` when editing the public spec.
 const OPENAPI_YAML: &str = include_str!(concat!(
     env!("CARGO_MANIFEST_DIR"),
-    "/../../openapi/pcf-nextgen-sba.yaml"
+    "/openapi/pcf-nextgen-sba.yaml"
 ));
 
 const SWAGGER_INDEX_HTML: &str = include_str!("swagger_index.html");
