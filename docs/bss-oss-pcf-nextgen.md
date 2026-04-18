@@ -13,6 +13,38 @@ This document is the **primary reference** for the [`bss-oss-pcf-nextgen`](https
 
 ---
 
+## Quick testing & OpenAPI (no Docker required)
+
+### Automated HTTP smoke tests (recommended)
+
+From the repository root:
+
+```bash
+cargo test -p bss-oss-pcf-nextgen --test http_smoke
+```
+
+This builds the Actix app **in-process** (no `docker run`, no separate server) and hits `/health/*`, `/metrics`, `/demo/ar-vr/policy`, policy decision, and closed-loop routes. Use this when **Docker Desktop is not running** or you want CI-friendly checks.
+
+### Docker / Swagger UI troubleshooting
+
+If `docker run ... swaggerapi/swagger-ui` fails with **`npipe:////./pipe/dockerDesktopLinuxEngine`** (Windows), the **Docker daemon is not running**. Start **Docker Desktop**, or skip Docker and use the **`cargo test`** command above, **Postman/Insomnia** (import `openapi/pcf-nextgen-sba.yaml`), or a local docs preview:
+
+```bash
+npx --yes @redocly/cli@1 preview-docs openapi/pcf-nextgen-sba.yaml
+```
+
+(`npx` requires Node.js; it opens a browser UI for the spec — point requests at your running `bss-oss-pcf-nextgen` base URL.)
+
+### Manual smoke script (optional)
+
+With the binary listening on `http://127.0.0.1:9080`:
+
+```powershell
+pwsh -File scripts/smoke-pcf-nextgen.ps1 -BaseUrl http://127.0.0.1:9080
+```
+
+---
+
 ## 1. What this crate provides
 
 ### 1.1 Binary: `bss-oss-pcf-nextgen`

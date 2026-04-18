@@ -7,6 +7,8 @@ Cloud-native **5G PCF** edge: SBA-style REST APIs on top of `bss-oss-pcf`, with 
 
 **Full documentation:** [docs/bss-oss-pcf-nextgen.md](https://github.com/rabbittrix/BSS-OSS-Rust-Ecosystem/blob/main/docs/bss-oss-pcf-nextgen.md) (user guide, HTTP API, metrics, embedding, deployment, limitations).
 
+**Smoke tests (no Docker):** `cargo test -p bss-oss-pcf-nextgen --test http_smoke` — or run the server and execute [`scripts/smoke-pcf-nextgen.ps1`](../../scripts/smoke-pcf-nextgen.ps1).
+
 ## Install from crates.io
 
 ```bash
