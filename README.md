@@ -326,6 +326,12 @@ These APIs manage alarms, network slicing, and orchestration:
    - Required for new 5G/FTTH products
    - **Why**: Essential for 5G network slicing and service differentiation
 
+### 5G Policy Control Function (PCF) ✅
+
+- ✅ **`bss-oss-pcf`** ([`crates/pcf`](crates/pcf)) — Core **PCF / PCRF** logic: QoS, charging rules, quota, Diameter-oriented hooks; [crates.io/crates/bss-oss-pcf](https://crates.io/crates/bss-oss-pcf).
+
+- ✅ **`bss-oss-pcf-nextgen`** ([`crates/pcf-nextgen`](crates/pcf-nextgen)) — **Cloud-native PCF HTTP edge** on top of `bss-oss-pcf`: SBA-style REST, intent-based policy, Policy-as-a-Service (multi-tenant overlays), monetization (CHF-ready quotes), digital twin simulation, closed-loop hints, marketplace stub, **embedded Swagger UI** at `/swagger-ui/`, Prometheus metrics. [crates.io/crates/bss-oss-pcf-nextgen](https://crates.io/crates/bss-oss-pcf-nextgen). Operator guide: [`docs/bss-oss-pcf-nextgen.md`](docs/bss-oss-pcf-nextgen.md); architecture: [`docs/pcf_nextgen_architecture.md`](docs/pcf_nextgen_architecture.md). OpenAPI: keep [`openapi/pcf-nextgen-sba.yaml`](openapi/pcf-nextgen-sba.yaml) in sync with [`crates/pcf-nextgen/openapi/pcf-nextgen-sba.yaml`](crates/pcf-nextgen/openapi/pcf-nextgen-sba.yaml) (required for `cargo publish`).
+
 ## 🏗️ Architecture
 
 ### Workspace Structure
@@ -356,6 +362,8 @@ bss-oss-rust/
 │   │   └── tmf656_slice/ # TMF656 Slice Management API ✅
 │   ├── pcm-engine/            # Product Catalog Engine
 │   ├── policy-engine/         # Policy Engine (bundling, eligibility, pricing, SLA)
+│   ├── pcf/                   # PCF / PCRF core (QoS, charging, quota) ✅
+│   ├── pcf-nextgen/           # Next-gen PCF HTTP edge, Swagger UI, crates.io ✅
 │   ├── api-gateway/           # API Gateway (auth, middleware, rate limiting, validation)
 │   ├── event-bus/             # Event Bus abstraction (publisher/subscriber)
 │   ├── order-orchestrator/    # Order Orchestration (decomposition, dependencies)
@@ -367,6 +375,9 @@ bss-oss-rust/
 │   ├── benchmarks/            # Performance benchmarks
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
+├── openapi/                   # OpenAPI specs (e.g. PCF next-gen; mirror under crates/pcf-nextgen/openapi/)
+├── examples/                  # Example API flows (e.g. PCF AR/VR)
+├── scripts/                   # Helper scripts (e.g. PCF smoke tests)
 ├── migrations/                # Database migration scripts
 └── docs/                      # Documentation
 ```
@@ -1527,6 +1538,8 @@ You can use Swagger UI to manually test all endpoints and verify:
 
 - **`pcm-engine`**: Product Catalog Engine framework (pricing, eligibility, bundling)
 - **`policy-engine`**: Policy Engine (bundling, eligibility, pricing, network, SLA policies)
+- **`bss-oss-pcf`**: 5G/4G **Policy Control Function** core (QoS, charging rules, quota) — [crates.io/crates/bss-oss-pcf](https://crates.io/crates/bss-oss-pcf)
+- **`bss-oss-pcf-nextgen`**: **Next-generation PCF** HTTP service (REST edge, intent engine, Swagger UI, metrics) — [crates.io/crates/bss-oss-pcf-nextgen](https://crates.io/crates/bss-oss-pcf-nextgen); run with `cargo run -p bss-oss-pcf-nextgen`, UI at `http://127.0.0.1:9080/swagger-ui/`
 - **`order-orchestrator`**: Order orchestration (decomposition, dependencies, state management)
 - **`service-orchestrator`**: Service lifecycle orchestrator (workflows, dependencies, activation automation) ✅
 - **`resource-management`**: Resource management (capacity, reservation, network topology)
@@ -1562,6 +1575,9 @@ cargo clippy
 
 # Run tests
 cargo test
+
+# PCF next-gen HTTP smoke tests (no Docker)
+cargo test -p bss-oss-pcf-nextgen --test http_smoke
 
 # Build in release mode
 cargo build --release
