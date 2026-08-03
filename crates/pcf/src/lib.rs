@@ -22,7 +22,7 @@
 //! ## Example Usage
 //!
 //! ```rust
-//! use bss_oss_pcf::{PcfEngine, PolicyRequest, NetworkGeneration};
+//! use bss_oss_pcf::{PcfEngine, PolicyRequest, NetworkGeneration, TaxId, TaxIdCountry};
 //! use bss_oss_pcf::pcf_engine::PcfEngineTrait;
 //!
 //! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -31,7 +31,9 @@
 //! let request = PolicyRequest {
 //!     subscriber_id: "1234567890".to_string(),
 //!     imsi: "123456789012345".to_string(),
-//!     cpf: Some("123.456.789-09".to_string()),
+//!     tax_id: Some(TaxId::from_string("123.456.789-09", TaxIdCountry::BR)?),
+//!     #[allow(deprecated)]
+//!     cpf: None,
 //!     network_generation: NetworkGeneration::FourG,
 //!     apn: "internet".to_string(),
 //!     service_type: "video_streaming".to_string(),
