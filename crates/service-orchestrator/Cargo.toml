@@ -1,12 +1,15 @@
 [package]
 name = "bss-oss-service-orchestrator"
-version.workspace = true
+version = "0.4.0"
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "MIT"
-description = "Service Lifecycle Orchestration Service for BSS/OSS Rust ecosystem"
+readme = "README.md"
+description = "Service lifecycle orchestration: Service Order → Activation → Inventory with dependency graph and background worker"
 repository.workspace = true
 documentation.workspace = true
+keywords = ["service", "orchestrator", "telecom", "bss", "lifecycle"]
+categories = ["asynchronous", "network-programming"]
 
 [dependencies]
 serde.workspace = true

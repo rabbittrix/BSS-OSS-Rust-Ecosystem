@@ -32,6 +32,29 @@ pub enum ServiceLifecycleState {
     Cancelled,
 }
 
+impl ServiceLifecycleState {
+    /// Database / SQL filter string (serde SCREAMING_SNAKE_CASE).
+    pub fn as_db_str(self) -> &'static str {
+        match self {
+            Self::OrderReceived => "ORDER_RECEIVED",
+            Self::Validating => "VALIDATING",
+            Self::CheckingDependencies => "CHECKING_DEPENDENCIES",
+            Self::WaitingForDependencies => "WAITING_FOR_DEPENDENCIES",
+            Self::ReadyForActivation => "READY_FOR_ACTIVATION",
+            Self::Activating => "ACTIVATING",
+            Self::Activated => "ACTIVATED",
+            Self::InventoryCreated => "INVENTORY_CREATED",
+            Self::Completed => "COMPLETED",
+            Self::Failed => "FAILED",
+            Self::Cancelled => "CANCELLED",
+        }
+    }
+
+    pub fn is_terminal(self) -> bool {
+        matches!(self, Self::Completed | Self::Failed | Self::Cancelled)
+    }
+}
+
 /// Service workflow task
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ServiceWorkflowTask {
@@ -50,7 +73,7 @@ pub struct ServiceWorkflowTask {
 }
 
 /// Service task type
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum ServiceTaskType {
     /// Service order validation
@@ -117,13 +140,14 @@ impl ServiceWorkflowContext {
         self.tasks.iter_mut().find(|t| t.id == task_id)
     }
 
+    /// Tasks ready to progress: not terminal, and all task dependencies completed.
     pub fn get_ready_tasks(&self) -> Vec<&ServiceWorkflowTask> {
         self.tasks
             .iter()
             .filter(|task| {
-                // Task is ready if:
-                // 1. It's in a state that allows progression
-                // 2. All its dependencies are completed
+                if task.state.is_terminal() {
+                    return false;
+                }
                 let dependencies_met = task.dependencies.iter().all(|dep_id| {
                     self.tasks
                         .iter()
@@ -131,15 +155,35 @@ impl ServiceWorkflowContext {
                         .map(|t| t.state == ServiceLifecycleState::Completed)
                         .unwrap_or(true)
                 });
-
-                matches!(
-                    task.state,
-                    ServiceLifecycleState::OrderReceived
-                        | ServiceLifecycleState::Validating
-                        | ServiceLifecycleState::CheckingDependencies
-                        | ServiceLifecycleState::ReadyForActivation
-                ) && dependencies_met
+                dependencies_met
             })
             .collect()
+    }
+
+    pub fn all_tasks_completed(&self) -> bool {
+        !self.tasks.is_empty()
+            && self
+                .tasks
+                .iter()
+                .all(|t| t.state == ServiceLifecycleState::Completed)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::workflow::ServiceWorkflowEngine;
+
+    #[test]
+    fn waiting_tasks_become_ready_after_deps_complete() {
+        let mut ctx = ServiceWorkflowEngine::create_workflow(Uuid::new_v4());
+        assert_eq!(ctx.get_ready_tasks().len(), 1); // ValidateOrder only
+
+        let validate_id = ctx.tasks[0].id;
+        ctx.update_task_state(validate_id, ServiceLifecycleState::Completed);
+        assert!(ctx
+            .get_ready_tasks()
+            .iter()
+            .any(|t| matches!(t.task_type, ServiceTaskType::CheckDependencies)));
     }
 }

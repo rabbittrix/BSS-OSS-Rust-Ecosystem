@@ -8,17 +8,20 @@ use tmf638_service_inventory::CreateServiceInventoryRequest;
 use tmf640_service_activation::CreateServiceActivationRequest;
 use uuid::Uuid;
 
-/// Service activation automation engine
+/// Service activation automation engine (shares the orchestrator dependency graph).
 pub struct ServiceActivationEngine {
     pool: Arc<PgPool>,
     dependency_graph: Arc<tokio::sync::RwLock<ServiceDependencyGraph>>,
 }
 
 impl ServiceActivationEngine {
-    pub fn new(pool: PgPool) -> Self {
+    pub fn new(
+        pool: PgPool,
+        dependency_graph: Arc<tokio::sync::RwLock<ServiceDependencyGraph>>,
+    ) -> Self {
         Self {
             pool: Arc::new(pool),
-            dependency_graph: Arc::new(tokio::sync::RwLock::new(ServiceDependencyGraph::new())),
+            dependency_graph,
         }
     }
 
@@ -29,14 +32,13 @@ impl ServiceActivationEngine {
         service_order_id: Uuid,
         service_spec_id: Uuid,
     ) -> Result<Uuid, ActivationError> {
-        // Check if dependencies are met
-        let dependency_graph = self.dependency_graph.read().await;
-        if !dependency_graph.can_provision(service_spec_id) {
-            return Err(ActivationError::DependenciesNotMet);
+        {
+            let dependency_graph = self.dependency_graph.read().await;
+            if !dependency_graph.can_provision(service_spec_id) {
+                return Err(ActivationError::DependenciesNotMet);
+            }
         }
-        drop(dependency_graph);
 
-        // Create service activation request
         let activation_request = CreateServiceActivationRequest {
             name: format!("Auto-activation for service order {}", service_order_id),
             description: Some("Automatically triggered service activation".to_string()),
@@ -46,10 +48,8 @@ impl ServiceActivationEngine {
             configuration: None,
         };
 
-        // Create service activation via database
         let activation_id = self.create_service_activation(activation_request).await?;
 
-        // Update workflow context
         if let Some(task) = context
             .tasks
             .iter_mut()
@@ -59,10 +59,8 @@ impl ServiceActivationEngine {
             task.state = ServiceLifecycleState::ReadyForActivation;
         }
 
-        // Execute activation
         self.execute_activation(activation_id).await?;
 
-        // Update workflow context
         if let Some(task) = context.tasks.iter_mut().find(|t| {
             matches!(
                 t.task_type,
@@ -73,8 +71,12 @@ impl ServiceActivationEngine {
             task.state = ServiceLifecycleState::Activated;
         }
 
-        context.state = ServiceLifecycleState::Activated;
+        {
+            let mut dependency_graph = self.dependency_graph.write().await;
+            dependency_graph.mark_provisioning(service_spec_id, activation_id);
+        }
 
+        context.state = ServiceLifecycleState::Activated;
         Ok(activation_id)
     }
 
@@ -97,7 +99,6 @@ impl ServiceActivationEngine {
 
         let inventory_id = self.create_inventory(inventory_request).await?;
 
-        // Update workflow context
         if let Some(task) = context
             .tasks
             .iter_mut()
@@ -109,22 +110,20 @@ impl ServiceActivationEngine {
 
         context.state = ServiceLifecycleState::InventoryCreated;
 
-        // Update dependency graph
-        let mut dependency_graph = self.dependency_graph.write().await;
-        dependency_graph.mark_active(service_spec_id);
-        drop(dependency_graph);
+        {
+            let mut dependency_graph = self.dependency_graph.write().await;
+            dependency_graph.mark_active(service_spec_id);
+        }
 
         Ok(inventory_id)
     }
 
-    /// Create service activation in database
     async fn create_service_activation(
         &self,
         request: CreateServiceActivationRequest,
     ) -> Result<Uuid, ActivationError> {
         let id = Uuid::new_v4();
         let now = chrono::Utc::now();
-        let state = "PENDING";
 
         sqlx::query(
             "INSERT INTO service_activations (id, name, description, version, state, activation_date, service_order_id)
@@ -134,7 +133,7 @@ impl ServiceActivationEngine {
         .bind(&request.name)
         .bind(&request.description)
         .bind(&request.version)
-        .bind(state)
+        .bind("PENDING")
         .bind(now)
         .bind(request.service_order_id)
         .execute(self.pool.as_ref())
@@ -144,9 +143,7 @@ impl ServiceActivationEngine {
         Ok(id)
     }
 
-    /// Execute service activation
     async fn execute_activation(&self, activation_id: Uuid) -> Result<(), ActivationError> {
-        // Update activation state to IN_PROGRESS
         sqlx::query("UPDATE service_activations SET state = $1 WHERE id = $2")
             .bind("IN_PROGRESS")
             .bind(activation_id)
@@ -154,13 +151,7 @@ impl ServiceActivationEngine {
             .await
             .map_err(ActivationError::Database)?;
 
-        // In a real implementation, this would:
-        // 1. Call external provisioning systems
-        // 2. Configure network elements
-        // 3. Update service state
-        // For now, we'll just mark it as completed
-
-        // Simulate activation completion
+        // Production: call external provisioning / NE configuration here.
         let completion_date = chrono::Utc::now();
         sqlx::query(
             "UPDATE service_activations SET state = $1, completion_date = $2 WHERE id = $3",
@@ -175,14 +166,12 @@ impl ServiceActivationEngine {
         Ok(())
     }
 
-    /// Create service inventory in database
     async fn create_inventory(
         &self,
         request: CreateServiceInventoryRequest,
     ) -> Result<Uuid, ActivationError> {
         let id = Uuid::new_v4();
         let now = chrono::Utc::now();
-        let state = "ACTIVE";
 
         sqlx::query(
             "INSERT INTO service_inventories (id, name, description, version, state, activation_date, service_specification_id)
@@ -192,7 +181,7 @@ impl ServiceActivationEngine {
         .bind(&request.name)
         .bind(&request.description)
         .bind(&request.version)
-        .bind(state)
+        .bind("ACTIVE")
         .bind(now)
         .bind(request.service_specification_id)
         .execute(self.pool.as_ref())

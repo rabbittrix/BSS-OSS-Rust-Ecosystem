@@ -313,27 +313,63 @@ impl ServiceDependencyGraph {
             .unwrap_or_default()
     }
 
-    /// Check if a service specification can be provisioned
+    /// Check if a service specification can be provisioned.
+    /// Specs with no registered node are treated as not provisionable.
+    /// Specs with an empty dependency list (or all deps Active) are ready.
     pub fn can_provision(&self, service_spec_id: Uuid) -> bool {
         self.nodes
             .iter()
             .find(|n| n.service_spec_id == service_spec_id)
             .map(|node| {
-                // All dependencies are active
-                node.dependencies.iter().all(|dep_spec_id| {
-                    self.nodes
-                        .iter()
-                        .find(|n| n.service_spec_id == *dep_spec_id)
-                        .map(|n| n.state == DependencyNodeState::Active)
-                        .unwrap_or(false)
-                })
+                node.dependencies.is_empty()
+                    || node.dependencies.iter().all(|dep_spec_id| {
+                        self.nodes
+                            .iter()
+                            .find(|n| n.service_spec_id == *dep_spec_id)
+                            .map(|n| n.state == DependencyNodeState::Active)
+                            .unwrap_or(false)
+                    })
             })
             .unwrap_or(false)
+    }
+
+    /// Ensure a node exists (e.g. leaf services with no DB dependency rows).
+    pub fn ensure_node(&mut self, service_spec_id: Uuid) {
+        if !self.nodes.iter().any(|n| n.service_spec_id == service_spec_id) {
+            self.add_service_spec(service_spec_id, vec![]);
+        }
     }
 }
 
 impl Default for ServiceDependencyGraph {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn leaf_spec_can_provision_after_ensure_node() {
+        let mut g = ServiceDependencyGraph::new();
+        let leaf = Uuid::new_v4();
+        assert!(!g.can_provision(leaf));
+        g.ensure_node(leaf);
+        assert!(g.can_provision(leaf));
+    }
+
+    #[test]
+    fn dependent_waits_until_parent_active() {
+        let mut g = ServiceDependencyGraph::new();
+        let parent = Uuid::new_v4();
+        let child = Uuid::new_v4();
+        g.add_service_spec(parent, vec![]);
+        g.add_service_spec(child, vec![parent]);
+        assert!(g.can_provision(parent));
+        assert!(!g.can_provision(child));
+        g.mark_active(parent);
+        assert!(g.can_provision(child));
     }
 }

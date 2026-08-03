@@ -433,9 +433,9 @@ cargo add pcm-engine@0.4.0
 cargo test -p pcm-engine
 ```
 
-#### 3. Service Orchestrator ✅
+#### 3. Service Orchestrator ✅ (`bss-oss-service-orchestrator` 0.4.0)
 
-Automates the complete service lifecycle from order to activation to inventory.
+Automates the complete service lifecycle from order to activation to inventory. **Implemented** and published on [crates.io](https://crates.io/crates/bss-oss-service-orchestrator).
 
 **Features:**
 
@@ -444,6 +444,11 @@ Automates the complete service lifecycle from order to activation to inventory.
 - Automatic service activation when dependencies are met
 - Service lifecycle state tracking
 - Background worker for processing pending workflows
+
+```bash
+cargo add bss-oss-service-orchestrator@0.4.0
+cargo test -p bss-oss-service-orchestrator
+```
 
 #### 4. Revenue Management System ✅
 
@@ -1549,7 +1554,7 @@ You can use Swagger UI to manually test all endpoints and verify:
 - **`bss-oss-pcf`**: 5G/4G **Policy Control Function** core (QoS, charging rules, quota) — [crates.io/crates/bss-oss-pcf](https://crates.io/crates/bss-oss-pcf)
 - **`bss-oss-pcf-nextgen`**: **Next-generation PCF** HTTP service (REST edge, intent engine, Swagger UI, metrics) — [crates.io/crates/bss-oss-pcf-nextgen](https://crates.io/crates/bss-oss-pcf-nextgen); run with `cargo run -p bss-oss-pcf-nextgen`, UI at `http://127.0.0.1:9080/swagger-ui/`
 - **`order-orchestrator`**: Order orchestration (decomposition, dependencies, state management)
-- **`service-orchestrator`**: Service lifecycle orchestrator (workflows, dependencies, activation automation) ✅
+- **`service-orchestrator`**: Service lifecycle orchestrator (`bss-oss-service-orchestrator` 0.4.0 — workflows, dependency graph, auto-activation, background worker) ✅
 - **`resource-management`**: Resource management (capacity, reservation, network topology)
 - **`revenue-management`**: Revenue management system (charging, rating, billing cycles, settlements) ✅
 - **`security`**: Security system (OAuth 2.0/OIDC, MFA, RBAC, audit logging) ✅

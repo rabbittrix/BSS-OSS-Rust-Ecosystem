@@ -142,6 +142,10 @@ impl ServiceWorkflowEngine {
                     if task_state == ServiceLifecycleState::WaitingForDependencies
                         || task_state == ServiceLifecycleState::Activated
                     {
+                        context.update_task_state(
+                            task_id,
+                            ServiceLifecycleState::InventoryCreated,
+                        );
                         context.state = ServiceLifecycleState::InventoryCreated;
                     }
                 }

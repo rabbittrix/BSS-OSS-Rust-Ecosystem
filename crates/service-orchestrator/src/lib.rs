@@ -13,5 +13,5 @@ pub mod state;
 pub mod workflow;
 
 pub use dependencies::{ServiceDependency, ServiceDependencyGraph};
-pub use orchestrator::ServiceOrchestrator;
+pub use orchestrator::{ServiceOrchestrator, ServiceOrchestratorTrait};
 pub use state::{ServiceLifecycleState, ServiceWorkflowContext};
