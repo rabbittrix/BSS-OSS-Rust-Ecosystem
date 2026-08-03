@@ -5,7 +5,7 @@
 
 **Service lifecycle orchestration** for the BSS/OSS Rust ecosystem: Service Order → Service Activation → Service Inventory.
 
-**Status: implemented (v0.4.0)** on [crates.io](https://crates.io/crates/bss-oss-service-orchestrator).
+**Status: implemented (v0.4.1)** on [crates.io](https://crates.io/crates/bss-oss-service-orchestrator).
 
 ## Features
 
@@ -20,7 +20,7 @@
 ## Install
 
 ```toml
-bss-oss-service-orchestrator = "0.4.0"
+bss-oss-service-orchestrator = "0.4.1"
 ```
 
 ## Quick start

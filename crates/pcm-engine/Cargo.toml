@@ -1,7 +1,7 @@
 [package]
 name = "pcm-engine"
 # Bumped independently for feature-complete PCM releases.
-version = "0.4.0"
+version = "0.4.1"
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "MIT"

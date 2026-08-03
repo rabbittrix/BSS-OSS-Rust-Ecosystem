@@ -5,7 +5,7 @@
 
 **Product Catalog Engine (PCM)** — the catalog heart of the BSS/OSS Rust ecosystem.
 
-**Status: implemented (v0.4.0)** on [crates.io](https://crates.io/crates/pcm-engine). All four core feature areas below are available in the library API today.
+**Status: implemented (v0.4.1)** on [crates.io](https://crates.io/crates/pcm-engine). All four core feature areas below are available in the library API today.
 
 ## Implemented features
 
@@ -21,11 +21,11 @@ Entry point: **`CatalogEngine`** — register rules, call `calculate_price`, `ch
 ## Install
 
 ```toml
-pcm-engine = "0.4.0"
+pcm-engine = "0.4.1"
 ```
 
 ```bash
-cargo add pcm-engine@0.4.0
+cargo add pcm-engine@0.4.1
 ```
 
 ## Quick start

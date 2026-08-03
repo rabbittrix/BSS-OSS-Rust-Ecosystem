@@ -5,7 +5,7 @@
 
 **Revenue Management** for the BSS/OSS Rust ecosystem — charging, rating, billing cycles, and partner settlements.
 
-**Status: implemented (v0.4.0)** on [crates.io](https://crates.io/crates/revenue-management).
+**Status: implemented (v0.4.1)** on [crates.io](https://crates.io/crates/revenue-management).
 
 ## Features
 
@@ -21,11 +21,11 @@ Entry point: **`RevenueManager`** (or use engines directly).
 ## Install
 
 ```toml
-revenue-management = "0.4.0"
+revenue-management = "0.4.1"
 ```
 
 ```bash
-cargo add revenue-management@0.4.0
+cargo add revenue-management@0.4.1
 ```
 
 ## Quick start

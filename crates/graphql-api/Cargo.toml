@@ -16,4 +16,4 @@ serde_json.workspace = true
 uuid.workspace = true
 chrono.workspace = true
 sqlx = { workspace = true }
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.0" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.1" }

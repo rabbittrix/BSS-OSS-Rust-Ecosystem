@@ -17,8 +17,8 @@ tokio.workspace = true
 thiserror.workspace = true
 sqlx.workspace = true
 async-trait.workspace = true
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.0" }
-tmf622-ordering = { path = "../tmf-apis/tmf622_ordering", version = "0.3.0" }
-tmf641-service-order = { path = "../tmf-apis/tmf641_service_order", version = "0.3.0" }
-tmf645-resource-order = { path = "../tmf-apis/tmf645_resource_order", version = "0.3.0" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.1" }
+tmf622-ordering = { path = "../tmf-apis/tmf622_ordering", version = "0.3.1" }
+tmf641-service-order = { path = "../tmf-apis/tmf641_service_order", version = "0.3.1" }
+tmf645-resource-order = { path = "../tmf-apis/tmf645_resource_order", version = "0.3.1" }
 log.workspace = true

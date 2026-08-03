@@ -1,7 +1,7 @@
 [package]
 name = "bss-oss-pcf-nextgen"
 # Published independently of the workspace meta-version; bump for each crates.io release.
-version = "0.3.2"
+version = "0.3.3"
 edition.workspace = true
 # `openapi/**` is required for `include_str!` in `swagger_ui.rs` during `cargo publish` packaging.
 include = ["Cargo.toml", "README.md", "src/**", "openapi/**", "tests/**"]
@@ -23,7 +23,7 @@ name = "bss-oss-pcf-nextgen"
 path = "src/main.rs"
 
 [dependencies]
-bss-oss-pcf = { path = "../pcf", version = "0.3.0" }
+bss-oss-pcf = { path = "../pcf", version = "0.3.1" }
 actix-web.workspace = true
 serde.workspace = true
 serde_json.workspace = true

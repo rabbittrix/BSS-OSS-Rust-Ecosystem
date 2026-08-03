@@ -21,7 +21,7 @@ This project aims to revolutionize the BSS/OSS landscape by providing:
 6. ✅ Implement **TMF622 - Product Ordering Management API**
 7. ✅ Implement **TMF637 - Product Inventory Management API**
 
-### Current Version: 0.3.0
+### Current Version: 0.3.1
 
 **Phase 2 APIs Completed:**
 
@@ -380,7 +380,7 @@ bss-oss-rust/
 │   ├── benchmarks/            # Performance benchmarks
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
-├── openapi/                   # OpenAPI specs (e.g. PCF next-gen; mirror under crates/pcf-nextgen/openapi/)
+├── openapi/                   # OpenAPI specs — `tmf-apis-openapi.json` (v0.3.1 TMF suite) + PCF next-gen YAML
 ├── examples/                  # Example API flows (e.g. PCF AR/VR)
 ├── scripts/                   # Helper scripts (e.g. PCF smoke tests)
 ├── migrations/                # Database migration scripts
@@ -393,7 +393,7 @@ bss-oss-rust/
 
 The most strategic choice for interoperability. Adherence to industry standards is crucial for commercial value.
 
-**Current Implementation (v0.3.0):**
+**Current Implementation (v0.3.1):**
 
 - **TMF620** - Product Catalog Management API ✅
 - **TMF622** - Product Ordering Management API ✅
@@ -419,9 +419,6 @@ The most strategic choice for interoperability. Adherence to industry standards 
 - **TMF633** - Service Catalog Management API ✅
 - **TMF634** - Resource Catalog Management API ✅
 - **TMF679** - Product Offering Qualification API ✅
-- **TMF633** - Service Catalog Management API ✅
-- **TMF634** - Resource Catalog Management API ✅
-- **TMF679** - Product Offering Qualification API ✅
 
 **Total:** 21 TM Forum APIs Implemented
 
@@ -439,12 +436,12 @@ The heart of the BSS. An efficient catalog allows Telcos to innovate quickly in 
 - **Catalog versioning and lifecycle** — content snapshots, publish / rollback, content-aware diffs
 
 ```bash
-cargo add pcm-engine@0.4.0
+cargo add pcm-engine@0.4.1
 # or from this workspace:
 cargo test -p pcm-engine
 ```
 
-#### 3. Service Orchestrator ✅ (`bss-oss-service-orchestrator` 0.4.0)
+#### 3. Service Orchestrator ✅ (`bss-oss-service-orchestrator` 0.4.1)
 
 Automates the complete service lifecycle from order to activation to inventory. **Implemented** and published on [crates.io](https://crates.io/crates/bss-oss-service-orchestrator).
 
@@ -457,11 +454,11 @@ Automates the complete service lifecycle from order to activation to inventory. 
 - Background worker for processing pending workflows
 
 ```bash
-cargo add bss-oss-service-orchestrator@0.4.0
+cargo add bss-oss-service-orchestrator@0.4.1
 cargo test -p bss-oss-service-orchestrator
 ```
 
-#### 4. Revenue Management System ✅ (`revenue-management` 0.4.0)
+#### 4. Revenue Management System ✅ (`revenue-management` 0.4.1)
 
 Comprehensive revenue management for charging, billing, and partner settlements. **Implemented** and published on [crates.io](https://crates.io/crates/revenue-management).
 
@@ -473,7 +470,7 @@ Comprehensive revenue management for charging, billing, and partner settlements.
 - Partner settlement workflows with revenue sharing
 
 ```bash
-cargo add revenue-management@0.4.0
+cargo add revenue-management@0.4.1
 cargo test -p revenue-management
 ```
 
@@ -737,13 +734,13 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 
 ### TMF677 Usage Consumption Management API
 
-**Base URL:** `/tmf-api/customerUsageManagement/v4`
+**Base URL:** `/tmf-api/usageConsumptionManagement/v4`
 
-#### Customer Usages
+#### Usage Consumption
 
-- **GET** `/customerUsage` - List all customer usage records
-- **GET** `/customerUsage/{id}` - Get customer usage by ID (UUID)
-- **POST** `/customerUsage` - Create a new customer usage record
+- **GET** `/usageConsumption` - List all usage consumption records
+- **GET** `/usageConsumption/{id}` - Get usage consumption by ID (UUID)
+- **POST** `/usageConsumption` - Create a new usage consumption record
 
 ### TMF646 Appointment Management API
 
@@ -1363,6 +1360,12 @@ Interactive API documentation is available at <http://localhost:8080/swagger-ui>
 
 The raw OpenAPI specification is available at <http://localhost:8080/api-doc/openapi.json>
 
+A checked-in snapshot (version **0.3.1**, corrected TMF tags including TMF621/633/634/646/648/677/679) lives at [`openapi/tmf-apis-openapi.json`](openapi/tmf-apis-openapi.json). Regenerate with:
+
+```bash
+cargo test -p bss-oss-server export_openapi -- --nocapture
+```
+
 ## 🧪 Testing
 
 ### Test Infrastructure
@@ -1600,9 +1603,9 @@ You can use Swagger UI to manually test all endpoints and verify:
 - **`bss-oss-pcf`**: 5G/4G **Policy Control Function** core (QoS, charging rules, quota) — [crates.io/crates/bss-oss-pcf](https://crates.io/crates/bss-oss-pcf)
 - **`bss-oss-pcf-nextgen`**: **Next-generation PCF** HTTP service (REST edge, intent engine, Swagger UI, metrics) — [crates.io/crates/bss-oss-pcf-nextgen](https://crates.io/crates/bss-oss-pcf-nextgen); run with `cargo run -p bss-oss-pcf-nextgen`, UI at `http://127.0.0.1:9080/swagger-ui/`
 - **`order-orchestrator`**: Order orchestration (decomposition, dependencies, state management)
-- **`service-orchestrator`**: Service lifecycle orchestrator (`bss-oss-service-orchestrator` 0.4.0 — workflows, dependency graph, auto-activation, background worker) ✅
+- **`service-orchestrator`**: Service lifecycle orchestrator (`bss-oss-service-orchestrator` 0.4.1 — workflows, dependency graph, auto-activation, background worker) ✅
 - **`resource-management`**: Resource management (capacity, reservation, network topology)
-- **`revenue-management`**: Revenue management (`revenue-management` 0.4.0 — charging, rating, billing cycles, settlements) ✅
+- **`revenue-management`**: Revenue management (`revenue-management` 0.4.1 — charging, rating, billing cycles, settlements) ✅
 - **`security`**: Security system (OAuth 2.0/OIDC, MFA, RBAC, audit logging) ✅
 
 ### Infrastructure Crates

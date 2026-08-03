@@ -483,7 +483,7 @@ use utoipa_swagger_ui::SwaggerUi;
     info(
         title = "BSS/OSS Rust - TM Forum Open APIs",
         description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679)",
-        version = "0.3.0",
+        version = "0.3.1",
         contact(
             name = "Roberto de Souza",
             email = "rabbittrix@hotmail.com"
@@ -761,4 +761,24 @@ async fn main() -> std::io::Result<()> {
     // The shutdown_timeout(30) above ensures graceful shutdown with 30s timeout
     server.run().await?;
     Ok(())
+}
+
+#[cfg(test)]
+mod openapi_export_tests {
+    use super::ApiDoc;
+    use std::path::PathBuf;
+    use utoipa::OpenApi;
+
+    #[test]
+    fn export_openapi_spec() {
+        let spec = ApiDoc::openapi();
+        let json = spec.to_pretty_json().expect("serialize openapi");
+        let mut out = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        out.push("../../openapi/tmf-apis-openapi.json");
+        if let Some(parent) = out.parent() {
+            let _ = std::fs::create_dir_all(parent);
+        }
+        std::fs::write(&out, json).expect("write openapi json");
+        assert!(out.exists());
+    }
 }

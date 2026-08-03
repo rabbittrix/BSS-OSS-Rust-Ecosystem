@@ -1,0 +1,6948 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "BSS/OSS Rust - TM Forum Open APIs",
+    "description": "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679)",
+    "contact": {
+      "name": "Roberto de Souza",
+      "email": "rabbittrix@hotmail.com"
+    },
+    "license": {
+      "name": "MIT"
+    },
+    "version": "0.3.1"
+  },
+  "paths": {
+    "/tmf-api/alarmManagement/v4/alarm": {
+      "get": {
+        "tags": [
+          "TMF642"
+        ],
+        "summary": "Get all alarms",
+        "operationId": "get_alarms",
+        "responses": {
+          "200": {
+            "description": "List of alarms",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Alarm"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF642"
+        ],
+        "summary": "Create a new alarm",
+        "operationId": "create_alarm",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAlarmRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Alarm created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Alarm"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/alarmManagement/v4/alarm/{id}": {
+      "get": {
+        "tags": [
+          "TMF642"
+        ],
+        "summary": "Get alarm by ID",
+        "operationId": "get_alarm_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Alarm ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alarm found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Alarm"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid alarm ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Alarm not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF642"
+        ],
+        "summary": "Delete an alarm",
+        "operationId": "delete_alarm",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Alarm ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Alarm deleted"
+          },
+          "400": {
+            "description": "Invalid alarm ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Alarm not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF642"
+        ],
+        "summary": "Update an alarm",
+        "operationId": "update_alarm",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Alarm ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAlarmRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Alarm updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Alarm"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Alarm not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/appointmentManagement/v4/appointment": {
+      "get": {
+        "tags": [
+          "TMF646"
+        ],
+        "summary": "Get all appointments",
+        "operationId": "get_appointments",
+        "responses": {
+          "200": {
+            "description": "List of appointments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Appointment"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF646"
+        ],
+        "summary": "Create a new appointment",
+        "operationId": "create_appointment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAppointmentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Appointment created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Appointment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/appointmentManagement/v4/appointment/{id}": {
+      "get": {
+        "tags": [
+          "TMF646"
+        ],
+        "summary": "Get appointment by ID",
+        "operationId": "get_appointment_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Appointment ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Appointment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid appointment ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Appointment not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/customerBillManagement/v4/customerBill": {
+      "get": {
+        "tags": [
+          "TMF678"
+        ],
+        "summary": "Get all customer bills",
+        "operationId": "get_bills",
+        "responses": {
+          "200": {
+            "description": "List of customer bills",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerBill"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF678"
+        ],
+        "summary": "Create a new customer bill",
+        "operationId": "create_bill",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomerBillRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Customer bill created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBill"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/customerBillManagement/v4/customerBill/{id}": {
+      "get": {
+        "tags": [
+          "TMF678"
+        ],
+        "summary": "Get customer bill by ID",
+        "operationId": "get_bill_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Customer Bill ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer bill found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBill"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid bill ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer bill not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/customerManagement/v4/customer": {
+      "get": {
+        "tags": [
+          "TMF629"
+        ],
+        "summary": "Get all customers",
+        "operationId": "get_customers",
+        "responses": {
+          "200": {
+            "description": "List of customers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF629"
+        ],
+        "summary": "Create a new customer",
+        "operationId": "create_customer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Customer created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/customerManagement/v4/customer/{id}": {
+      "get": {
+        "tags": [
+          "TMF629"
+        ],
+        "summary": "Get customer by ID",
+        "operationId": "get_customer_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Customer ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid customer ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/identityManagement/v4/identity": {
+      "get": {
+        "tags": [
+          "TMF669"
+        ],
+        "summary": "Get all identities",
+        "operationId": "get_identities",
+        "responses": {
+          "200": {
+            "description": "List of identities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Identity"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF669"
+        ],
+        "summary": "Create a new identity",
+        "operationId": "create_identity",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIdentityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Identity created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Identity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/identityManagement/v4/identity/{id}": {
+      "get": {
+        "tags": [
+          "TMF669"
+        ],
+        "summary": "Get identity by ID",
+        "operationId": "get_identity_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identity ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Identity found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Identity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid identity ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Identity not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/partyManagement/v4/party": {
+      "get": {
+        "tags": [
+          "TMF632"
+        ],
+        "summary": "Get all parties",
+        "operationId": "get_parties",
+        "responses": {
+          "200": {
+            "description": "List of parties",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Party"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF632"
+        ],
+        "summary": "Create a new party",
+        "operationId": "create_party",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePartyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Party created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Party"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/partyManagement/v4/party/{id}": {
+      "get": {
+        "tags": [
+          "TMF632"
+        ],
+        "summary": "Get party by ID",
+        "operationId": "get_party_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Party ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Party found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Party"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid party ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Party not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/partyRoleManagement/v4/partyRole": {
+      "get": {
+        "tags": [
+          "TMF668"
+        ],
+        "summary": "Get all party roles",
+        "operationId": "get_party_roles",
+        "responses": {
+          "200": {
+            "description": "List of party roles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PartyRole"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF668"
+        ],
+        "summary": "Create a new party role",
+        "operationId": "create_party_role",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePartyRoleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Party role created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyRole"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/partyRoleManagement/v4/partyRole/{id}": {
+      "get": {
+        "tags": [
+          "TMF668"
+        ],
+        "summary": "Get party role by ID",
+        "operationId": "get_party_role_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Party Role ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Party role found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyRole"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid party role ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Party role not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/productCatalogManagement/v4/catalog": {
+      "get": {
+        "tags": [
+          "TMF620"
+        ],
+        "summary": "Get all catalogs",
+        "operationId": "get_catalogs",
+        "responses": {
+          "200": {
+            "description": "List of catalogs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Catalog"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF620"
+        ],
+        "summary": "Create a new catalog",
+        "operationId": "create_catalog",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCatalogRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Catalog created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Catalog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/productCatalogManagement/v4/catalog/{id}": {
+      "get": {
+        "tags": [
+          "TMF620"
+        ],
+        "summary": "Get catalog by ID",
+        "operationId": "get_catalog_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Catalog ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Catalog found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Catalog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid catalog ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Catalog not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/productCatalogManagement/v4/productOffering": {
+      "get": {
+        "tags": [
+          "TMF620"
+        ],
+        "summary": "Get all product offerings",
+        "operationId": "get_product_offerings",
+        "responses": {
+          "200": {
+            "description": "List of product offerings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductOffering"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF620"
+        ],
+        "summary": "Create a new product offering",
+        "operationId": "create_product_offering",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductOfferingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Product offering created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductOffering"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/productInventoryManagement/v4/productInventory": {
+      "get": {
+        "tags": [
+          "TMF637"
+        ],
+        "summary": "Get all product inventories",
+        "operationId": "get_inventories",
+        "responses": {
+          "200": {
+            "description": "List of product inventories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductInventory"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF637"
+        ],
+        "summary": "Create a new product inventory",
+        "operationId": "create_inventory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductInventoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Product inventory created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductInventory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/productInventoryManagement/v4/productInventory/{id}": {
+      "get": {
+        "tags": [
+          "TMF637"
+        ],
+        "summary": "Get product inventory by ID",
+        "operationId": "get_inventory_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product Inventory ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product inventory found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductInventory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid inventory ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Product inventory not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/productOfferingQualification/v4/productOfferingQualification": {
+      "get": {
+        "tags": [
+          "TMF679"
+        ],
+        "operationId": "list_qualifications",
+        "responses": {
+          "200": {
+            "description": "List",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductOfferingQualification"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF679"
+        ],
+        "operationId": "create_qualification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductOfferingQualificationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductOfferingQualification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/productOfferingQualification/v4/productOfferingQualification/{id}": {
+      "get": {
+        "tags": [
+          "TMF679"
+        ],
+        "operationId": "get_qualification_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductOfferingQualification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/productOrderingManagement/v4/productOrder": {
+      "get": {
+        "tags": [
+          "TMF622"
+        ],
+        "summary": "Get all product orders",
+        "operationId": "get_orders",
+        "responses": {
+          "200": {
+            "description": "List of product orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductOrder"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF622"
+        ],
+        "summary": "Create a new product order",
+        "operationId": "create_order",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Product order created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductOrder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/productOrderingManagement/v4/productOrder/{id}": {
+      "get": {
+        "tags": [
+          "TMF622"
+        ],
+        "summary": "Get product order by ID",
+        "operationId": "get_order_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product Order ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product order found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductOrder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid order ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Product order not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/quoteManagement/v4/quote": {
+      "get": {
+        "tags": [
+          "TMF648"
+        ],
+        "summary": "Get all quotes",
+        "operationId": "get_quotes",
+        "responses": {
+          "200": {
+            "description": "List of quotes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Quote"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF648"
+        ],
+        "summary": "Create a new quote",
+        "operationId": "create_quote",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuoteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Quote created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quote"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/quoteManagement/v4/quote/{id}": {
+      "get": {
+        "tags": [
+          "TMF648"
+        ],
+        "summary": "Get quote by ID",
+        "operationId": "get_quote_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Quote ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quote found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quote"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid quote ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Quote not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF648"
+        ],
+        "summary": "Delete a quote",
+        "operationId": "delete_quote",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Quote ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Quote deleted"
+          },
+          "400": {
+            "description": "Invalid quote ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Quote not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF648"
+        ],
+        "summary": "Update a quote",
+        "operationId": "update_quote",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Quote ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQuoteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Quote updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quote"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Quote not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceActivationAndConfiguration/v4/resourceActivation": {
+      "get": {
+        "tags": [
+          "TMF702"
+        ],
+        "summary": "Get all resource activations",
+        "operationId": "get_resource_activations",
+        "responses": {
+          "200": {
+            "description": "List of resource activations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceActivation"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF702"
+        ],
+        "summary": "Create a new resource activation",
+        "operationId": "create_resource_activation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResourceActivationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource activation created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceActivation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceActivationAndConfiguration/v4/resourceActivation/{id}": {
+      "get": {
+        "tags": [
+          "TMF702"
+        ],
+        "summary": "Get resource activation by ID",
+        "operationId": "get_resource_activation_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource Activation ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource activation found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceActivation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid activation ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource activation not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceCatalogManagement/v4/resourceCatalog": {
+      "get": {
+        "tags": [
+          "TMF634"
+        ],
+        "operationId": "list_resource_catalogs",
+        "responses": {
+          "200": {
+            "description": "List",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceCatalog"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF634"
+        ],
+        "operationId": "create_resource_catalog",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResourceCatalogRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceCatalog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceCatalogManagement/v4/resourceCatalog/{id}": {
+      "get": {
+        "tags": [
+          "TMF634"
+        ],
+        "operationId": "get_resource_catalog_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceCatalog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceCatalogManagement/v4/resourceSpecification": {
+      "get": {
+        "tags": [
+          "TMF634"
+        ],
+        "operationId": "list_resource_specifications",
+        "responses": {
+          "200": {
+            "description": "List",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceSpecification"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF634"
+        ],
+        "operationId": "create_resource_specification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResourceSpecificationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceSpecification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceCatalogManagement/v4/resourceSpecification/{id}": {
+      "get": {
+        "tags": [
+          "TMF634"
+        ],
+        "operationId": "get_resource_specification_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceSpecification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceInventoryManagement/v4/resourceInventory": {
+      "get": {
+        "tags": [
+          "TMF639"
+        ],
+        "summary": "Get all resource inventories",
+        "operationId": "get_resource_inventories",
+        "responses": {
+          "200": {
+            "description": "List of resource inventories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceInventory"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF639"
+        ],
+        "summary": "Create a new resource inventory",
+        "operationId": "create_resource_inventory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResourceInventoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource inventory created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceInventory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceInventoryManagement/v4/resourceInventory/{id}": {
+      "get": {
+        "tags": [
+          "TMF639"
+        ],
+        "summary": "Get resource inventory by ID",
+        "operationId": "get_resource_inventory_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource Inventory ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource inventory found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceInventory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid inventory ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource inventory not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceOrderingManagement/v4/resourceOrder": {
+      "get": {
+        "tags": [
+          "TMF645"
+        ],
+        "summary": "Get all resource orders",
+        "operationId": "get_resource_orders",
+        "responses": {
+          "200": {
+            "description": "List of resource orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceOrder"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF645"
+        ],
+        "summary": "Create a new resource order",
+        "operationId": "create_resource_order",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResourceOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource order created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceOrder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/resourceOrderingManagement/v4/resourceOrder/{id}": {
+      "get": {
+        "tags": [
+          "TMF645"
+        ],
+        "summary": "Get resource order by ID",
+        "operationId": "get_resource_order_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resource Order ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource order found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceOrder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid order ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource order not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceActivationAndConfiguration/v4/serviceActivation": {
+      "get": {
+        "tags": [
+          "TMF640"
+        ],
+        "summary": "Get all service activations",
+        "operationId": "get_service_activations",
+        "responses": {
+          "200": {
+            "description": "List of service activations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceActivation"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF640"
+        ],
+        "summary": "Create a new service activation",
+        "operationId": "create_service_activation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceActivationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Service activation created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceActivation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceActivationAndConfiguration/v4/serviceActivation/{id}": {
+      "get": {
+        "tags": [
+          "TMF640"
+        ],
+        "summary": "Get service activation by ID",
+        "operationId": "get_service_activation_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Service Activation ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service activation found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceActivation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid activation ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Service activation not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceCatalogManagement/v4/serviceCatalog": {
+      "get": {
+        "tags": [
+          "TMF633"
+        ],
+        "operationId": "list_service_catalogs",
+        "responses": {
+          "200": {
+            "description": "List",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceCatalog"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF633"
+        ],
+        "operationId": "create_service_catalog",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceCatalogRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceCatalogManagement/v4/serviceCatalog/{id}": {
+      "get": {
+        "tags": [
+          "TMF633"
+        ],
+        "operationId": "get_service_catalog_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceCatalogManagement/v4/serviceSpecification": {
+      "get": {
+        "tags": [
+          "TMF633"
+        ],
+        "operationId": "list_service_specifications",
+        "responses": {
+          "200": {
+            "description": "List",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceSpecification"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF633"
+        ],
+        "operationId": "create_service_specification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceSpecificationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceSpecification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceCatalogManagement/v4/serviceSpecification/{id}": {
+      "get": {
+        "tags": [
+          "TMF633"
+        ],
+        "operationId": "get_service_specification_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceSpecification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceInventoryManagement/v4/serviceInventory": {
+      "get": {
+        "tags": [
+          "TMF638"
+        ],
+        "summary": "Get all service inventories",
+        "operationId": "get_service_inventories",
+        "responses": {
+          "200": {
+            "description": "List of service inventories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceInventory"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF638"
+        ],
+        "summary": "Create a new service inventory",
+        "operationId": "create_service_inventory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceInventoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Service inventory created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceInventory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceInventoryManagement/v4/serviceInventory/{id}": {
+      "get": {
+        "tags": [
+          "TMF638"
+        ],
+        "summary": "Get service inventory by ID",
+        "operationId": "get_service_inventory_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Service Inventory ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service inventory found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceInventory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid inventory ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Service inventory not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceOrderingManagement/v4/serviceOrder": {
+      "get": {
+        "tags": [
+          "TMF641"
+        ],
+        "summary": "Get all service orders",
+        "operationId": "get_service_orders",
+        "responses": {
+          "200": {
+            "description": "List of service orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceOrder"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF641"
+        ],
+        "summary": "Create a new service order",
+        "operationId": "create_service_order",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Service order created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceOrder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/serviceOrderingManagement/v4/serviceOrder/{id}": {
+      "get": {
+        "tags": [
+          "TMF641"
+        ],
+        "summary": "Get service order by ID",
+        "operationId": "get_service_order_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Service Order ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service order found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceOrder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid order ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Service order not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/sliceManagement/v4/networkSlice": {
+      "get": {
+        "tags": [
+          "TMF656"
+        ],
+        "summary": "Get all network slices",
+        "operationId": "get_network_slices",
+        "responses": {
+          "200": {
+            "description": "List of network slices",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NetworkSlice"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF656"
+        ],
+        "summary": "Create a new network slice",
+        "operationId": "create_network_slice",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNetworkSliceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Network slice created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkSlice"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/sliceManagement/v4/networkSlice/{id}": {
+      "get": {
+        "tags": [
+          "TMF656"
+        ],
+        "summary": "Get network slice by ID",
+        "operationId": "get_network_slice_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Network Slice ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Network slice found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkSlice"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid slice ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Network slice not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF656"
+        ],
+        "summary": "Delete a network slice",
+        "operationId": "delete_network_slice",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Network Slice ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Network slice deleted"
+          },
+          "400": {
+            "description": "Invalid slice ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Network slice not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF656"
+        ],
+        "summary": "Update a network slice",
+        "operationId": "update_network_slice",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Network Slice ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNetworkSliceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Network slice updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkSlice"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Network slice not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/troubleTicket/v4/troubleTicket": {
+      "get": {
+        "tags": [
+          "TMF621"
+        ],
+        "summary": "Get all trouble tickets",
+        "operationId": "get_trouble_tickets",
+        "responses": {
+          "200": {
+            "description": "List of trouble tickets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TroubleTicket"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF621"
+        ],
+        "summary": "Create a new trouble ticket",
+        "operationId": "create_trouble_ticket",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTroubleTicketRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Trouble ticket created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TroubleTicket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/troubleTicket/v4/troubleTicket/{id}": {
+      "get": {
+        "tags": [
+          "TMF621"
+        ],
+        "summary": "Get trouble ticket by ID",
+        "operationId": "get_trouble_ticket_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Trouble Ticket ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trouble ticket found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TroubleTicket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid trouble ticket ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Trouble ticket not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF621"
+        ],
+        "summary": "Delete a trouble ticket",
+        "operationId": "delete_trouble_ticket",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Trouble Ticket ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Trouble ticket deleted"
+          },
+          "400": {
+            "description": "Invalid trouble ticket ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Trouble ticket not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF621"
+        ],
+        "summary": "Update a trouble ticket",
+        "operationId": "update_trouble_ticket",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Trouble Ticket ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTroubleTicketRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Trouble ticket updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TroubleTicket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Trouble ticket not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/usageConsumptionManagement/v4/usageConsumption": {
+      "get": {
+        "tags": [
+          "TMF677"
+        ],
+        "summary": "Get all customer usages",
+        "operationId": "get_usages",
+        "responses": {
+          "200": {
+            "description": "List of customer usages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerUsage"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF677"
+        ],
+        "summary": "Create a new customer usage record",
+        "operationId": "create_usage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomerUsageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Customer usage created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerUsage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/usageConsumptionManagement/v4/usageConsumption/{id}": {
+      "get": {
+        "tags": [
+          "TMF677"
+        ],
+        "summary": "Get customer usage by ID",
+        "operationId": "get_usage_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Customer Usage ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer usage found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerUsage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid usage ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer usage not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/usageManagement/v4/usage": {
+      "get": {
+        "tags": [
+          "TMF635"
+        ],
+        "summary": "Get all usage records",
+        "operationId": "get_usages",
+        "responses": {
+          "200": {
+            "description": "List of usage records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Usage"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF635"
+        ],
+        "summary": "Create a new usage record",
+        "operationId": "create_usage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUsageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Usage record created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/usageManagement/v4/usage/{id}": {
+      "get": {
+        "tags": [
+          "TMF635"
+        ],
+        "summary": "Get usage by ID",
+        "operationId": "get_usage_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Usage ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usage record found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid usage ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Usage record not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountRef": {
+        "type": "object",
+        "description": "Account Reference",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Alarm": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state",
+              "severity",
+              "alarm_type"
+            ],
+            "properties": {
+              "acknowledged_time": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Acknowledged time"
+              },
+              "alarm_details": {
+                "type": "string",
+                "description": "Alarm specific information",
+                "nullable": true
+              },
+              "alarm_type": {
+                "$ref": "#/components/schemas/AlarmType"
+              },
+              "cleared_time": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Cleared time"
+              },
+              "raised_time": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Raised time"
+              },
+              "severity": {
+                "$ref": "#/components/schemas/AlarmSeverity"
+              },
+              "source_resource": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ResourceRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/AlarmState"
+              }
+            }
+          }
+        ],
+        "description": "Alarm - Represents a network alarm"
+      },
+      "AlarmSeverity": {
+        "type": "string",
+        "description": "Alarm Severity",
+        "enum": [
+          "CRITICAL",
+          "MAJOR",
+          "MINOR",
+          "WARNING",
+          "INDETERMINATE"
+        ]
+      },
+      "AlarmState": {
+        "type": "string",
+        "description": "Alarm State",
+        "enum": [
+          "RAISED",
+          "ACKNOWLEDGED",
+          "CLEARED",
+          "CLOSED"
+        ]
+      },
+      "AlarmType": {
+        "type": "string",
+        "description": "Alarm Type",
+        "enum": [
+          "COMMUNICATIONS_ALARM",
+          "QUALITY_OF_SERVICE_ALARM",
+          "PROCESSING_ERROR_ALARM",
+          "EQUIPMENT_ALARM",
+          "ENVIRONMENTAL_ALARM",
+          "INTEGRITY_VIOLATION",
+          "OPERATIONAL_VIOLATION",
+          "PHYSICAL_VIOLATION",
+          "SECURITY_SERVICE_OR_MECHANISM_VIOLATION",
+          "TIME_DOMAIN_VIOLATION"
+        ]
+      },
+      "Appointment": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "appointment_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Appointment date/time"
+              },
+              "appointment_type": {
+                "type": "string",
+                "description": "Appointment type (installation, repair, maintenance, etc.)",
+                "nullable": true
+              },
+              "contact_medium": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ContactMedium"
+                },
+                "description": "Contact medium (address, phone, etc.)",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "description": "Description",
+                "nullable": true
+              },
+              "duration": {
+                "type": "integer",
+                "format": "int32",
+                "description": "Duration in minutes",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (customer, technician, etc.)",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/AppointmentState"
+              }
+            }
+          }
+        ],
+        "description": "Appointment - Represents a scheduled appointment"
+      },
+      "AppointmentState": {
+        "type": "string",
+        "description": "Appointment State",
+        "enum": [
+          "INITIAL",
+          "CONFIRMED",
+          "IN_PROGRESS",
+          "COMPLETED",
+          "CANCELLED",
+          "FAILED"
+        ]
+      },
+      "BaseEntity": {
+        "type": "object",
+        "description": "Base entity with common fields",
+        "required": [
+          "id",
+          "name",
+          "lifecycle_status"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Description",
+            "nullable": true
+          },
+          "href": {
+            "type": "string",
+            "description": "Resource URI",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier"
+          },
+          "last_update": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update date"
+          },
+          "lifecycle_status": {
+            "$ref": "#/components/schemas/LifecycleStatus"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name"
+          },
+          "valid_for": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TimePeriod"
+              }
+            ],
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "description": "Version",
+            "nullable": true
+          }
+        }
+      },
+      "BillItem": {
+        "type": "object",
+        "description": "Bill Item - Individual item within a bill",
+        "required": [
+          "id",
+          "description",
+          "amount"
+        ],
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "description": {
+            "type": "string",
+            "description": "Item description"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "product_offering": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProductOfferingRef"
+              }
+            ],
+            "nullable": true
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Item quantity",
+            "nullable": true
+          }
+        }
+      },
+      "BillState": {
+        "type": "string",
+        "description": "Bill State",
+        "enum": [
+          "PENDING",
+          "PAID",
+          "OVERDUE",
+          "CANCELLED"
+        ]
+      },
+      "Catalog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "product_offering": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ProductOfferingRef"
+                },
+                "description": "Product offerings in this catalog",
+                "nullable": true
+              }
+            }
+          }
+        ],
+        "description": "Product Catalog - A collection of product offerings"
+      },
+      "Characteristic": {
+        "type": "object",
+        "description": "Characteristic (attribute)",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "value_type": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ConfigurationParameter": {
+        "type": "object",
+        "description": "Configuration Parameter",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ContactMedium": {
+        "type": "object",
+        "description": "Contact Medium",
+        "required": [
+          "medium_type",
+          "value"
+        ],
+        "properties": {
+          "medium_type": {
+            "type": "string"
+          },
+          "preferred": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateAccountRefRequest": {
+        "type": "object",
+        "description": "Request to create an account reference",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateAlarmRequest": {
+        "type": "object",
+        "description": "Request to create an alarm",
+        "required": [
+          "name",
+          "severity",
+          "alarm_type"
+        ],
+        "properties": {
+          "alarm_details": {
+            "type": "string",
+            "nullable": true
+          },
+          "alarm_type": {
+            "$ref": "#/components/schemas/AlarmType"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "raised_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/AlarmSeverity"
+          },
+          "source_resource_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateAppointmentRequest": {
+        "type": "object",
+        "description": "Request to create an appointment",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "appointment_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "appointment_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "contact_medium": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateContactMediumRequest"
+            },
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateBillItemRequest": {
+        "type": "object",
+        "description": "Request to create a bill item",
+        "required": [
+          "description",
+          "amount"
+        ],
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "description": {
+            "type": "string"
+          },
+          "product_offering_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        }
+      },
+      "CreateCatalogRequest": {
+        "type": "object",
+        "description": "Request to create a catalog",
+        "required": [
+          "name",
+          "lifecycle_status"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "lifecycle_status": {
+            "$ref": "#/components/schemas/LifecycleStatus"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateCharacteristicRequest": {
+        "type": "object",
+        "description": "Request to create a characteristic",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "value_type": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateConfigurationParameterRequest": {
+        "type": "object",
+        "description": "Request to create a configuration parameter",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateContactMediumRequest": {
+        "type": "object",
+        "description": "Request to create a contact medium",
+        "required": [
+          "medium_type",
+          "value"
+        ],
+        "properties": {
+          "medium_type": {
+            "type": "string"
+          },
+          "preferred": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateCredentialRequest": {
+        "type": "object",
+        "description": "Request to create a credential",
+        "required": [
+          "credential_type"
+        ],
+        "properties": {
+          "credential_type": {
+            "$ref": "#/components/schemas/CredentialType"
+          },
+          "credential_value": {
+            "type": "string",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateCustomerBillRequest": {
+        "type": "object",
+        "description": "Request to create a customer bill",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "bill_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bill_item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateBillItemRequest"
+            },
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "tax_included": {
+            "type": "boolean"
+          },
+          "total_amount": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateCustomerRequest": {
+        "type": "object",
+        "description": "Request to create a customer",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "contact_medium": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateContactMediumRequest"
+            },
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateCustomerUsageRequest": {
+        "type": "object",
+        "description": "Request to create a customer usage record",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "product_offering_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "unit": {
+            "type": "string",
+            "nullable": true
+          },
+          "usage_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usage_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateIdentityRequest": {
+        "type": "object",
+        "description": "Request to create an identity",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "credential": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateCredentialRequest"
+            },
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "identity_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "jwt_issuer": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "oauth_client_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "oauth_client_secret": {
+            "type": "string",
+            "nullable": true
+          },
+          "party_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateNetworkFunctionRefRequest": {
+        "type": "object",
+        "description": "Request to create a network function reference",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "function_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateNetworkSliceRequest": {
+        "type": "object",
+        "description": "Request to create a network slice",
+        "required": [
+          "name",
+          "slice_type"
+        ],
+        "properties": {
+          "activation_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "network_functions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateNetworkFunctionRefRequest"
+            },
+            "nullable": true
+          },
+          "sla_parameters": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreateSLAParametersRequest"
+              }
+            ],
+            "nullable": true
+          },
+          "slice_type": {
+            "$ref": "#/components/schemas/SliceType"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateOrderItemRequest": {
+        "type": "object",
+        "description": "Request to create an order item",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "product_offering_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "product_specification_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        }
+      },
+      "CreatePartyRequest": {
+        "type": "object",
+        "description": "Request to create a party",
+        "required": [
+          "name",
+          "party_type"
+        ],
+        "properties": {
+          "account": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateAccountRefRequest"
+            },
+            "nullable": true
+          },
+          "characteristic": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateCharacteristicRequest"
+            },
+            "nullable": true
+          },
+          "contact_medium": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateContactMediumRequest"
+            },
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "party_type": {
+            "$ref": "#/components/schemas/PartyType"
+          },
+          "registration_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreatePartyRoleRequest": {
+        "type": "object",
+        "description": "Request to create a party role",
+        "required": [
+          "name",
+          "role"
+        ],
+        "properties": {
+          "contact_medium": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateContactMediumRequest"
+            },
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "engagement_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "party_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "role": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateProductInventoryRequest": {
+        "type": "object",
+        "description": "Request to create a product inventory",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "product_offering_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "product_specification_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateProductOfferingQualificationRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "product_offering_id",
+          "product_offering_name"
+        ],
+        "properties": {
+          "customer_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Uuid"
+              }
+            ],
+            "nullable": true
+          },
+          "customer_segment": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "product_offering_id": {
+            "$ref": "#/components/schemas/Uuid"
+          },
+          "product_offering_name": {
+            "type": "string"
+          },
+          "provide_alternative": {
+            "type": "boolean"
+          },
+          "provide_unavailability_reason": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateProductOfferingRequest": {
+        "type": "object",
+        "description": "Request to create a product offering",
+        "required": [
+          "name",
+          "lifecycle_status"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_bundle": {
+            "type": "boolean"
+          },
+          "is_sellable": {
+            "type": "boolean"
+          },
+          "lifecycle_status": {
+            "$ref": "#/components/schemas/LifecycleStatus"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateProductOrderRequest": {
+        "type": "object",
+        "description": "Request to create a product order",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "order_item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateOrderItemRequest"
+            },
+            "nullable": true
+          },
+          "priority": {
+            "type": "string",
+            "nullable": true
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateQuoteRequest": {
+        "type": "object",
+        "description": "Request to create a quote",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "expected_order_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "quote_item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateQuoteItemRequest"
+            },
+            "nullable": true
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateRelatedPartyRequest": {
+        "type": "object",
+        "description": "Request to create a related party",
+        "required": [
+          "name",
+          "role"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateResourceActivationRequest": {
+        "type": "object",
+        "description": "Request to create a resource activation",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "configuration": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateConfigurationParameterRequest"
+            },
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "service_activation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateResourceCatalogRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "lifecycle_status"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "lifecycle_status": {
+            "$ref": "#/components/schemas/LifecycleStatus"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateResourceInventoryRequest": {
+        "type": "object",
+        "description": "Request to create a resource inventory",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "resource_specification_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "resource_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateResourceOrderItemRequest": {
+        "type": "object",
+        "description": "Request to create a resource order item",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "resource_specification_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "CreateResourceOrderRequest": {
+        "type": "object",
+        "description": "Request to create a resource order",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "order_item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateResourceOrderItemRequest"
+            },
+            "nullable": true
+          },
+          "priority": {
+            "type": "string",
+            "nullable": true
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateResourceSpecificationRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "lifecycle_status"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_bundle": {
+            "type": "boolean"
+          },
+          "lifecycle_status": {
+            "$ref": "#/components/schemas/LifecycleStatus"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateSLAParametersRequest": {
+        "type": "object",
+        "description": "Request to create SLA parameters",
+        "properties": {
+          "coverage_area": {
+            "type": "string",
+            "nullable": true
+          },
+          "max_devices": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "minimum": 0
+          },
+          "max_latency_ms": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "minimum": 0
+          },
+          "min_throughput_mbps": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "minimum": 0
+          }
+        }
+      },
+      "CreateServiceActivationRequest": {
+        "type": "object",
+        "description": "Request to create a service activation",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "configuration": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateConfigurationParameterRequest"
+            },
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "service_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "service_order_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateServiceCatalogRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "lifecycle_status"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "lifecycle_status": {
+            "$ref": "#/components/schemas/LifecycleStatus"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateServiceInventoryRequest": {
+        "type": "object",
+        "description": "Request to create a service inventory",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "service_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "service_specification_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateServiceOrderItemRequest": {
+        "type": "object",
+        "description": "Request to create a service order item",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "service_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "service_specification_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "CreateServiceOrderRequest": {
+        "type": "object",
+        "description": "Request to create a service order",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "order_item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateServiceOrderItemRequest"
+            },
+            "nullable": true
+          },
+          "priority": {
+            "type": "string",
+            "nullable": true
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateServiceSpecificationRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "lifecycle_status"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_bundle": {
+            "type": "boolean"
+          },
+          "lifecycle_status": {
+            "$ref": "#/components/schemas/LifecycleStatus"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateTroubleTicketRequest": {
+        "type": "object",
+        "description": "Create Trouble Ticket Request",
+        "required": [
+          "name",
+          "ticket_type",
+          "priority"
+        ],
+        "properties": {
+          "assigned_to": {
+            "type": "string",
+            "nullable": true
+          },
+          "customer_id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Uuid"
+              }
+            ],
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/TroubleTicketPriority"
+          },
+          "related_entity": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedEntity"
+            },
+            "nullable": true
+          },
+          "ticket_type": {
+            "$ref": "#/components/schemas/TroubleTicketType"
+          }
+        }
+      },
+      "CreateUsageRequest": {
+        "type": "object",
+        "description": "Request to create a usage record",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "product_offering_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateRelatedPartyRequest"
+            },
+            "nullable": true
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "unit": {
+            "type": "string",
+            "nullable": true
+          },
+          "usage_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usage_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Credential": {
+        "type": "object",
+        "description": "Credential",
+        "required": [
+          "id",
+          "credential_type"
+        ],
+        "properties": {
+          "created_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Created date"
+          },
+          "credential_type": {
+            "$ref": "#/components/schemas/CredentialType"
+          },
+          "credential_value": {
+            "type": "string",
+            "description": "Credential value (hashed, never returned in responses)",
+            "nullable": true
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Expiration date"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "CredentialType": {
+        "type": "string",
+        "description": "Credential Type",
+        "enum": [
+          "PASSWORD",
+          "O_AUTH",
+          "JWT",
+          "API_KEY",
+          "CERTIFICATE"
+        ]
+      },
+      "Customer": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "account": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AccountRef"
+                },
+                "description": "Account reference",
+                "nullable": true
+              },
+              "characteristic": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Characteristic"
+                },
+                "description": "Customer characteristic",
+                "nullable": true
+              },
+              "contact_medium": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ContactMedium"
+                },
+                "description": "Contact medium (email, phone, etc.)",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/CustomerState"
+              },
+              "status": {
+                "type": "string",
+                "description": "Customer status",
+                "nullable": true
+              }
+            }
+          }
+        ],
+        "description": "Customer - Represents a customer profile"
+      },
+      "CustomerBill": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "bill_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Bill date"
+              },
+              "bill_item": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/BillItem"
+                },
+                "description": "Bill items",
+                "nullable": true
+              },
+              "due_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Due date"
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (customer)",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/BillState"
+              },
+              "tax_included": {
+                "type": "boolean",
+                "description": "Tax included"
+              },
+              "total_amount": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Money"
+                  }
+                ],
+                "nullable": true
+              }
+            }
+          }
+        ],
+        "description": "Customer Bill - Represents a customer bill"
+      },
+      "CustomerState": {
+        "type": "string",
+        "description": "Customer State",
+        "enum": [
+          "INITIAL",
+          "ACTIVE",
+          "SUSPENDED",
+          "TERMINATED"
+        ]
+      },
+      "CustomerUsage": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "amount": {
+                "type": "number",
+                "format": "double",
+                "description": "Usage amount (bytes, minutes, etc.)",
+                "nullable": true
+              },
+              "end_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "End date/time"
+              },
+              "product_offering": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductOfferingRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (customer)",
+                "nullable": true
+              },
+              "start_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Start date/time"
+              },
+              "state": {
+                "$ref": "#/components/schemas/UsageState"
+              },
+              "unit": {
+                "type": "string",
+                "description": "Usage unit",
+                "nullable": true
+              },
+              "usage_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Usage date"
+              },
+              "usage_type": {
+                "type": "string",
+                "description": "Usage type (voice, data, sms, etc.)",
+                "nullable": true
+              }
+            }
+          }
+        ],
+        "description": "Customer Usage - Represents a customer usage record (CDR)"
+      },
+      "Identity": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "credential": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Credential"
+                },
+                "description": "Credentials associated with this identity",
+                "nullable": true
+              },
+              "expiration_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Expiration date"
+              },
+              "identity_type": {
+                "type": "string",
+                "description": "Identity type (user, service, device)",
+                "nullable": true
+              },
+              "jwt_issuer": {
+                "type": "string",
+                "description": "JWT issuer",
+                "nullable": true
+              },
+              "oauth_client_id": {
+                "type": "string",
+                "description": "OAuth client ID (if OAuth-based)",
+                "nullable": true
+              },
+              "oauth_client_secret": {
+                "type": "string",
+                "description": "OAuth client secret (hashed, never returned in responses)",
+                "nullable": true
+              },
+              "party": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PartyRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/IdentityState"
+              }
+            }
+          }
+        ],
+        "description": "Identity - Represents a digital identity"
+      },
+      "IdentityState": {
+        "type": "string",
+        "description": "Identity State",
+        "enum": [
+          "CREATED",
+          "ACTIVE",
+          "SUSPENDED",
+          "REVOKED",
+          "EXPIRED"
+        ]
+      },
+      "InventoryState": {
+        "type": "string",
+        "description": "Product Inventory State",
+        "enum": [
+          "RESERVED",
+          "AVAILABLE",
+          "IN_USE",
+          "RETIRED",
+          "RESERVED_FOR_CUSTOMER"
+        ]
+      },
+      "LifecycleStatus": {
+        "type": "string",
+        "description": "Lifecycle status of a resource",
+        "enum": [
+          "IN_STUDY",
+          "IN_DESIGN",
+          "IN_TEST",
+          "ACTIVE",
+          "LAUNCHED",
+          "RETIRED",
+          "OBSOLETE",
+          "REJECTED"
+        ]
+      },
+      "Money": {
+        "type": "object",
+        "description": "Money representation",
+        "required": [
+          "value",
+          "unit"
+        ],
+        "properties": {
+          "unit": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "NetworkFunctionRef": {
+        "type": "object",
+        "description": "Network Function Reference",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "function_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "NetworkSlice": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state",
+              "slice_type"
+            ],
+            "properties": {
+              "activation_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Activation date"
+              },
+              "network_functions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/NetworkFunctionRef"
+                },
+                "description": "Network function references",
+                "nullable": true
+              },
+              "sla_parameters": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SLAParameters"
+                  }
+                ],
+                "nullable": true
+              },
+              "slice_type": {
+                "$ref": "#/components/schemas/SliceType"
+              },
+              "state": {
+                "$ref": "#/components/schemas/SliceState"
+              },
+              "termination_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Termination date"
+              }
+            }
+          }
+        ],
+        "description": "Network Slice - Represents a 5G network slice"
+      },
+      "OrderItem": {
+        "type": "object",
+        "description": "Order Item - Individual item within a product order",
+        "required": [
+          "id",
+          "action",
+          "state"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Item action (add, modify, delete, noChange)"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "product_offering": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProductOfferingRef"
+              }
+            ],
+            "nullable": true
+          },
+          "product_specification": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProductSpecificationRef"
+              }
+            ],
+            "nullable": true
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantity",
+            "nullable": true
+          },
+          "state": {
+            "$ref": "#/components/schemas/OrderState"
+          }
+        }
+      },
+      "OrderState": {
+        "type": "string",
+        "description": "Product Order State",
+        "enum": [
+          "ACKNOWLEDGED",
+          "IN_PROGRESS",
+          "COMPLETED",
+          "CANCELLED",
+          "REJECTED",
+          "HELD",
+          "FAILED"
+        ]
+      },
+      "Party": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state",
+              "party_type"
+            ],
+            "properties": {
+              "account": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AccountRef"
+                },
+                "description": "Account reference",
+                "nullable": true
+              },
+              "characteristic": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Characteristic"
+                },
+                "description": "Characteristic (attributes)",
+                "nullable": true
+              },
+              "contact_medium": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ContactMedium"
+                },
+                "description": "Contact information",
+                "nullable": true
+              },
+              "party_type": {
+                "$ref": "#/components/schemas/PartyType"
+              },
+              "registration_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Registration date"
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (parent organization, etc.)",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/PartyState"
+              }
+            }
+          }
+        ],
+        "description": "Party - Represents an individual or organization"
+      },
+      "PartyRef": {
+        "type": "object",
+        "description": "Party Reference",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "PartyRole": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state",
+              "role"
+            ],
+            "properties": {
+              "contact_medium": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ContactMedium"
+                },
+                "description": "Contact information",
+                "nullable": true
+              },
+              "engagement_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Engagement date"
+              },
+              "party_type": {
+                "type": "string",
+                "description": "Party type (INDIVIDUAL, ORGANIZATION)",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (parent organization, etc.)",
+                "nullable": true
+              },
+              "role": {
+                "type": "string",
+                "description": "Role name (e.g., CUSTOMER, PARTNER, VENDOR, RESELLER)"
+              },
+              "state": {
+                "$ref": "#/components/schemas/PartyRoleState"
+              }
+            }
+          }
+        ],
+        "description": "Party Role - Represents a party (organization, person) with a specific role"
+      },
+      "PartyRoleState": {
+        "type": "string",
+        "description": "Party Role State",
+        "enum": [
+          "INITIALIZED",
+          "VALIDATED",
+          "ACTIVE",
+          "SUSPENDED",
+          "TERMINATED"
+        ]
+      },
+      "PartyState": {
+        "type": "string",
+        "description": "Party State",
+        "enum": [
+          "INITIALIZED",
+          "VALIDATED",
+          "ACTIVE",
+          "SUSPENDED",
+          "TERMINATED"
+        ]
+      },
+      "PartyType": {
+        "type": "string",
+        "description": "Party Type",
+        "enum": [
+          "INDIVIDUAL",
+          "ORGANIZATION"
+        ]
+      },
+      "PriceType": {
+        "type": "string",
+        "description": "Price type",
+        "enum": [
+          "RECURRING",
+          "ONE_TIME",
+          "USAGE"
+        ]
+      },
+      "ProductInventory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "activation_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Activation date"
+              },
+              "last_modified_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Last modified date"
+              },
+              "product_offering": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductOfferingRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "product_specification": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductSpecificationRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "quantity": {
+                "type": "integer",
+                "format": "int32",
+                "description": "Quantity available",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (customer who owns/reserves this inventory)",
+                "nullable": true
+              },
+              "reserved_quantity": {
+                "type": "integer",
+                "format": "int32",
+                "description": "Reserved quantity",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/InventoryState"
+              }
+            }
+          }
+        ],
+        "description": "Product Inventory - Represents inventory of a product"
+      },
+      "ProductOffering": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "bundled_product_offering": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ProductOfferingRef"
+                },
+                "description": "Bundled product offerings",
+                "nullable": true
+              },
+              "is_bundle": {
+                "type": "boolean",
+                "description": "Whether this offering can be bundled"
+              },
+              "is_sellable": {
+                "type": "boolean",
+                "description": "Whether this offering is sold separately"
+              },
+              "product_offering_price": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ProductOfferingPrice"
+                },
+                "description": "Product offering prices",
+                "nullable": true
+              },
+              "product_specification": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductSpecificationRef"
+                  }
+                ],
+                "nullable": true
+              }
+            }
+          }
+        ],
+        "description": "Product Offering - A product that can be sold"
+      },
+      "ProductOfferingPrice": {
+        "type": "object",
+        "description": "Product Offering Price",
+        "required": [
+          "name",
+          "price_type",
+          "price"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "price_type": {
+            "$ref": "#/components/schemas/PriceType"
+          },
+          "unit_of_measure": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ProductOfferingQualification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "customer_id": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Uuid"
+                  }
+                ],
+                "nullable": true
+              },
+              "product_offering_qualification_item": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ProductOfferingQualificationItem"
+                },
+                "nullable": true
+              },
+              "provide_alternative": {
+                "type": "boolean",
+                "nullable": true
+              },
+              "provide_unavailability_reason": {
+                "type": "boolean",
+                "nullable": true
+              },
+              "qualification_result": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/QualificationResult"
+                  }
+                ],
+                "nullable": true
+              },
+              "requested_date": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DateTime"
+                  }
+                ],
+                "nullable": true
+              },
+              "state": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "ProductOfferingQualificationItem": {
+        "type": "object",
+        "required": [
+          "product_offering",
+          "qualification_result"
+        ],
+        "properties": {
+          "eligibility_unavailability_reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "product_offering": {
+            "$ref": "#/components/schemas/ProductOfferingRef"
+          },
+          "qualification_result": {
+            "$ref": "#/components/schemas/QualificationResult"
+          }
+        }
+      },
+      "ProductOfferingRef": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ProductOrder": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "expected_completion_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Expected completion date"
+              },
+              "order_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Order date"
+              },
+              "order_item": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrderItem"
+                },
+                "description": "Order items",
+                "nullable": true
+              },
+              "priority": {
+                "type": "string",
+                "description": "Priority",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (customer)",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/OrderState"
+              }
+            }
+          }
+        ],
+        "description": "Product Order - Represents a customer order for products"
+      },
+      "ProductSpecificationRef": {
+        "type": "object",
+        "description": "Product Specification Reference",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "QualificationResult": {
+        "type": "string",
+        "enum": [
+          "QUALIFIED",
+          "UNQUALIFIED",
+          "ALTERNATE"
+        ]
+      },
+      "Quote": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "expected_order_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Expected order date"
+              },
+              "quote_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Quote date"
+              },
+              "quote_item": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QuoteItem"
+                },
+                "description": "Quote items",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (customer)",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/QuoteState"
+              },
+              "total_price": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Money"
+                  }
+                ],
+                "nullable": true
+              },
+              "valid_until": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Valid until date"
+              }
+            }
+          }
+        ],
+        "description": "Quote - Represents a price quote for products or services"
+      },
+      "QuoteItem": {
+        "type": "object",
+        "description": "Quote Item - Individual item within a quote",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "product_offering": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProductOfferingRef"
+              }
+            ],
+            "nullable": true
+          },
+          "product_specification": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProductSpecificationRef"
+              }
+            ],
+            "nullable": true
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantity",
+            "nullable": true
+          },
+          "total_price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "nullable": true
+          },
+          "unit_price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "QuoteState": {
+        "type": "string",
+        "description": "Quote State",
+        "enum": [
+          "IN_PROGRESS",
+          "READY",
+          "CANCELLED",
+          "ACCEPTED",
+          "REJECTED",
+          "EXPIRED"
+        ]
+      },
+      "RatingRef": {
+        "type": "object",
+        "description": "Rating Reference",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating_amount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        }
+      },
+      "RelatedParty": {
+        "type": "object",
+        "description": "Related Party - Customer or other party related to the quote",
+        "required": [
+          "id",
+          "name",
+          "role"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "ResourceActivation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "activation_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Activation date"
+              },
+              "completion_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Completion date"
+              },
+              "configuration": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ConfigurationParameter"
+                },
+                "description": "Configuration parameters (key-value pairs)",
+                "nullable": true
+              },
+              "resource": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ResourceRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "service_activation": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ServiceActivationRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/ResourceActivationState"
+              }
+            }
+          }
+        ],
+        "description": "Resource Activation - Represents a resource activation/configuration request"
+      },
+      "ResourceActivationState": {
+        "type": "string",
+        "description": "Resource Activation State",
+        "enum": [
+          "PENDING",
+          "IN_PROGRESS",
+          "COMPLETED",
+          "FAILED",
+          "CANCELLED"
+        ]
+      },
+      "ResourceCatalog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "resource_specification": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ResourceSpecificationRef"
+                },
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "ResourceInventory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "activation_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Activation date"
+              },
+              "last_modified_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Last modified date"
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (owner/operator)",
+                "nullable": true
+              },
+              "resource": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ResourceRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "resource_specification": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ResourceSpecificationRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "resource_type": {
+                "type": "string",
+                "description": "Resource type (physical, virtual, logical)",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/ResourceInventoryState"
+              }
+            }
+          }
+        ],
+        "description": "Resource Inventory - Represents inventory of physical/virtual network resources"
+      },
+      "ResourceInventoryState": {
+        "type": "string",
+        "description": "Resource Inventory State",
+        "enum": [
+          "RESERVED",
+          "AVAILABLE",
+          "IN_USE",
+          "MAINTENANCE",
+          "RETIRED"
+        ]
+      },
+      "ResourceOrder": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "expected_completion_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Expected completion date"
+              },
+              "external_id": {
+                "type": "string",
+                "description": "External ID (e.g., from service order)",
+                "nullable": true
+              },
+              "order_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Order date"
+              },
+              "order_item": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ResourceOrderItem"
+                },
+                "description": "Resource order items",
+                "nullable": true
+              },
+              "priority": {
+                "type": "string",
+                "description": "Priority",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/ResourceOrderState"
+              }
+            }
+          }
+        ],
+        "description": "Resource Order - Represents a resource-level order (network resource provisioning)"
+      },
+      "ResourceOrderItem": {
+        "type": "object",
+        "description": "Resource Order Item - Individual item within a resource order",
+        "required": [
+          "id",
+          "action",
+          "state"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Item action (add, modify, delete, noChange)"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantity",
+            "nullable": true
+          },
+          "resource": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ResourceRef"
+              }
+            ],
+            "nullable": true
+          },
+          "resource_specification": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ResourceSpecificationRef"
+              }
+            ],
+            "nullable": true
+          },
+          "state": {
+            "$ref": "#/components/schemas/ResourceOrderState"
+          }
+        }
+      },
+      "ResourceOrderState": {
+        "type": "string",
+        "description": "Resource Order State",
+        "enum": [
+          "ACKNOWLEDGED",
+          "IN_PROGRESS",
+          "COMPLETED",
+          "CANCELLED",
+          "REJECTED",
+          "HELD",
+          "FAILED"
+        ]
+      },
+      "ResourceRef": {
+        "type": "object",
+        "description": "Resource Reference",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "resource_type": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ResourceSpecification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string",
+                "nullable": true
+              },
+              "is_bundle": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "ResourceSpecificationRef": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "SLAParameters": {
+        "type": "object",
+        "description": "SLA Parameters",
+        "properties": {
+          "coverage_area": {
+            "type": "string",
+            "description": "Coverage area",
+            "nullable": true
+          },
+          "max_devices": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Maximum number of devices",
+            "nullable": true,
+            "minimum": 0
+          },
+          "max_latency_ms": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Maximum latency in milliseconds",
+            "nullable": true,
+            "minimum": 0
+          },
+          "min_throughput_mbps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Minimum throughput in Mbps",
+            "nullable": true,
+            "minimum": 0
+          }
+        }
+      },
+      "ServiceActivation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "activation_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Activation date"
+              },
+              "completion_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Completion date"
+              },
+              "configuration": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ConfigurationParameter"
+                },
+                "description": "Configuration parameters (key-value pairs)",
+                "nullable": true
+              },
+              "service": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ServiceRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "service_order": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ServiceOrderRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/ServiceActivationState"
+              }
+            }
+          }
+        ],
+        "description": "Service Activation - Represents a service activation/configuration request"
+      },
+      "ServiceActivationRef": {
+        "type": "object",
+        "description": "Service Activation Reference",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ServiceActivationState": {
+        "type": "string",
+        "description": "Service Activation State",
+        "enum": [
+          "PENDING",
+          "IN_PROGRESS",
+          "COMPLETED",
+          "FAILED",
+          "CANCELLED"
+        ]
+      },
+      "ServiceCatalog": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "service_specification": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ServiceSpecificationRef"
+                },
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "ServiceInventory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "activation_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Activation date"
+              },
+              "last_modified_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Last modified date"
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (customer who owns this service)",
+                "nullable": true
+              },
+              "service": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ServiceRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "service_specification": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ServiceSpecificationRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/ServiceInventoryState"
+              }
+            }
+          }
+        ],
+        "description": "Service Inventory - Represents inventory of a service (provisioned service instance)"
+      },
+      "ServiceInventoryState": {
+        "type": "string",
+        "description": "Service Inventory State",
+        "enum": [
+          "RESERVED",
+          "ACTIVE",
+          "INACTIVE",
+          "TERMINATED",
+          "SUSPENDED"
+        ]
+      },
+      "ServiceOrder": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "expected_completion_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Expected completion date"
+              },
+              "external_id": {
+                "type": "string",
+                "description": "External ID (e.g., from product order)",
+                "nullable": true
+              },
+              "order_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Order date"
+              },
+              "order_item": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ServiceOrderItem"
+                },
+                "description": "Service order items",
+                "nullable": true
+              },
+              "priority": {
+                "type": "string",
+                "description": "Priority",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/ServiceOrderState"
+              }
+            }
+          }
+        ],
+        "description": "Service Order - Represents a service-level order (network/service provisioning)"
+      },
+      "ServiceOrderItem": {
+        "type": "object",
+        "description": "Service Order Item - Individual item within a service order",
+        "required": [
+          "id",
+          "action",
+          "state"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Item action (add, modify, delete, noChange)"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantity",
+            "nullable": true
+          },
+          "service": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ServiceRef"
+              }
+            ],
+            "nullable": true
+          },
+          "service_specification": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ServiceSpecificationRef"
+              }
+            ],
+            "nullable": true
+          },
+          "state": {
+            "$ref": "#/components/schemas/ServiceOrderState"
+          }
+        }
+      },
+      "ServiceOrderRef": {
+        "type": "object",
+        "description": "Service Order Reference",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ServiceOrderState": {
+        "type": "string",
+        "description": "Service Order State",
+        "enum": [
+          "ACKNOWLEDGED",
+          "IN_PROGRESS",
+          "COMPLETED",
+          "CANCELLED",
+          "REJECTED",
+          "HELD",
+          "FAILED"
+        ]
+      },
+      "ServiceRef": {
+        "type": "object",
+        "description": "Service Reference",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ServiceSpecification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string",
+                "nullable": true
+              },
+              "is_bundle": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "ServiceSpecificationRef": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "SliceState": {
+        "type": "string",
+        "description": "Slice State",
+        "enum": [
+          "PLANNED",
+          "ACTIVE",
+          "INACTIVE",
+          "TERMINATED"
+        ]
+      },
+      "SliceType": {
+        "type": "string",
+        "description": "Slice Type",
+        "enum": [
+          "ENHANCED_MOBILE_BROADBAND",
+          "ULTRA_RELIABLE_LOW_LATENCY",
+          "MASSIVE_MACHINE_TYPE_COMMUNICATIONS",
+          "CUSTOM"
+        ]
+      },
+      "TimePeriod": {
+        "type": "object",
+        "description": "Time period for validity",
+        "required": [
+          "start_date_time"
+        ],
+        "properties": {
+          "end_date_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "start_date_time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TroubleTicket": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "status",
+              "priority",
+              "ticket_type",
+              "description"
+            ],
+            "properties": {
+              "assigned_to": {
+                "type": "string",
+                "nullable": true
+              },
+              "customer_id": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Uuid"
+                  }
+                ],
+                "nullable": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "priority": {
+                "$ref": "#/components/schemas/TroubleTicketPriority"
+              },
+              "related_entity": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedEntity"
+                },
+                "nullable": true
+              },
+              "resolution": {
+                "type": "string",
+                "nullable": true
+              },
+              "resolution_date": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DateTime"
+                  }
+                ],
+                "nullable": true
+              },
+              "status": {
+                "$ref": "#/components/schemas/TroubleTicketStatus"
+              },
+              "tenant_id": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Uuid"
+                  }
+                ],
+                "nullable": true
+              },
+              "ticket_type": {
+                "$ref": "#/components/schemas/TroubleTicketType"
+              }
+            }
+          }
+        ],
+        "description": "Trouble Ticket - Represents a customer service ticket"
+      },
+      "TroubleTicketPriority": {
+        "type": "string",
+        "description": "Trouble Ticket Priority",
+        "enum": [
+          "CRITICAL",
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "TroubleTicketStatus": {
+        "type": "string",
+        "description": "Trouble Ticket Status",
+        "enum": [
+          "SUBMITTED",
+          "ACKNOWLEDGED",
+          "IN_PROGRESS",
+          "RESOLVED",
+          "CLOSED",
+          "CANCELLED"
+        ]
+      },
+      "TroubleTicketType": {
+        "type": "string",
+        "description": "Trouble Ticket Type",
+        "enum": [
+          "SERVICE_ISSUE",
+          "BILLING_ISSUE",
+          "TECHNICAL_ISSUE",
+          "ACCOUNT_ISSUE",
+          "OTHER"
+        ]
+      },
+      "UpdateAlarmRequest": {
+        "type": "object",
+        "description": "Request to update an alarm",
+        "properties": {
+          "acknowledged_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cleared_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AlarmState"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "UpdateNetworkSliceRequest": {
+        "type": "object",
+        "description": "Request to update a network slice",
+        "properties": {
+          "activation_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SliceState"
+              }
+            ],
+            "nullable": true
+          },
+          "termination_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UpdateQuoteRequest": {
+        "type": "object",
+        "description": "Request to update a quote",
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/QuoteState"
+              }
+            ],
+            "nullable": true
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UpdateTroubleTicketRequest": {
+        "type": "object",
+        "description": "Update Trouble Ticket Request",
+        "properties": {
+          "assigned_to": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "priority": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TroubleTicketPriority"
+              }
+            ],
+            "nullable": true
+          },
+          "resolution": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TroubleTicketStatus"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "Usage": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "amount": {
+                "type": "number",
+                "format": "double",
+                "description": "Amount (quantity consumed)",
+                "nullable": true
+              },
+              "end_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "End date/time"
+              },
+              "product_offering": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductOfferingRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "rating": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/RatingRef"
+                  }
+                ],
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related party (customer, subscriber)",
+                "nullable": true
+              },
+              "start_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Start date/time"
+              },
+              "state": {
+                "$ref": "#/components/schemas/UsageState"
+              },
+              "unit": {
+                "type": "string",
+                "description": "Unit (MB, minutes, messages, etc.)",
+                "nullable": true
+              },
+              "usage_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Usage date/time"
+              },
+              "usage_type": {
+                "type": "string",
+                "description": "Usage type (voice, data, sms, etc.)",
+                "nullable": true
+              }
+            }
+          }
+        ],
+        "description": "Usage - Represents usage records (CDRs, event consumption)"
+      },
+      "UsageState": {
+        "type": "string",
+        "description": "Usage State",
+        "enum": [
+          "CAPTURED",
+          "RATED",
+          "BILLED",
+          "REJECTED"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "TMF620",
+      "description": "Product Catalog Management API"
+    },
+    {
+      "name": "TMF622",
+      "description": "Product Ordering Management API"
+    },
+    {
+      "name": "TMF637",
+      "description": "Product Inventory Management API"
+    },
+    {
+      "name": "TMF629",
+      "description": "Customer Management API"
+    },
+    {
+      "name": "TMF678",
+      "description": "Customer Bill Management API"
+    },
+    {
+      "name": "TMF677",
+      "description": "Usage Consumption Management API"
+    },
+    {
+      "name": "TMF646",
+      "description": "Appointment Management API"
+    },
+    {
+      "name": "TMF641",
+      "description": "Service Order Management API"
+    },
+    {
+      "name": "TMF638",
+      "description": "Service Inventory Management API"
+    },
+    {
+      "name": "TMF640",
+      "description": "Service Activation & Configuration API"
+    },
+    {
+      "name": "TMF702",
+      "description": "Resource Activation & Configuration API"
+    },
+    {
+      "name": "TMF639",
+      "description": "Resource Inventory Management API"
+    },
+    {
+      "name": "TMF645",
+      "description": "Resource Order Management API"
+    },
+    {
+      "name": "TMF635",
+      "description": "Usage Management API"
+    },
+    {
+      "name": "TMF668",
+      "description": "Party Role Management API"
+    },
+    {
+      "name": "TMF632",
+      "description": "Party Management API"
+    },
+    {
+      "name": "TMF669",
+      "description": "Identity & Credential Management API"
+    },
+    {
+      "name": "TMF642",
+      "description": "Alarm Management API"
+    },
+    {
+      "name": "TMF656",
+      "description": "Slice Management API"
+    },
+    {
+      "name": "TMF621",
+      "description": "Trouble Ticket Management API"
+    },
+    {
+      "name": "TMF648",
+      "description": "Quote Management API"
+    },
+    {
+      "name": "TMF633",
+      "description": "Service Catalog Management API"
+    },
+    {
+      "name": "TMF634",
+      "description": "Resource Catalog Management API"
+    },
+    {
+      "name": "TMF679",
+      "description": "Product Offering Qualification API"
+    }
+  ]
+}

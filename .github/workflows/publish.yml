@@ -22,6 +22,13 @@ on:
           - bss-oss-pcf-nextgen
           - bss-oss-service-orchestrator
           - revenue-management
+          - tmf621-trouble-ticket
+          - tmf633-service-catalog
+          - tmf634-resource-catalog
+          - tmf646-appointment
+          - tmf648-quote
+          - tmf677-usage
+          - tmf679-product-offering-qualification
 
 env:
   CARGO_TERM_COLOR: always

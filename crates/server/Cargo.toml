@@ -14,33 +14,33 @@ name = "bss-oss-rust"
 path = "src/main.rs"
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.0" }
-tmf620-catalog = { path = "../tmf-apis/tmf620_catalog", version = "0.3.0" }
-tmf622-ordering = { path = "../tmf-apis/tmf622_ordering", version = "0.3.0" }
-tmf637-inventory = { path = "../tmf-apis/tmf637_inventory", version = "0.3.0" }
-tmf629-customer = { path = "../tmf-apis/tmf629_customer", version = "0.3.0" }
-tmf678-billing = { path = "../tmf-apis/tmf678_billing", version = "0.3.0" }
-tmf677-usage = { path = "../tmf-apis/tmf677_usage", version = "0.3.0" }
-tmf646-appointment = { path = "../tmf-apis/tmf646_appointment", version = "0.3.0" }
-tmf641-service-order = { path = "../tmf-apis/tmf641_service_order", version = "0.3.0" }
-tmf638-service-inventory = { path = "../tmf-apis/tmf638_service_inventory", version = "0.3.0" }
-tmf640-service-activation = { path = "../tmf-apis/tmf640_service_activation", version = "0.3.0" }
-tmf702-resource-activation = { path = "../tmf-apis/tmf702_resource_activation", version = "0.3.0" }
-tmf639-resource-inventory = { path = "../tmf-apis/tmf639_resource_inventory", version = "0.3.0" }
-tmf645-resource-order = { path = "../tmf-apis/tmf645_resource_order", version = "0.3.0" }
-tmf635-usage = { path = "../tmf-apis/tmf635_usage", version = "0.3.0" }
-tmf668-party-role = { path = "../tmf-apis/tmf668_party_role", version = "0.3.0" }
-tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.3.0" }
-tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.3.0" }
-tmf642-alarm = { path = "../tmf-apis/tmf642_alarm", version = "0.3.0" }
-tmf656-slice = { path = "../tmf-apis/tmf656_slice", version = "0.3.0" }
-tmf621-trouble-ticket = { path = "../tmf-apis/tmf621_trouble_ticket", version = "0.3.0" }
-tmf648-quote = { path = "../tmf-apis/tmf648_quote", version = "0.3.0" }
-tmf633-service-catalog = { path = "../tmf-apis/tmf633_service_catalog", version = "0.3.0" }
-tmf634-resource-catalog = { path = "../tmf-apis/tmf634_resource_catalog", version = "0.3.0" }
-tmf679-product-offering-qualification = { path = "../tmf-apis/tmf679_product_offering_qualification", version = "0.3.0" }
-bss-oss-utils = { path = "../utils", version = "0.3.0" }
-graphql-api = { path = "../graphql-api", version = "0.3.0" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.1" }
+tmf620-catalog = { path = "../tmf-apis/tmf620_catalog", version = "0.3.1" }
+tmf622-ordering = { path = "../tmf-apis/tmf622_ordering", version = "0.3.1" }
+tmf637-inventory = { path = "../tmf-apis/tmf637_inventory", version = "0.3.1" }
+tmf629-customer = { path = "../tmf-apis/tmf629_customer", version = "0.3.1" }
+tmf678-billing = { path = "../tmf-apis/tmf678_billing", version = "0.3.1" }
+tmf677-usage = { path = "../tmf-apis/tmf677_usage", version = "0.3.1" }
+tmf646-appointment = { path = "../tmf-apis/tmf646_appointment", version = "0.3.1" }
+tmf641-service-order = { path = "../tmf-apis/tmf641_service_order", version = "0.3.1" }
+tmf638-service-inventory = { path = "../tmf-apis/tmf638_service_inventory", version = "0.3.1" }
+tmf640-service-activation = { path = "../tmf-apis/tmf640_service_activation", version = "0.3.1" }
+tmf702-resource-activation = { path = "../tmf-apis/tmf702_resource_activation", version = "0.3.1" }
+tmf639-resource-inventory = { path = "../tmf-apis/tmf639_resource_inventory", version = "0.3.1" }
+tmf645-resource-order = { path = "../tmf-apis/tmf645_resource_order", version = "0.3.1" }
+tmf635-usage = { path = "../tmf-apis/tmf635_usage", version = "0.3.1" }
+tmf668-party-role = { path = "../tmf-apis/tmf668_party_role", version = "0.3.1" }
+tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.3.1" }
+tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.3.1" }
+tmf642-alarm = { path = "../tmf-apis/tmf642_alarm", version = "0.3.1" }
+tmf656-slice = { path = "../tmf-apis/tmf656_slice", version = "0.3.1" }
+tmf621-trouble-ticket = { path = "../tmf-apis/tmf621_trouble_ticket", version = "0.3.1" }
+tmf648-quote = { path = "../tmf-apis/tmf648_quote", version = "0.3.1" }
+tmf633-service-catalog = { path = "../tmf-apis/tmf633_service_catalog", version = "0.3.1" }
+tmf634-resource-catalog = { path = "../tmf-apis/tmf634_resource_catalog", version = "0.3.1" }
+tmf679-product-offering-qualification = { path = "../tmf-apis/tmf679_product_offering_qualification", version = "0.3.1" }
+bss-oss-utils = { path = "../utils", version = "0.3.1" }
+graphql-api = { path = "../graphql-api", version = "0.3.1" }
 async-graphql = "7.0"
 async-graphql-actix-web = "7.0"
 sqlx = { workspace = true }
