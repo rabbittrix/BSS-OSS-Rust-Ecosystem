@@ -1,0 +1,38 @@
+[package]
+name = "telecom-product-engine"
+version = "0.1.0"
+edition.workspace = true
+authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
+license = "MIT"
+readme = "README.md"
+description = "Orchestration engine for innovative telecom products (top-up, turbo boost, data wallet, BNPL, identity) over TM Forum Open APIs"
+repository.workspace = true
+documentation.workspace = true
+keywords = ["telecom", "bss", "oss", "tmf", "orchestration"]
+categories = ["network-programming", "asynchronous"]
+
+[dependencies]
+async-trait = "0.1"
+anyhow = "1"
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.2" }
+tmf620-catalog = { path = "../tmf-apis/tmf620_catalog", version = "0.3.2" }
+tmf629-customer = { path = "../tmf-apis/tmf629_customer", version = "0.3.2" }
+tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.3.2" }
+tmf637-inventory = { path = "../tmf-apis/tmf637_inventory", version = "0.3.2" }
+tmf640-service-activation = { path = "../tmf-apis/tmf640_service_activation", version = "0.3.2" }
+tmf654-prepay-balance = { path = "../tmf-apis/tmf654_prepay_balance", version = "0.3.2" }
+tmf656-slice = { path = "../tmf-apis/tmf656_slice", version = "0.3.2" }
+tmf666-account = { path = "../tmf-apis/tmf666_account", version = "0.3.2" }
+tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.3.2" }
+tmf676-payment = { path = "../tmf-apis/tmf676_payment", version = "0.3.2" }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }

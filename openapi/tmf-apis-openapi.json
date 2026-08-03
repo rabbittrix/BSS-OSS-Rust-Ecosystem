@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "BSS/OSS Rust - TM Forum Open APIs",
-    "description": "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679, TMF666, TMF676, TMF651)",
+    "description": "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679, TMF666, TMF676, TMF651, TMF654)",
     "contact": {
       "name": "Roberto de Souza",
       "email": "rabbittrix@hotmail.com"
@@ -1731,6 +1731,190 @@
           },
           "404": {
             "description": "Refund not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/prepayBalanceManagement/v4/prepayBalance": {
+      "get": {
+        "tags": [
+          "TMF654"
+        ],
+        "operationId": "get_balances",
+        "responses": {
+          "200": {
+            "description": "List of prepay balances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrepayBalance"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF654"
+        ],
+        "operationId": "create_balance",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePrepayBalanceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Balance created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrepayBalance"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/prepayBalanceManagement/v4/prepayBalance/{id}": {
+      "get": {
+        "tags": [
+          "TMF654"
+        ],
+        "operationId": "get_balance_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Balance ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Balance found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrepayBalance"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF654"
+        ],
+        "operationId": "delete_balance",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Balance ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF654"
+        ],
+        "operationId": "update_balance",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Balance ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePrepayBalanceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Balance updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrepayBalance"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tmf-api/prepayBalanceManagement/v4/prepayBalance/{id}/adjust": {
+      "post": {
+        "tags": [
+          "TMF654"
+        ],
+        "operationId": "adjust_balance",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Balance ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdjustBalanceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Balance adjusted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrepayBalance"
+                }
+              }
+            }
           }
         }
       }
@@ -3925,6 +4109,21 @@
           "CLOSED"
         ]
       },
+      "AdjustBalanceRequest": {
+        "type": "object",
+        "required": [
+          "delta"
+        ],
+        "properties": {
+          "delta": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "Agreement": {
         "allOf": [
           {
@@ -4135,6 +4334,16 @@
           "COMPLETED",
           "CANCELLED",
           "FAILED"
+        ]
+      },
+      "BalanceType": {
+        "type": "string",
+        "enum": [
+          "MONETARY",
+          "DATA",
+          "VOICE",
+          "SMS",
+          "OTHER"
         ]
       },
       "BaseEntity": {
@@ -5105,6 +5314,33 @@
           "version": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "CreatePrepayBalanceRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "balance_type",
+          "remaining_value"
+        ],
+        "properties": {
+          "balance_type": {
+            "$ref": "#/components/schemas/BalanceType"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "party_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "remaining_value": {
+            "$ref": "#/components/schemas/Money"
           }
         }
       },
@@ -6203,20 +6439,17 @@
       },
       "Money": {
         "type": "object",
-        "description": "Money - Represents a monetary amount",
         "required": [
           "value",
           "unit"
         ],
         "properties": {
           "unit": {
-            "type": "string",
-            "description": "Currency code (ISO 4217)"
+            "type": "string"
           },
           "value": {
             "type": "number",
-            "format": "double",
-            "description": "Amount value"
+            "format": "double"
           }
         }
       },
@@ -6597,6 +6830,36 @@
           "COMPLETED",
           "FAILED",
           "CANCELLED"
+        ]
+      },
+      "PrepayBalance": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "balance_type",
+              "remaining_value"
+            ],
+            "properties": {
+              "balance_type": {
+                "$ref": "#/components/schemas/BalanceType"
+              },
+              "party_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "remaining_value": {
+                "$ref": "#/components/schemas/Money"
+              },
+              "valid_for_end": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
         ]
       },
       "PriceType": {
@@ -8139,6 +8402,23 @@
           }
         }
       },
+      "UpdatePrepayBalanceRequest": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "remaining_value": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
       "UpdateQuoteRequest": {
         "type": "object",
         "description": "Request to update a quote",
@@ -8415,6 +8695,10 @@
     {
       "name": "TMF651",
       "description": "Agreement Management API"
+    },
+    {
+      "name": "TMF654",
+      "description": "Prepay Balance Management API"
     }
   ]
 }

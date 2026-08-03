@@ -97,6 +97,10 @@ use tmf651_agreement::models::{
     Agreement, AgreementStatus, CreateAgreementRequest, RelatedParty as Tmf651RelatedParty,
     UpdateAgreementRequest,
 };
+use tmf654_prepay_balance::models::{
+    AdjustBalanceRequest, BalanceType, CreatePrepayBalanceRequest, Money as Tmf654Money,
+    PrepayBalance, UpdatePrepayBalanceRequest,
+};
 use tmf656_slice::models::{
     CreateNetworkFunctionRefRequest, CreateNetworkSliceRequest, CreateSLAParametersRequest,
     NetworkFunctionRef, NetworkSlice, SLAParameters, SliceState, SliceType,
@@ -288,6 +292,13 @@ use utoipa_swagger_ui::SwaggerUi;
         tmf651_agreement::handlers::create_agreement,
         tmf651_agreement::handlers::update_agreement,
         tmf651_agreement::handlers::delete_agreement,
+        // TMF654 Prepay Balance
+        tmf654_prepay_balance::handlers::get_balances,
+        tmf654_prepay_balance::handlers::get_balance_by_id,
+        tmf654_prepay_balance::handlers::create_balance,
+        tmf654_prepay_balance::handlers::adjust_balance,
+        tmf654_prepay_balance::handlers::update_balance,
+        tmf654_prepay_balance::handlers::delete_balance,
     ),
     components(schemas(
         // TMF620
@@ -515,6 +526,13 @@ use utoipa_swagger_ui::SwaggerUi;
         UpdateAgreementRequest,
         AgreementStatus,
         Tmf651RelatedParty,
+        // TMF654
+        PrepayBalance,
+        CreatePrepayBalanceRequest,
+        UpdatePrepayBalanceRequest,
+        AdjustBalanceRequest,
+        BalanceType,
+        Tmf654Money,
         // Common
         BaseEntity,
         LifecycleStatus,
@@ -547,11 +565,12 @@ use utoipa_swagger_ui::SwaggerUi;
         (name = "TMF679", description = "Product Offering Qualification API"),
         (name = "TMF666", description = "Account Management API"),
         (name = "TMF676", description = "Payment Management API"),
-        (name = "TMF651", description = "Agreement Management API")
+        (name = "TMF651", description = "Agreement Management API"),
+        (name = "TMF654", description = "Prepay Balance Management API")
     ),
     info(
         title = "BSS/OSS Rust - TM Forum Open APIs",
-        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679, TMF666, TMF676, TMF651)",
+        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679, TMF666, TMF676, TMF651, TMF654)",
         version = "0.3.2",
         contact(
             name = "Roberto de Souza",
@@ -725,6 +744,7 @@ async fn main() -> std::io::Result<()> {
     log::info!("   - TMF666: Account Management");
     log::info!("   - TMF676: Payment Management");
     log::info!("   - TMF651: Agreement Management");
+    log::info!("   - TMF654: Prepay Balance Management");
     log::info!("   - GraphQL: http://{}:{}/graphql", host, port);
     log::info!(
         "📚 Swagger UI will be available at http://{}:{}/swagger-ui",
@@ -822,6 +842,7 @@ async fn main() -> std::io::Result<()> {
             .configure(tmf666_account::api::configure_routes)
             .configure(tmf676_payment::api::configure_routes)
             .configure(tmf651_agreement::api::configure_routes)
+            .configure(tmf654_prepay_balance::api::configure_routes)
     })
     .bind((host.as_str(), port))?
     .shutdown_timeout(30); // 30 seconds for graceful shutdown

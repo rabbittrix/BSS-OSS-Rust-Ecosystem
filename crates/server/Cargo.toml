@@ -42,6 +42,7 @@ tmf679-product-offering-qualification = { path = "../tmf-apis/tmf679_product_off
 tmf666-account = { path = "../tmf-apis/tmf666_account", version = "0.3.2" }
 tmf676-payment = { path = "../tmf-apis/tmf676_payment", version = "0.3.2" }
 tmf651-agreement = { path = "../tmf-apis/tmf651_agreement", version = "0.3.2" }
+tmf654-prepay-balance = { path = "../tmf-apis/tmf654_prepay_balance", version = "0.3.2" }
 bss-oss-utils = { path = "../utils", version = "0.3.2" }
 graphql-api = { path = "../graphql-api", version = "0.3.2" }
 async-graphql = "7.0"

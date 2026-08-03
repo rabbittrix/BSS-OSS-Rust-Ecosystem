@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light dark;
+  font-family: "Segoe UI", "IBM Plex Sans", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+}

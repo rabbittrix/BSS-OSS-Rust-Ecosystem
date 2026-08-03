@@ -32,6 +32,8 @@ on:
           - tmf666-account
           - tmf676-payment
           - tmf651-agreement
+          - tmf654-prepay-balance
+          - telecom-product-engine
 
 env:
   CARGO_TERM_COLOR: always
@@ -197,6 +199,26 @@ jobs:
           cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
           cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
 
+      - name: Publish tmf654-prepay-balance
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' &&
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'tmf654-prepay-balance'))
+        working-directory: crates/tmf-apis/tmf654_prepay_balance
+        run: |
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
+      - name: Publish telecom-product-engine
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' &&
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'telecom-product-engine'))
+        working-directory: crates/telecom-product-engine
+        run: |
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
       - name: Verify publication
         run: |
           echo "✅ All crates published successfully to crates.io"
@@ -210,6 +232,8 @@ jobs:
           echo "🔗 Check: https://crates.io/crates/tmf666-account"
           echo "🔗 Check: https://crates.io/crates/tmf676-payment"
           echo "🔗 Check: https://crates.io/crates/tmf651-agreement"
+          echo "🔗 Check: https://crates.io/crates/tmf654-prepay-balance"
+          echo "🔗 Check: https://crates.io/crates/telecom-product-engine"
 
       - name: Create GitHub release notes
         if: github.event_name == 'release'
