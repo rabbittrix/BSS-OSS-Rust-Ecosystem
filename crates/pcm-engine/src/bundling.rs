@@ -82,10 +82,8 @@ pub fn validate_bundle(bundle: &Bundle) -> Result<(), String> {
                 return Err("Mandatory bundles cannot have optional products".to_string());
             }
         }
-        BundleType::Exclusive => {
-            if bundle.products.len() < 2 {
-                return Err("Exclusive bundles must have at least 2 products".to_string());
-            }
+        BundleType::Exclusive if bundle.products.len() < 2 => {
+            return Err("Exclusive bundles must have at least 2 products".to_string());
         }
         _ => {}
     }

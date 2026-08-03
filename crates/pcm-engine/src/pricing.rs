@@ -128,7 +128,7 @@ pub fn calculate_best_price(
         .iter()
         .filter(|r| r.product_offering_id == product_offering_id)
         .collect();
-    matched.sort_by(|a, b| b.priority.cmp(&a.priority));
+    matched.sort_by_key(|b| std::cmp::Reverse(b.priority));
     matched
         .into_iter()
         .find_map(|rule| calculate_final_price(rule, context))

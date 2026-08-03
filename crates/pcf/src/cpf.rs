@@ -117,22 +117,22 @@ impl Cpf {
 
         // Generate first 9 digits
         let mut digits = vec![0u32; 9];
-        for i in 0..9 {
-            digits[i] = rng.random_range(0..=9);
+        for digit in digits.iter_mut().take(9) {
+            *digit = rng.random_range(0..=9);
         }
 
         // Calculate first check digit
-        let mut sum = 0;
-        for i in 0..9 {
-            sum += digits[i] * (10 - i as u32);
+        let mut sum = 0u32;
+        for (i, digit) in digits.iter().enumerate().take(9) {
+            sum += digit * (10 - i as u32);
         }
         let first_check = (sum * 10) % 11;
         digits.push(if first_check == 10 { 0 } else { first_check });
 
         // Calculate second check digit
-        let mut sum = 0;
-        for i in 0..10 {
-            sum += digits[i] * (11 - i as u32);
+        let mut sum = 0u32;
+        for (i, digit) in digits.iter().enumerate().take(10) {
+            sum += digit * (11 - i as u32);
         }
         let second_check = (sum * 10) % 11;
         digits.push(if second_check == 10 { 0 } else { second_check });
