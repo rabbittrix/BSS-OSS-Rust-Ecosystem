@@ -4,12 +4,12 @@ version.workspace = true
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "Apache-2.0"
-description = "TM Forum TMF677 Customer Usage Management API implementation in Rust"
+description = "TM Forum TMF677 Usage Consumption Management API implementation in Rust"
 repository.workspace = true
 documentation.workspace = true
 
 [dependencies]
-tmf-apis-core = { path = "../core", version = "0.3.1" }
+tmf-apis-core = { path = "../core", version = "0.3.2" }
 actix-web.workspace = true
 sqlx.workspace = true
 jsonwebtoken.workspace = true

@@ -25,6 +25,7 @@ This project provides a complete, production-ready implementation of TM Forum's 
 - **Phase 5 (Revenue Management)**: TMF635 (Usage), TMF668 (Party Role)
 - **Phase 6 (Security, Party & Identity)**: TMF632 (Party), TMF669 (Identity & Credential)
 - **Assurance / Commercial**: TMF621 (Trouble Ticket), TMF648 (Quote), TMF642 (Alarm), TMF656 (Slice)
+- **Account / Payment / Agreement**: TMF666 (Account / BillingAccount), TMF676 (Payment), TMF651 (Agreement)
 
 ✅ **Production-Ready Features**:
 
@@ -93,7 +94,7 @@ bss-oss-rust/
 │   │   ├── core/          # Shared models and error types
 │   │   ├── tmf620_catalog/
 │   │   ├── tmf622_ordering/
-│   │   └── ... (17 total APIs)
+│   │   └── ... (27 total APIs)
 │   ├── server/            # Main application server
 │   ├── pcm-engine/        # Product Catalog Engine
 │   └── utils/             # Common utilities
@@ -123,6 +124,16 @@ All APIs follow TM Forum Open API standards and are accessible via REST:
 | TMF668  | `/tmf-api/partyRoleManagement/v4`                | Party role management       |
 | TMF632  | `/tmf-api/partyManagement/v4`                    | Party management            |
 | TMF669  | `/tmf-api/identityManagement/v4`                 | Identity & credential mgmt  |
+| TMF621  | `/tmf-api/troubleTicket/v4`                      | Trouble ticket management   |
+| TMF648  | `/tmf-api/quoteManagement/v4`                    | Quote management            |
+| TMF633  | `/tmf-api/serviceCatalogManagement/v4`           | Service catalog             |
+| TMF634  | `/tmf-api/resourceCatalogManagement/v4`          | Resource catalog            |
+| TMF679  | `/tmf-api/productOfferingQualification/v4`       | Product offering qualification |
+| TMF666  | `/tmf-api/accountManagement/v4`                  | Account / billing account   |
+| TMF676  | `/tmf-api/payment/v4`                            | Payment & refund            |
+| TMF651  | `/tmf-api/agreementManagement/v4`                | Agreement management        |
+| TMF642  | `/tmf-api/alarmManagement/v4`                    | Alarm management            |
+| TMF656  | `/tmf-api/sliceManagement/v4`                    | Network slice management    |
 | GraphQL | `/graphql`                                       | GraphQL API interface       |
 
 ## Advanced Features

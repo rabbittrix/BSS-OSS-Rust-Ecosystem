@@ -9,9 +9,9 @@ repository.workspace = true
 documentation.workspace = true
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.1" }
-tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.3.1" }
-tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.3.1" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.2" }
+tmf669-identity = { path = "../tmf-apis/tmf669_identity", version = "0.3.2" }
+tmf632-party = { path = "../tmf-apis/tmf632_party", version = "0.3.2" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
@@ -32,7 +32,7 @@ qrcode = "0.14"
 image = "0.25"
 
 [dev-dependencies]
-test-utils = { path = "../test-utils", version = "0.3.1" }
+test-utils = { path = "../test-utils", version = "0.3.2" }
 sqlx.workspace = true
 tokio-test = "0.4"
 actix-rt = "2"

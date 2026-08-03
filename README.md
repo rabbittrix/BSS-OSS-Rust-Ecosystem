@@ -21,7 +21,7 @@ This project aims to revolutionize the BSS/OSS landscape by providing:
 6. ✅ Implement **TMF622 - Product Ordering Management API**
 7. ✅ Implement **TMF637 - Product Inventory Management API**
 
-### Current Version: 0.3.1
+### Current Version: 0.3.2
 
 **Phase 2 APIs Completed:**
 
@@ -222,7 +222,7 @@ Comprehensive testing infrastructure for quality assurance:
 
 2. ✅ **Integration Tests for All TMF APIs**
 
-   - Integration tests for all 21 TMF APIs
+   - Integration tests for all 27 TMF APIs
    - Database-backed integration tests
    - API endpoint testing utilities
 
@@ -364,7 +364,10 @@ bss-oss-rust/
 │   │   ├── tmf648_quote/ # TMF648 Quote Management API ✅
 │   │   ├── tmf633_service_catalog/ # TMF633 Service Catalog Management API ✅
 │   │   ├── tmf634_resource_catalog/ # TMF634 Resource Catalog Management API ✅
-│   │   └── tmf679_product_offering_qualification/ # TMF679 Product Offering Qualification API ✅
+│   │   ├── tmf679_product_offering_qualification/ # TMF679 Product Offering Qualification API ✅
+│   │   ├── tmf666_account/ # TMF666 Account Management API ✅
+│   │   ├── tmf676_payment/ # TMF676 Payment Management API ✅
+│   │   └── tmf651_agreement/ # TMF651 Agreement Management API ✅
 │   ├── pcm-engine/            # Product Catalog Engine
 │   ├── policy-engine/         # Policy Engine (bundling, eligibility, pricing, SLA)
 │   ├── pcf/                   # PCF / PCRF core (QoS, charging, quota) ✅
@@ -380,7 +383,7 @@ bss-oss-rust/
 │   ├── benchmarks/            # Performance benchmarks
 │   ├── utils/                 # Logger, helpers, observability
 │   └── server/                # Main application server
-├── openapi/                   # OpenAPI specs — `tmf-apis-openapi.json` (v0.3.1 TMF suite) + PCF next-gen YAML
+├── openapi/                   # OpenAPI specs — `tmf-apis-openapi.json` (v0.3.2 TMF suite) + PCF next-gen YAML
 ├── examples/                  # Example API flows (e.g. PCF AR/VR)
 ├── scripts/                   # Helper scripts (e.g. PCF smoke tests)
 ├── migrations/                # Database migration scripts
@@ -393,7 +396,7 @@ bss-oss-rust/
 
 The most strategic choice for interoperability. Adherence to industry standards is crucial for commercial value.
 
-**Current Implementation (v0.3.1):**
+**Current Implementation (v0.3.2):**
 
 - **TMF620** - Product Catalog Management API ✅
 - **TMF622** - Product Ordering Management API ✅
@@ -419,8 +422,11 @@ The most strategic choice for interoperability. Adherence to industry standards 
 - **TMF633** - Service Catalog Management API ✅
 - **TMF634** - Resource Catalog Management API ✅
 - **TMF679** - Product Offering Qualification API ✅
+- **TMF666** - Account Management API (BillingAccount / PartyAccount) ✅
+- **TMF676** - Payment Management API ✅
+- **TMF651** - Agreement Management API ✅
 
-**Total:** 21 TM Forum APIs Implemented
+**Total:** 27 TM Forum APIs Implemented
 
 #### 2. Product Catalog Engine (PCM) Framework
 
@@ -864,6 +870,35 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 
 - **GET/POST** `/productOfferingQualification` - List / create qualifications
 - **GET** `/productOfferingQualification/{id}` - Get qualification by ID
+
+### TMF666 Account Management API
+
+**Base URL:** `/tmf-api/accountManagement/v4`
+
+- **GET/POST** `/billingAccount` - List / create billing accounts
+- **GET/PATCH/DELETE** `/billingAccount/{id}` - Get / update / delete billing account
+- **GET/POST** `/partyAccount` - List / create party accounts
+- **GET/PATCH/DELETE** `/partyAccount/{id}` - Get / update / delete party account
+
+> Billing accounts are part of TMF666 (not TMF674 Geographic Site).
+
+### TMF676 Payment Management API
+
+**Base URL:** `/tmf-api/payment/v4`
+
+- **GET/POST** `/payment` - List / create payments
+- **GET/PATCH/DELETE** `/payment/{id}` - Get / update / delete payment
+- **GET/POST** `/refund` - List / create refunds
+- **GET/PATCH/DELETE** `/refund/{id}` - Get / update / delete refund
+
+> Payment is TMF676. TMF677 remains Usage Consumption Management.
+
+### TMF651 Agreement Management API
+
+**Base URL:** `/tmf-api/agreementManagement/v4`
+
+- **GET/POST** `/agreement` - List / create agreements
+- **GET/PATCH/DELETE** `/agreement/{id}` - Get / update / delete agreement
 
 ### Example Requests
 
@@ -1360,7 +1395,7 @@ Interactive API documentation is available at <http://localhost:8080/swagger-ui>
 
 The raw OpenAPI specification is available at <http://localhost:8080/api-doc/openapi.json>
 
-A checked-in snapshot (version **0.3.1**, corrected TMF tags including TMF621/633/634/646/648/677/679) lives at [`openapi/tmf-apis-openapi.json`](openapi/tmf-apis-openapi.json). Regenerate with:
+A checked-in snapshot (version **0.3.2**, including TMF621/633/634/646/648/666/651/676/677/679) lives at [`openapi/tmf-apis-openapi.json`](openapi/tmf-apis-openapi.json). Regenerate with:
 
 ```bash
 cargo test -p bss-oss-server export_openapi -- --nocapture
@@ -1500,7 +1535,7 @@ Swagger UI provides an interactive interface to test all TMF APIs:
 
    - **Swagger UI**: <http://localhost:8080/swagger-ui> - Interactive REST API documentation
    - **GraphQL Playground**: <http://localhost:8080/graphql> - Interactive GraphQL interface
-   - All 21 TMF APIs are available via REST
+   - all 27 TMF APIs are available via REST
    - GraphQL interface provides flexible query access to catalogs, products, and customers
 
 3. **Test Endpoints:**
@@ -1541,8 +1576,11 @@ Swagger UI provides an interactive interface to test all TMF APIs:
    - **TMF656**: Slice Management (5G network slicing)
    - **TMF621**: Trouble Ticket Management (trouble ticket lifecycle)
    - **TMF648**: Quote Management (price quotes and quote items)
+   - **TMF666**: Account Management (billing / party accounts)
+   - **TMF676**: Payment Management (payments and refunds)
+   - **TMF651**: Agreement Management (commercial agreements)
 
-   **Total: 21 TM Forum APIs available via REST and GraphQL**
+   **Total: 27 TM Forum APIs available via REST and GraphQL**
 
 6. **View OpenAPI Specification:**
    - Access the raw OpenAPI JSON at <http://localhost:8080/api-doc/openapi.json>
@@ -1593,6 +1631,9 @@ You can use Swagger UI to manually test all endpoints and verify:
 - **`tmf633-service-catalog`**: TMF633 Service Catalog Management API implementation
 - **`tmf634-resource-catalog`**: TMF634 Resource Catalog Management API implementation
 - **`tmf679-product-offering-qualification`**: TMF679 Product Offering Qualification API implementation
+- **`tmf666-account`**: TMF666 Account Management API implementation
+- **`tmf676-payment`**: TMF676 Payment Management API implementation
+- **`tmf651-agreement`**: TMF651 Agreement Management API implementation
 - **`tmf677-usage`**: TMF677 Usage Consumption Management API implementation
 - **`tmf646-appointment`**: TMF646 Appointment Management API implementation
 

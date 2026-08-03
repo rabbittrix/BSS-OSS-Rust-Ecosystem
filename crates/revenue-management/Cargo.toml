@@ -12,11 +12,11 @@ keywords = ["billing", "charging", "telecom", "bss", "settlement"]
 categories = ["finance", "asynchronous"]
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.1" }
-tmf635-usage = { path = "../tmf-apis/tmf635_usage", version = "0.3.1" }
-tmf678-billing = { path = "../tmf-apis/tmf678_billing", version = "0.3.1" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.2" }
+tmf635-usage = { path = "../tmf-apis/tmf635_usage", version = "0.3.2" }
+tmf678-billing = { path = "../tmf-apis/tmf678_billing", version = "0.3.2" }
 pcm-engine = { path = "../pcm-engine", version = "0.4.1" }
-bss-oss-event-bus = { path = "../event-bus", version = "0.3.1" }
+bss-oss-event-bus = { path = "../event-bus", version = "0.3.2" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true

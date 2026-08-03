@@ -229,9 +229,9 @@ impl NifPt {
 
         // NIF validation algorithm (mod 11)
         let digits: Vec<u32> = nif.chars().map(|c| c.to_digit(10).unwrap()).collect();
-        let mut sum = 0;
-        for i in 0..8 {
-            sum += digits[i] * (9 - i as u32);
+        let mut sum = 0u32;
+        for (i, digit) in digits.iter().enumerate().take(8) {
+            sum += digit * (9 - i as u32);
         }
         let remainder = sum % 11;
         let check_digit = if remainder < 2 { 0 } else { 11 - remainder };
@@ -422,12 +422,10 @@ impl Nino {
             ));
         }
 
-        for i in 2..8 {
-            if !chars[i].is_ascii_digit() {
-                return Err(PcfError::InvalidSubscriberData(
-                    "NINO must have 6 digits after initial letters".to_string(),
-                ));
-            }
+        if chars.iter().take(8).skip(2).any(|c| !c.is_ascii_digit()) {
+            return Err(PcfError::InvalidSubscriberData(
+                "NINO must have 6 digits after initial letters".to_string(),
+            ));
         }
 
         if !chars[8].is_ascii_alphabetic() {

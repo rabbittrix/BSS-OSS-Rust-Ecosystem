@@ -6,7 +6,7 @@ This document outlines the TM Forum Open API standards implemented in this proje
 
 The TM Forum Open APIs provide standardized interfaces for BSS/OSS systems, enabling interoperability between different vendors and systems. This project implements a comprehensive set of TMF APIs covering Product Management, Customer Management, Service Lifecycle, Resource Management, Revenue Management, and Security & Identity domains.
 
-## Current Version: 0.3.0
+## Current Version: 0.3.2
 
 ## Implemented APIs
 
@@ -452,9 +452,76 @@ Manages price quotes for products and services before orders are placed. Enables
 - `PATCH /tmf-api/quoteManagement/v4/quote/{id}` - Update quote
 - `DELETE /tmf-api/quoteManagement/v4/quote/{id}` - Delete quote
 
+### Phase 8: Account, Payment & Agreement ✅
+
+> **Numbering note:** Billing accounts are managed under **TMF666 Account Management** (not TMF674 — Geographic Site). Payment is **TMF676** (not TMF677 — Usage Consumption, already implemented).
+
+#### TMF666 - Account Management API
+
+**Status:** ✅ Implemented
+
+Provides standardized management of billing and party accounts (including billing account CRUD used by charging/billing flows).
+
+**Key Resources:**
+- BillingAccount
+- PartyAccount
+
+**Endpoints:**
+
+- `GET /tmf-api/accountManagement/v4/billingAccount` - List billing accounts
+- `GET /tmf-api/accountManagement/v4/billingAccount/{id}` - Get billing account by ID
+- `POST /tmf-api/accountManagement/v4/billingAccount` - Create billing account
+- `PATCH /tmf-api/accountManagement/v4/billingAccount/{id}` - Update billing account
+- `DELETE /tmf-api/accountManagement/v4/billingAccount/{id}` - Delete billing account
+- `GET /tmf-api/accountManagement/v4/partyAccount` - List party accounts
+- `GET /tmf-api/accountManagement/v4/partyAccount/{id}` - Get party account by ID
+- `POST /tmf-api/accountManagement/v4/partyAccount` - Create party account
+- `PATCH /tmf-api/accountManagement/v4/partyAccount/{id}` - Update party account
+- `DELETE /tmf-api/accountManagement/v4/partyAccount/{id}` - Delete party account
+
+#### TMF676 - Payment Management API
+
+**Status:** ✅ Implemented
+
+Client interface for notifying payment systems about performed payments and refunds.
+
+**Key Resources:**
+- Payment
+- Refund
+
+**Endpoints:**
+
+- `GET /tmf-api/payment/v4/payment` - List payments
+- `GET /tmf-api/payment/v4/payment/{id}` - Get payment by ID
+- `POST /tmf-api/payment/v4/payment` - Create payment
+- `PATCH /tmf-api/payment/v4/payment/{id}` - Update payment
+- `DELETE /tmf-api/payment/v4/payment/{id}` - Delete payment
+- `GET /tmf-api/payment/v4/refund` - List refunds
+- `GET /tmf-api/payment/v4/refund/{id}` - Get refund by ID
+- `POST /tmf-api/payment/v4/refund` - Create refund
+- `PATCH /tmf-api/payment/v4/refund/{id}` - Update refund
+- `DELETE /tmf-api/payment/v4/refund/{id}` - Delete refund
+
+#### TMF651 - Agreement Management API
+
+**Status:** ✅ Implemented
+
+Manages commercial agreements between parties (lifecycle from in-process through terminated).
+
+**Key Resources:**
+- Agreement
+
+**Endpoints:**
+
+- `GET /tmf-api/agreementManagement/v4/agreement` - List agreements
+- `GET /tmf-api/agreementManagement/v4/agreement/{id}` - Get agreement by ID
+- `POST /tmf-api/agreementManagement/v4/agreement` - Create agreement
+- `PATCH /tmf-api/agreementManagement/v4/agreement/{id}` - Update agreement
+- `DELETE /tmf-api/agreementManagement/v4/agreement/{id}` - Delete agreement
+
 ## Implementation Summary
 
-### Total Implemented APIs: 21
+### Total Implemented APIs: 27
 
 - **Phase 1 (Product Domain):** 3 APIs (TMF620, TMF622, TMF637)
 - **Phase 2 (Customer & User Domain):** 4 APIs (TMF629, TMF678, TMF677, TMF646)
@@ -463,6 +530,7 @@ Manages price quotes for products and services before orders are placed. Enables
 - **Phase 5 (Revenue Management):** 2 APIs (TMF635, TMF668)
 - **Phase 6 (Security, Party & Identity):** 2 APIs (TMF632, TMF669)
 - **Phase 7 (Additional APIs):** 5 APIs (TMF621, TMF648, TMF633, TMF634, TMF679)
+- **Phase 8 (Account, Payment & Agreement):** 3 APIs (TMF666, TMF676, TMF651)
 - **Other APIs:** 2 APIs (TMF642, TMF656)
 
 ## Compliance

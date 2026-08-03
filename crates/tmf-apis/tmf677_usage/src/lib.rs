@@ -1,7 +1,7 @@
-//! TMF677 - Customer Usage Management API
+//! TMF677 - Usage Consumption Management API
 //!
-//! This module implements the TM Forum Customer Usage Management API,
-//! providing a standardized interface for handling CDRs, usage records, and consumption.
+//! This module implements the TM Forum Usage Consumption Management API,
+//! providing a standardized interface for consumption balances and usage reports.
 
 pub mod api;
 pub mod auth;

@@ -2,7 +2,7 @@
 
 | File | Description |
 |------|-------------|
-| `tmf-apis-openapi.json` | Full BSS/OSS TMF OpenAPI document (utoipa) for the main server — version **0.3.1** |
+| `tmf-apis-openapi.json` | Full BSS/OSS TMF OpenAPI document (utoipa) for the main server — version **0.3.2** |
 | `pcf-nextgen-sba.yaml` | Next-gen PCF SBA OpenAPI (mirrored under `crates/pcf-nextgen/openapi/`) |
 
 ## Regenerate TMF OpenAPI
@@ -18,4 +18,4 @@ With the server running:
 - UI: `http://localhost:8080/swagger-ui/`
 - Spec: `http://localhost:8080/api-doc/openapi.json`
 
-Corrected TMF tags in this release include **TMF621**, **TMF633**, **TMF634**, **TMF646**, **TMF648**, **TMF677**, and **TMF679**.
+Corrected TMF tags include **TMF621**, **TMF633**, **TMF634**, **TMF646**, **TMF648**, **TMF677** (Usage Consumption), and **TMF679**. New in 0.3.2: **TMF666** (Account), **TMF676** (Payment), **TMF651** (Agreement).

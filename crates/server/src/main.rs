@@ -84,19 +84,28 @@ use tmf645_resource_order::models::{
     ResourceSpecificationRef as Tmf645ResourceSpecificationRef,
 };
 use tmf646_appointment::models::{
-    Appointment, AppointmentState, ContactMedium as Tmf688ContactMedium, CreateAppointmentRequest,
-    CreateContactMediumRequest as Tmf688CreateContactMediumRequest,
-    CreateRelatedPartyRequest as Tmf688CreateRelatedPartyRequest,
-    RelatedParty as Tmf688RelatedParty,
+    Appointment, AppointmentState, ContactMedium as Tmf646ContactMedium, CreateAppointmentRequest,
+    CreateContactMediumRequest as Tmf646CreateContactMediumRequest,
+    CreateRelatedPartyRequest as Tmf646CreateRelatedPartyRequest,
+    RelatedParty as Tmf646RelatedParty,
 };
 use tmf648_quote::models::{
     CreateQuoteRequest, Quote, QuoteItem, QuoteState, RelatedParty as Tmf648RelatedParty,
     UpdateQuoteRequest,
 };
+use tmf651_agreement::models::{
+    Agreement, AgreementStatus, CreateAgreementRequest, RelatedParty as Tmf651RelatedParty,
+    UpdateAgreementRequest,
+};
 use tmf656_slice::models::{
     CreateNetworkFunctionRefRequest, CreateNetworkSliceRequest, CreateSLAParametersRequest,
     NetworkFunctionRef, NetworkSlice, SLAParameters, SliceState, SliceType,
     UpdateNetworkSliceRequest,
+};
+use tmf666_account::models::{
+    AccountState, BillingAccount, CreateBillingAccountRequest, CreatePartyAccountRequest,
+    PartyAccount, RelatedParty as Tmf666RelatedParty, UpdateBillingAccountRequest,
+    UpdatePartyAccountRequest,
 };
 use tmf668_party_role::models::{
     ContactMedium as Tmf668ContactMedium,
@@ -108,9 +117,13 @@ use tmf669_identity::models::{
     CreateCredentialRequest, CreateIdentityRequest, Credential, CredentialType, Identity,
     IdentityState, PartyRef as Tmf669PartyRef,
 };
+use tmf676_payment::models::{
+    CreatePaymentRequest, CreateRefundRequest, Money as Tmf676Money, Payment, PaymentStatus,
+    Refund, RelatedParty as Tmf676RelatedParty, UpdatePaymentRequest, UpdateRefundRequest,
+};
 use tmf677_usage::models::{
-    CreateCustomerUsageRequest, CreateRelatedPartyRequest as Tmf679CreateRelatedPartyRequest,
-    CustomerUsage, RelatedParty as Tmf679RelatedParty, UsageState as Tmf679UsageState,
+    CreateCustomerUsageRequest, CreateRelatedPartyRequest as Tmf677CreateRelatedPartyRequest,
+    CustomerUsage, RelatedParty as Tmf677RelatedParty, UsageState as Tmf677UsageState,
 };
 use tmf678_billing::models::{
     BillItem, BillState, CreateBillItemRequest, CreateCustomerBillRequest,
@@ -157,11 +170,11 @@ use utoipa_swagger_ui::SwaggerUi;
         tmf678_billing::handlers::get_bills,
         tmf678_billing::handlers::get_bill_by_id,
         tmf678_billing::handlers::create_bill,
-        // TMF679
+        // TMF677 Usage Consumption
         tmf677_usage::handlers::get_usages,
         tmf677_usage::handlers::get_usage_by_id,
         tmf677_usage::handlers::create_usage,
-        // TMF688
+        // TMF646 Appointment
         tmf646_appointment::handlers::get_appointments,
         tmf646_appointment::handlers::get_appointment_by_id,
         tmf646_appointment::handlers::create_appointment,
@@ -247,6 +260,34 @@ use utoipa_swagger_ui::SwaggerUi;
         tmf679_product_offering_qualification::handlers::list_qualifications,
         tmf679_product_offering_qualification::handlers::get_qualification_by_id,
         tmf679_product_offering_qualification::handlers::create_qualification,
+        // TMF666 Account Management
+        tmf666_account::handlers::get_billing_accounts,
+        tmf666_account::handlers::get_billing_account_by_id,
+        tmf666_account::handlers::create_billing_account,
+        tmf666_account::handlers::update_billing_account,
+        tmf666_account::handlers::delete_billing_account,
+        tmf666_account::handlers::get_party_accounts,
+        tmf666_account::handlers::get_party_account_by_id,
+        tmf666_account::handlers::create_party_account,
+        tmf666_account::handlers::update_party_account,
+        tmf666_account::handlers::delete_party_account,
+        // TMF676 Payment Management
+        tmf676_payment::handlers::get_payments,
+        tmf676_payment::handlers::get_payment_by_id,
+        tmf676_payment::handlers::create_payment,
+        tmf676_payment::handlers::update_payment,
+        tmf676_payment::handlers::delete_payment,
+        tmf676_payment::handlers::get_refunds,
+        tmf676_payment::handlers::get_refund_by_id,
+        tmf676_payment::handlers::create_refund,
+        tmf676_payment::handlers::update_refund,
+        tmf676_payment::handlers::delete_refund,
+        // TMF651 Agreement Management
+        tmf651_agreement::handlers::get_agreements,
+        tmf651_agreement::handlers::get_agreement_by_id,
+        tmf651_agreement::handlers::create_agreement,
+        tmf651_agreement::handlers::update_agreement,
+        tmf651_agreement::handlers::delete_agreement,
     ),
     components(schemas(
         // TMF620
@@ -296,20 +337,20 @@ use utoipa_swagger_ui::SwaggerUi;
         BillMoney,
         Tmf678ProductOfferingRef,
         Tmf678RelatedParty,
-        // TMF679
+        // TMF677 Usage Consumption
         CustomerUsage,
         CreateCustomerUsageRequest,
-        Tmf679CreateRelatedPartyRequest,
-        Tmf679UsageState,
-        Tmf679RelatedParty,
-        // TMF688
+        Tmf677CreateRelatedPartyRequest,
+        Tmf677UsageState,
+        Tmf677RelatedParty,
+        // TMF646 Appointment
         Appointment,
         CreateAppointmentRequest,
-        Tmf688CreateContactMediumRequest,
-        Tmf688CreateRelatedPartyRequest,
+        Tmf646CreateContactMediumRequest,
+        Tmf646CreateRelatedPartyRequest,
         AppointmentState,
-        Tmf688ContactMedium,
-        Tmf688RelatedParty,
+        Tmf646ContactMedium,
+        Tmf646RelatedParty,
         // TMF641
         ServiceOrder,
         CreateServiceOrderRequest,
@@ -449,6 +490,31 @@ use utoipa_swagger_ui::SwaggerUi;
         CreateProductOfferingQualificationRequest,
         QualificationResult,
         Tmf679ProductOfferingRef,
+        // TMF666
+        BillingAccount,
+        PartyAccount,
+        CreateBillingAccountRequest,
+        UpdateBillingAccountRequest,
+        CreatePartyAccountRequest,
+        UpdatePartyAccountRequest,
+        AccountState,
+        Tmf666RelatedParty,
+        // TMF676
+        Payment,
+        Refund,
+        CreatePaymentRequest,
+        UpdatePaymentRequest,
+        CreateRefundRequest,
+        UpdateRefundRequest,
+        PaymentStatus,
+        Tmf676Money,
+        Tmf676RelatedParty,
+        // TMF651
+        Agreement,
+        CreateAgreementRequest,
+        UpdateAgreementRequest,
+        AgreementStatus,
+        Tmf651RelatedParty,
         // Common
         BaseEntity,
         LifecycleStatus,
@@ -478,12 +544,15 @@ use utoipa_swagger_ui::SwaggerUi;
         (name = "TMF648", description = "Quote Management API"),
         (name = "TMF633", description = "Service Catalog Management API"),
         (name = "TMF634", description = "Resource Catalog Management API"),
-        (name = "TMF679", description = "Product Offering Qualification API")
+        (name = "TMF679", description = "Product Offering Qualification API"),
+        (name = "TMF666", description = "Account Management API"),
+        (name = "TMF676", description = "Payment Management API"),
+        (name = "TMF651", description = "Agreement Management API")
     ),
     info(
         title = "BSS/OSS Rust - TM Forum Open APIs",
-        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679)",
-        version = "0.3.1",
+        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679, TMF666, TMF676, TMF651)",
+        version = "0.3.2",
         contact(
             name = "Roberto de Souza",
             email = "rabbittrix@hotmail.com"
@@ -653,6 +722,9 @@ async fn main() -> std::io::Result<()> {
     log::info!("   - TMF633: Service Catalog Management");
     log::info!("   - TMF634: Resource Catalog Management");
     log::info!("   - TMF679: Product Offering Qualification");
+    log::info!("   - TMF666: Account Management");
+    log::info!("   - TMF676: Payment Management");
+    log::info!("   - TMF651: Agreement Management");
     log::info!("   - GraphQL: http://{}:{}/graphql", host, port);
     log::info!(
         "📚 Swagger UI will be available at http://{}:{}/swagger-ui",
@@ -747,6 +819,9 @@ async fn main() -> std::io::Result<()> {
             .configure(tmf633_service_catalog::api::configure_routes)
             .configure(tmf634_resource_catalog::api::configure_routes)
             .configure(tmf679_product_offering_qualification::api::configure_routes)
+            .configure(tmf666_account::api::configure_routes)
+            .configure(tmf676_payment::api::configure_routes)
+            .configure(tmf651_agreement::api::configure_routes)
     })
     .bind((host.as_str(), port))?
     .shutdown_timeout(30); // 30 seconds for graceful shutdown

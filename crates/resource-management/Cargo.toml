@@ -19,5 +19,5 @@ sqlx.workspace = true
 async-trait.workspace = true
 log.workspace = true
 utoipa.workspace = true
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.1" }
-tmf639-resource-inventory = { path = "../tmf-apis/tmf639_resource_inventory", version = "0.3.1" }
+tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.2" }
+tmf639-resource-inventory = { path = "../tmf-apis/tmf639_resource_inventory", version = "0.3.2" }

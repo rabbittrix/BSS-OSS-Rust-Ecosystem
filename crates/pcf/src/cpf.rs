@@ -87,9 +87,9 @@ impl Cpf {
         let digits: Vec<u32> = cpf.chars().map(|c| c.to_digit(10).unwrap()).collect();
 
         // Calculate first check digit
-        let mut sum = 0;
-        for i in 0..9 {
-            sum += digits[i] * (10 - i as u32);
+        let mut sum = 0u32;
+        for (i, digit) in digits.iter().enumerate().take(9) {
+            sum += digit * (10 - i as u32);
         }
         let first_check = (sum * 10) % 11;
         let first_check = if first_check == 10 { 0 } else { first_check };
@@ -99,9 +99,9 @@ impl Cpf {
         }
 
         // Calculate second check digit
-        let mut sum = 0;
-        for i in 0..10 {
-            sum += digits[i] * (11 - i as u32);
+        let mut sum = 0u32;
+        for (i, digit) in digits.iter().enumerate().take(10) {
+            sum += digit * (11 - i as u32);
         }
         let second_check = (sum * 10) % 11;
         let second_check = if second_check == 10 { 0 } else { second_check };

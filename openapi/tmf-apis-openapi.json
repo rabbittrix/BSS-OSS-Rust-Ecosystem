@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "BSS/OSS Rust - TM Forum Open APIs",
-    "description": "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679)",
+    "description": "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679, TMF666, TMF676, TMF651)",
     "contact": {
       "name": "Roberto de Souza",
       "email": "rabbittrix@hotmail.com"
@@ -10,9 +10,561 @@
     "license": {
       "name": "MIT"
     },
-    "version": "0.3.1"
+    "version": "0.3.2"
   },
   "paths": {
+    "/tmf-api/accountManagement/v4/billingAccount": {
+      "get": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Get all billing accounts",
+        "operationId": "get_billing_accounts",
+        "responses": {
+          "200": {
+            "description": "List of billing accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BillingAccount"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Create a billing account",
+        "operationId": "create_billing_account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBillingAccountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Billing account created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/accountManagement/v4/billingAccount/{id}": {
+      "get": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Get billing account by ID",
+        "operationId": "get_billing_account_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Billing Account ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Billing account found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid billing account ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Billing account not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Delete a billing account",
+        "operationId": "delete_billing_account",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Billing Account ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Billing account deleted"
+          },
+          "400": {
+            "description": "Invalid billing account ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Billing account not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Update a billing account",
+        "operationId": "update_billing_account",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Billing Account ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBillingAccountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Billing account updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Billing account not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/accountManagement/v4/partyAccount": {
+      "get": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Get all party accounts",
+        "operationId": "get_party_accounts",
+        "responses": {
+          "200": {
+            "description": "List of party accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PartyAccount"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Create a party account",
+        "operationId": "create_party_account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePartyAccountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Party account created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/accountManagement/v4/partyAccount/{id}": {
+      "get": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Get party account by ID",
+        "operationId": "get_party_account_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Party Account ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Party account found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid party account ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Party account not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Delete a party account",
+        "operationId": "delete_party_account",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Party Account ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Party account deleted"
+          },
+          "400": {
+            "description": "Invalid party account ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Party account not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF666"
+        ],
+        "summary": "Update a party account",
+        "operationId": "update_party_account",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Party Account ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePartyAccountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Party account updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Party account not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/agreementManagement/v4/agreement": {
+      "get": {
+        "tags": [
+          "TMF651"
+        ],
+        "summary": "Get all agreements",
+        "operationId": "get_agreements",
+        "responses": {
+          "200": {
+            "description": "List of agreements",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Agreement"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF651"
+        ],
+        "summary": "Create an agreement",
+        "operationId": "create_agreement",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAgreementRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Agreement created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agreement"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/agreementManagement/v4/agreement/{id}": {
+      "get": {
+        "tags": [
+          "TMF651"
+        ],
+        "summary": "Get agreement by ID",
+        "operationId": "get_agreement_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Agreement ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agreement found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agreement"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid agreement ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Agreement not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF651"
+        ],
+        "summary": "Delete an agreement",
+        "operationId": "delete_agreement",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Agreement ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Agreement deleted"
+          },
+          "400": {
+            "description": "Invalid agreement ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Agreement not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF651"
+        ],
+        "summary": "Update an agreement",
+        "operationId": "update_agreement",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Agreement ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAgreementRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Agreement updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agreement"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Agreement not found"
+          }
+        }
+      }
+    },
     "/tmf-api/alarmManagement/v4/alarm": {
       "get": {
         "tags": [
@@ -811,6 +1363,374 @@
           },
           "404": {
             "description": "Party role not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/payment/v4/payment": {
+      "get": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Get all payments",
+        "operationId": "get_payments",
+        "responses": {
+          "200": {
+            "description": "List of payments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Payment"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Create a payment",
+        "operationId": "create_payment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Payment created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/payment/v4/payment/{id}": {
+      "get": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Get payment by ID",
+        "operationId": "get_payment_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Payment ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid payment ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Payment not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Delete a payment",
+        "operationId": "delete_payment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Payment ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Payment deleted"
+          },
+          "400": {
+            "description": "Invalid payment ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Payment not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Update a payment",
+        "operationId": "update_payment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Payment ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Payment updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Payment not found"
+          }
+        }
+      }
+    },
+    "/tmf-api/payment/v4/refund": {
+      "get": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Get all refunds",
+        "operationId": "get_refunds",
+        "responses": {
+          "200": {
+            "description": "List of refunds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Refund"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Create a refund",
+        "operationId": "create_refund",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRefundRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Refund created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Refund"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tmf-api/payment/v4/refund/{id}": {
+      "get": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Get refund by ID",
+        "operationId": "get_refund_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Refund ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Refund found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Refund"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid refund ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Refund not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Delete a refund",
+        "operationId": "delete_refund",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Refund ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Refund deleted"
+          },
+          "400": {
+            "description": "Invalid refund ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Refund not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TMF676"
+        ],
+        "summary": "Update a refund",
+        "operationId": "update_refund",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Refund ID (UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRefundRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Refund updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Refund"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Refund not found"
           }
         }
       }
@@ -2996,6 +3916,67 @@
           }
         }
       },
+      "AccountState": {
+        "type": "string",
+        "description": "Account State",
+        "enum": [
+          "ACTIVE",
+          "INACTIVE",
+          "CLOSED"
+        ]
+      },
+      "Agreement": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "agreement_period_end": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Agreement period end"
+              },
+              "agreement_period_start": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Agreement period start"
+              },
+              "agreement_type": {
+                "type": "string",
+                "description": "Agreement type",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related parties",
+                "nullable": true
+              },
+              "status": {
+                "$ref": "#/components/schemas/AgreementStatus"
+              }
+            }
+          }
+        ],
+        "description": "Agreement"
+      },
+      "AgreementStatus": {
+        "type": "string",
+        "description": "Agreement Status",
+        "enum": [
+          "IN_PROCESS",
+          "ACTIVE",
+          "SUSPENDED",
+          "TERMINATED"
+        ]
+      },
       "Alarm": {
         "allOf": [
           {
@@ -3253,6 +4234,38 @@
           "CANCELLED"
         ]
       },
+      "BillingAccount": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "account_type": {
+                "type": "string",
+                "description": "Account type",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related parties",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/AccountState"
+              }
+            }
+          }
+        ],
+        "description": "Billing Account"
+      },
       "Catalog": {
         "allOf": [
           {
@@ -3343,6 +4356,45 @@
         "properties": {
           "name": {
             "type": "string"
+          }
+        }
+      },
+      "CreateAgreementRequest": {
+        "type": "object",
+        "description": "Request to create an agreement",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "agreement_period_end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "agreement_period_start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "agreement_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedParty"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -3454,6 +4506,37 @@
           "quantity": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          }
+        }
+      },
+      "CreateBillingAccountRequest": {
+        "type": "object",
+        "description": "Request to create a billing account",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "account_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedParty"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
             "nullable": true
           }
         }
@@ -3849,6 +4932,37 @@
           }
         }
       },
+      "CreatePartyAccountRequest": {
+        "type": "object",
+        "description": "Request to create a party account",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "account_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedParty"
+            },
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "CreatePartyRequest": {
         "type": "object",
         "description": "Request to create a party",
@@ -3944,6 +5058,49 @@
           },
           "role": {
             "type": "string"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreatePaymentRequest": {
+        "type": "object",
+        "description": "Request to create a payment",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "amount": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "nullable": true
+          },
+          "billing_account_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "payment_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedParty"
+            },
+            "nullable": true
           },
           "version": {
             "type": "string",
@@ -4135,6 +5292,49 @@
           "valid_until": {
             "type": "string",
             "format": "date-time"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateRefundRequest": {
+        "type": "object",
+        "description": "Request to create a refund",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "amount": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "payment_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "refund_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "related_party": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelatedParty"
+            },
+            "nullable": true
           },
           "version": {
             "type": "string",
@@ -5003,18 +6203,20 @@
       },
       "Money": {
         "type": "object",
-        "description": "Money representation",
+        "description": "Money - Represents a monetary amount",
         "required": [
           "value",
           "unit"
         ],
         "properties": {
           "unit": {
-            "type": "string"
+            "type": "string",
+            "description": "Currency code (ISO 4217)"
           },
           "value": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "description": "Amount value"
           }
         }
       },
@@ -5209,6 +6411,38 @@
         ],
         "description": "Party - Represents an individual or organization"
       },
+      "PartyAccount": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "state"
+            ],
+            "properties": {
+              "account_type": {
+                "type": "string",
+                "description": "Account type",
+                "nullable": true
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related parties",
+                "nullable": true
+              },
+              "state": {
+                "$ref": "#/components/schemas/AccountState"
+              }
+            }
+          }
+        ],
+        "description": "Party Account"
+      },
       "PartyRef": {
         "type": "object",
         "description": "Party Reference",
@@ -5308,6 +6542,61 @@
         "enum": [
           "INDIVIDUAL",
           "ORGANIZATION"
+        ]
+      },
+      "Payment": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "amount": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Money"
+                  }
+                ],
+                "nullable": true
+              },
+              "billing_account_id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Related billing account"
+              },
+              "payment_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Payment date"
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related parties",
+                "nullable": true
+              },
+              "status": {
+                "$ref": "#/components/schemas/PaymentStatus"
+              }
+            }
+          }
+        ],
+        "description": "Payment"
+      },
+      "PaymentStatus": {
+        "type": "string",
+        "description": "Payment Status",
+        "enum": [
+          "PENDING",
+          "COMPLETED",
+          "FAILED",
+          "CANCELLED"
         ]
       },
       "PriceType": {
@@ -5775,9 +7064,54 @@
           }
         }
       },
+      "Refund": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "amount": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Money"
+                  }
+                ],
+                "nullable": true
+              },
+              "payment_id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Related payment"
+              },
+              "refund_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Refund date"
+              },
+              "related_party": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RelatedParty"
+                },
+                "description": "Related parties",
+                "nullable": true
+              },
+              "status": {
+                "$ref": "#/components/schemas/PaymentStatus"
+              }
+            }
+          }
+        ],
+        "description": "Refund"
+      },
       "RelatedParty": {
         "type": "object",
-        "description": "Related Party - Customer or other party related to the quote",
+        "description": "Related Party",
         "required": [
           "id",
           "name",
@@ -6661,6 +7995,36 @@
           "OTHER"
         ]
       },
+      "UpdateAgreementRequest": {
+        "type": "object",
+        "description": "Request to update an agreement",
+        "properties": {
+          "agreement_period_end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "agreement_period_start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "agreement_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AgreementStatus"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
       "UpdateAlarmRequest": {
         "type": "object",
         "description": "Request to update an alarm",
@@ -6677,6 +8041,28 @@
             "allOf": [
               {
                 "$ref": "#/components/schemas/AlarmState"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "UpdateBillingAccountRequest": {
+        "type": "object",
+        "description": "Request to update a billing account",
+        "properties": {
+          "account_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AccountState"
               }
             ],
             "nullable": true
@@ -6705,6 +8091,54 @@
           }
         }
       },
+      "UpdatePartyAccountRequest": {
+        "type": "object",
+        "description": "Request to update a party account",
+        "properties": {
+          "account_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AccountState"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "UpdatePaymentRequest": {
+        "type": "object",
+        "description": "Request to update a payment",
+        "properties": {
+          "amount": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PaymentStatus"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
       "UpdateQuoteRequest": {
         "type": "object",
         "description": "Request to update a quote",
@@ -6724,6 +8158,32 @@
           "valid_until": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "UpdateRefundRequest": {
+        "type": "object",
+        "description": "Request to update a refund",
+        "properties": {
+          "amount": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PaymentStatus"
+              }
+            ],
+            "nullable": true
           }
         }
       },
@@ -6943,6 +8403,18 @@
     {
       "name": "TMF679",
       "description": "Product Offering Qualification API"
+    },
+    {
+      "name": "TMF666",
+      "description": "Account Management API"
+    },
+    {
+      "name": "TMF676",
+      "description": "Payment Management API"
+    },
+    {
+      "name": "TMF651",
+      "description": "Agreement Management API"
     }
   ]
 }

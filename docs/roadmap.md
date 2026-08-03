@@ -1,6 +1,6 @@
 # Roadmap
 
-## Current Version: 0.3.0
+## Current Version: 0.3.2
 
 ## Phase 1: Stable Core Foundation ✅
 
@@ -110,7 +110,8 @@
 - [x] 5G network slicing management (Implemented via TMF656 - Slice Management API)
 - [x] IoT device management (Device registration, status tracking, telemetry collection)
 - [x] Real-time analytics dashboard (WebSocket-based live metrics streaming)
-- [x] Additional TMF APIs (TMF621 - Trouble Ticket ✅, TMF648 - Quote ✅)
+- [x] Additional TMF APIs (TMF621 Trouble Ticket, TMF648 Quote, TMF633 Service Catalog, TMF634 Resource Catalog, TMF679 POQ ✅)
+- [x] Account / Payment / Agreement (TMF666 Account, TMF676 Payment, TMF651 Agreement ✅)
 - [x] Machine learning integration for predictive analytics ✅
 - [x] Blockchain integration for audit trails ✅
 - [x] Edge computing support ✅
@@ -124,7 +125,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute to the roadmap.
 
 **Completed Phases:** 10 out of 10 core phases ✅
 
-**Total APIs Implemented:** 19 TM Forum APIs
+**Total APIs Implemented:** 27 TM Forum APIs
 
 **Additional Components:**
 

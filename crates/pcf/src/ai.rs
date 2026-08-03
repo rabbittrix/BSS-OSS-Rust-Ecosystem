@@ -285,7 +285,7 @@ impl AIServiceTrait for DefaultAIService {
         if is_blacklisted {
             warnings.push("CPF is blacklisted".to_string());
         }
-        if fraud_risk >= 0.5 && fraud_risk < 0.7 {
+        if (0.5..0.7).contains(&fraud_risk) {
             warnings.push("Moderate fraud risk detected - manual review recommended".to_string());
         }
 
@@ -341,7 +341,7 @@ impl AIServiceTrait for DefaultAIService {
         if is_blacklisted {
             warnings.push("Tax ID is blacklisted".to_string());
         }
-        if fraud_risk >= 0.5 && fraud_risk < 0.7 {
+        if (0.5..0.7).contains(&fraud_risk) {
             warnings.push("Moderate fraud risk detected - manual review recommended".to_string());
         }
 
@@ -376,25 +376,23 @@ impl DefaultAIService {
         }
 
         // Check for sequential patterns (for numeric IDs)
-        if tax_id.chars().all(|c| c.is_ascii_digit()) {
-            if Self::is_sequential_pattern(tax_id) {
-                risk_score += 0.3;
-            }
+        if tax_id.chars().all(|c| c.is_ascii_digit()) && Self::is_sequential_pattern(tax_id) {
+            risk_score += 0.3;
         }
 
         // Country-specific checks
         match country {
-            crate::tax_id::TaxIdCountry::US => {
+            crate::tax_id::TaxIdCountry::US
+                if tax_id.starts_with("000") || tax_id.ends_with("0000") =>
+            {
                 // SSN-specific: check for known invalid patterns
-                if tax_id.starts_with("000") || tax_id.ends_with("0000") {
-                    risk_score += 0.5;
-                }
+                risk_score += 0.5;
             }
-            crate::tax_id::TaxIdCountry::GB => {
+            crate::tax_id::TaxIdCountry::GB
+                if tax_id.starts_with("BG") || tax_id.starts_with("GB") =>
+            {
                 // NINO-specific: check for invalid prefixes
-                if tax_id.starts_with("BG") || tax_id.starts_with("GB") {
-                    risk_score += 0.5;
-                }
+                risk_score += 0.5;
             }
             _ => {}
         }
@@ -409,7 +407,7 @@ impl DefaultAIService {
             crate::tax_id::TaxIdCountry::BR => Self::check_blacklist(tax_id),
             crate::tax_id::TaxIdCountry::US => {
                 // Known invalid SSNs
-                let blacklisted = vec!["000000000", "123456789", "111111111"];
+                let blacklisted = ["000000000", "123456789", "111111111"];
                 blacklisted.contains(&tax_id)
             }
             _ => false, // In production, would check database
@@ -420,7 +418,7 @@ impl DefaultAIService {
     pub fn check_blacklist(cpf: &str) -> bool {
         // In production, this would query a database or external service
         // For now, we check against a hardcoded list of known fraudulent CPFs
-        let blacklisted_cpfs = vec![
+        let blacklisted_cpfs = [
             "11111111111", // All ones
             "22222222222", // All twos
             "00000000000", // All zeros

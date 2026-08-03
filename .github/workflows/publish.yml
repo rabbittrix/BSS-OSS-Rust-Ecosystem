@@ -29,6 +29,9 @@ on:
           - tmf648-quote
           - tmf677-usage
           - tmf679-product-offering-qualification
+          - tmf666-account
+          - tmf676-payment
+          - tmf651-agreement
 
 env:
   CARGO_TERM_COLOR: always
@@ -164,6 +167,36 @@ jobs:
           cargo publish -p revenue-management --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
           cargo publish -p revenue-management --token ${{ secrets.CRATES_IO_TOKEN }}
 
+      - name: Publish tmf666-account
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' &&
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'tmf666-account'))
+        working-directory: crates/tmf-apis/tmf666_account
+        run: |
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
+      - name: Publish tmf676-payment
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' &&
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'tmf676-payment'))
+        working-directory: crates/tmf-apis/tmf676_payment
+        run: |
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
+      - name: Publish tmf651-agreement
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' &&
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'tmf651-agreement'))
+        working-directory: crates/tmf-apis/tmf651_agreement
+        run: |
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+
       - name: Verify publication
         run: |
           echo "✅ All crates published successfully to crates.io"
@@ -174,6 +207,9 @@ jobs:
           echo "🔗 Check: https://crates.io/crates/bss-oss-pcf-nextgen"
           echo "🔗 Check: https://crates.io/crates/bss-oss-service-orchestrator"
           echo "🔗 Check: https://crates.io/crates/revenue-management"
+          echo "🔗 Check: https://crates.io/crates/tmf666-account"
+          echo "🔗 Check: https://crates.io/crates/tmf676-payment"
+          echo "🔗 Check: https://crates.io/crates/tmf651-agreement"
 
       - name: Create GitHub release notes
         if: github.event_name == 'release'

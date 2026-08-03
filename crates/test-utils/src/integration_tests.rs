@@ -186,7 +186,7 @@ pub mod tmf678_tests {
 }
 
 /// Test helper for TMF677 - Usage Consumption Management API
-pub mod tmf679_tests {
+pub mod tmf677_tests {
     use super::*;
 
     /// Test creating a usage record
@@ -223,7 +223,7 @@ pub mod tmf679_tests {
 }
 
 /// Test helper for TMF646 - Appointment Management API
-pub mod tmf688_tests {
+pub mod tmf646_tests {
     use super::*;
 
     /// Test creating an appointment

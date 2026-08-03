@@ -24,6 +24,9 @@ members = [
     "crates/tmf-apis/tmf633_service_catalog",
     "crates/tmf-apis/tmf634_resource_catalog",
     "crates/tmf-apis/tmf679_product_offering_qualification",
+    "crates/tmf-apis/tmf666_account",
+    "crates/tmf-apis/tmf676_payment",
+    "crates/tmf-apis/tmf651_agreement",
     "crates/tmf-apis/tmf656_slice",
     "crates/pcm-engine",
     "crates/utils",
@@ -87,7 +90,7 @@ async-trait = "0.1"
 futures = "0.3"
 
 [workspace.package]
-version = "0.3.1"
+version = "0.3.2"
 edition = "2021"
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 # Note: Individual crates specify their own licenses
