@@ -17,8 +17,8 @@
 
 - [x] Implement TMF629 - Customer Management API
 - [x] Implement TMF678 - Customer Bill Management API
-- [x] Implement TMF679 - Customer Usage Management API
-- [x] Implement TMF688 - Appointment Management API
+- [x] Implement TMF677 - Usage Consumption Management API
+- [x] Implement TMF646 - Appointment Management API
 - [x] Add comprehensive test coverage for all TMF APIs (test-utils crate created)
 - [x] Performance optimization and benchmarking (benchmarks crate created)
 - [x] Add rate limiting and request validation (implemented in api-gateway)
@@ -110,7 +110,7 @@
 - [x] 5G network slicing management (Implemented via TMF656 - Slice Management API)
 - [x] IoT device management (Device registration, status tracking, telemetry collection)
 - [x] Real-time analytics dashboard (WebSocket-based live metrics streaming)
-- [x] Additional TMF APIs (TMF633 - Trouble Ticket ✅, TMF634 - Quote ✅)
+- [x] Additional TMF APIs (TMF621 - Trouble Ticket ✅, TMF648 - Quote ✅)
 - [x] Machine learning integration for predictive analytics ✅
 - [x] Blockchain integration for audit trails ✅
 - [x] Edge computing support ✅

@@ -1,4 +1,4 @@
--- TMF679 Customer Usage Management API Schema
+-- TMF677 Usage Consumption Management API Schema
 -- Customer Usages table (CDRs, usage records)
 CREATE TABLE
     IF NOT EXISTS customer_usages (
@@ -54,6 +54,6 @@ CREATE INDEX IF NOT EXISTS idx_customer_usages_product_offering_id ON customer_u
 CREATE INDEX IF NOT EXISTS idx_usage_related_parties_usage_id ON usage_related_parties (usage_id);
 
 -- Comments
-COMMENT ON TABLE customer_usages IS 'TMF679 Customer Usages - CDRs, usage records, and consumption';
+COMMENT ON TABLE customer_usages IS 'TMF677 Usage Consumptions - CDRs, usage records, and consumption';
 
 COMMENT ON TABLE usage_related_parties IS 'TMF679 Usage Related Parties - Parties related to usage records';

@@ -119,7 +119,7 @@ Retrieves bills and billing structures. Required for customer portals and self-c
 - `PATCH /tmf-api/customerBillManagement/v4/customerBill/{id}` - Update customer bill
 - `DELETE /tmf-api/customerBillManagement/v4/customerBill/{id}` - Delete customer bill
 
-#### TMF679 - Customer Usage Management API
+#### TMF677 - Usage Consumption Management API
 
 **Status:** ✅ Implemented
 
@@ -134,13 +134,13 @@ Handles CDRs, usage records, and consumption. Essential for 5G, IoT, prepaid, an
 
 **Endpoints:**
 
-- `GET /tmf-api/customerUsageManagement/v4/customerUsage` - List customer usages
-- `GET /tmf-api/customerUsageManagement/v4/customerUsage/{id}` - Get customer usage by ID
-- `POST /tmf-api/customerUsageManagement/v4/customerUsage` - Create customer usage
-- `PATCH /tmf-api/customerUsageManagement/v4/customerUsage/{id}` - Update customer usage
-- `DELETE /tmf-api/customerUsageManagement/v4/customerUsage/{id}` - Delete customer usage
+- `GET /tmf-api/usageConsumptionManagement/v4/usageConsumption` - List customer usages
+- `GET /tmf-api/usageConsumptionManagement/v4/usageConsumption/{id}` - Get customer usage by ID
+- `POST /tmf-api/usageConsumptionManagement/v4/usageConsumption` - Create customer usage
+- `PATCH /tmf-api/usageConsumptionManagement/v4/usageConsumption/{id}` - Update customer usage
+- `DELETE /tmf-api/usageConsumptionManagement/v4/usageConsumption/{id}` - Delete customer usage
 
-#### TMF688 - Appointment Management API
+#### TMF646 - Appointment Management API
 
 **Status:** ✅ Implemented
 
@@ -383,7 +383,32 @@ Handles digital identities, credentials, OAuth/JWT integration. Your system beco
 
 ### Phase 7: Additional TMF APIs ✅
 
-#### TMF633 - Trouble Ticket Management API
+
+#### TMF633 - Service Catalog Management API
+
+Manages service catalogs and service specifications (service domain catalog, distinct from TMF620 product catalog).
+
+**Key Resources:**
+- ServiceCatalog
+- ServiceSpecification
+
+#### TMF634 - Resource Catalog Management API
+
+Manages resource catalogs and resource specifications.
+
+**Key Resources:**
+- ResourceCatalog
+- ResourceSpecification
+
+#### TMF679 - Product Offering Qualification API
+
+Evaluates whether a product offering can be sold to a customer (eligibility / qualification).
+
+**Key Resources:**
+- ProductOfferingQualification
+- ProductOfferingQualificationItem
+
+#### TMF621 - Trouble Ticket Management API
 
 **Status:** ✅ Implemented
 
@@ -405,7 +430,7 @@ Manages customer service tickets and issues. Provides standardized interface for
 - `PATCH /tmf-api/troubleTicket/v4/troubleTicket/{id}` - Update trouble ticket
 - `DELETE /tmf-api/troubleTicket/v4/troubleTicket/{id}` - Delete trouble ticket
 
-#### TMF634 - Quote Management API
+#### TMF648 - Quote Management API
 
 **Status:** ✅ Implemented
 
@@ -432,12 +457,12 @@ Manages price quotes for products and services before orders are placed. Enables
 ### Total Implemented APIs: 21
 
 - **Phase 1 (Product Domain):** 3 APIs (TMF620, TMF622, TMF637)
-- **Phase 2 (Customer & User Domain):** 4 APIs (TMF629, TMF678, TMF679, TMF688)
+- **Phase 2 (Customer & User Domain):** 4 APIs (TMF629, TMF678, TMF677, TMF646)
 - **Phase 3 (Service Lifecycle):** 4 APIs (TMF641, TMF638, TMF640, TMF702)
 - **Phase 4 (Resource Domain):** 2 APIs (TMF639, TMF645)
 - **Phase 5 (Revenue Management):** 2 APIs (TMF635, TMF668)
 - **Phase 6 (Security, Party & Identity):** 2 APIs (TMF632, TMF669)
-- **Phase 7 (Additional APIs):** 2 APIs (TMF633, TMF634)
+- **Phase 7 (Additional APIs):** 5 APIs (TMF621, TMF648, TMF633, TMF634, TMF679)
 - **Other APIs:** 2 APIs (TMF642, TMF656)
 
 ## Compliance
@@ -461,8 +486,8 @@ This project aims for full compliance with TM Forum Open API specifications. All
 - [TMF637 Specification](https://www.tmforum.org/open-apis/)
 - [TMF629 Specification](https://www.tmforum.org/open-apis/)
 - [TMF678 Specification](https://www.tmforum.org/open-apis/)
-- [TMF679 Specification](https://www.tmforum.org/open-apis/)
-- [TMF688 Specification](https://www.tmforum.org/open-apis/)
+- [TMF677 Specification](https://www.tmforum.org/open-apis/)
+- [TMF646 Specification](https://www.tmforum.org/open-apis/)
 - [TMF641 Specification](https://www.tmforum.org/open-apis/)
 - [TMF638 Specification](https://www.tmforum.org/open-apis/)
 - [TMF640 Specification](https://www.tmforum.org/open-apis/)

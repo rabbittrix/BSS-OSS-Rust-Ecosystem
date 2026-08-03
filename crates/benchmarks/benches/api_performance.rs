@@ -23,7 +23,7 @@ fn benchmark_api_response_times(c: &mut Criterion) {
             "/tmf-api/productOrderingManagement/v4/productOrder",
         ),
         ("GET /bill", "/tmf-api/customerBillManagement/v4/bill"),
-        ("GET /usage", "/tmf-api/customerUsageManagement/v4/usage"),
+        ("GET /usage", "/tmf-api/usageConsumptionManagement/v4/usageConsumption"),
         (
             "GET /appointment",
             "/tmf-api/appointmentManagement/v4/appointment",

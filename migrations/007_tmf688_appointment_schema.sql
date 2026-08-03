@@ -1,4 +1,4 @@
--- TMF688 Appointment Management API Schema
+-- TMF646 Appointment Management API Schema
 -- Appointments table
 CREATE TABLE
     IF NOT EXISTS appointments (
@@ -58,8 +58,8 @@ CREATE INDEX IF NOT EXISTS idx_appointment_related_parties_appointment_id ON app
 CREATE INDEX IF NOT EXISTS idx_appointment_contact_mediums_appointment_id ON appointment_contact_mediums (appointment_id);
 
 -- Comments
-COMMENT ON TABLE appointments IS 'TMF688 Appointments - Scheduling technician visits, installations, etc.';
+COMMENT ON TABLE appointments IS 'TMF646 Appointments - Scheduling technician visits, installations, etc.';
 
-COMMENT ON TABLE appointment_related_parties IS 'TMF688 Appointment Related Parties - Parties related to appointments';
+COMMENT ON TABLE appointment_related_parties IS 'TMF646 Appointment Related Parties - Parties related to appointments';
 
-COMMENT ON TABLE appointment_contact_mediums IS 'TMF688 Appointment Contact Mediums - Contact information for appointments';
+COMMENT ON TABLE appointment_contact_mediums IS 'TMF646 Appointment Contact Mediums - Contact information for appointments';

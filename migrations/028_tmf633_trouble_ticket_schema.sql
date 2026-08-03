@@ -1,4 +1,4 @@
--- TMF633 Trouble Ticket Management schema
+-- TMF621 Trouble Ticket Management schema
 -- Create trouble_tickets table
 CREATE TABLE
     IF NOT EXISTS trouble_tickets (
@@ -40,7 +40,7 @@ CREATE INDEX IF NOT EXISTS idx_trouble_tickets_assigned_to ON trouble_tickets (a
 CREATE INDEX IF NOT EXISTS idx_trouble_tickets_created_at ON trouble_tickets (created_at);
 
 -- Add comments
-COMMENT ON TABLE trouble_tickets IS 'TMF633 Trouble Ticket Management - Customer service tickets and issues';
+COMMENT ON TABLE trouble_tickets IS 'TMF621 Trouble Ticket Management - Customer service tickets and issues';
 
 COMMENT ON COLUMN trouble_tickets.status IS 'Ticket status: SUBMITTED, ACKNOWLEDGED, IN_PROGRESS, RESOLVED, CLOSED, CANCELLED';
 

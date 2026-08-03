@@ -10,6 +10,10 @@ use bss_oss_utils::init_logger;
 use graphql_api::create_schema;
 use prometheus::{Counter, Gauge, Histogram, Registry, TextEncoder};
 use tmf620_catalog::{db::init_db, models::*};
+use tmf621_trouble_ticket::models::{
+    CreateTroubleTicketRequest, TroubleTicket, TroubleTicketPriority, TroubleTicketStatus,
+    TroubleTicketType, UpdateTroubleTicketRequest,
+};
 use tmf622_ordering::models::{
     CreateOrderItemRequest, CreateProductOrderRequest, OrderItem, OrderState,
     ProductOfferingRef as Tmf622ProductOfferingRef, ProductOrder,
@@ -29,13 +33,13 @@ use tmf632_party::models::{
     CreateRelatedPartyRequest as Tmf632CreateRelatedPartyRequest, Party, PartyState, PartyType,
     RelatedParty as Tmf632RelatedParty,
 };
-use tmf633_trouble_ticket::models::{
-    CreateTroubleTicketRequest, TroubleTicket, TroubleTicketPriority, TroubleTicketStatus,
-    TroubleTicketType, UpdateTroubleTicketRequest,
+use tmf633_service_catalog::models::{
+    CreateServiceCatalogRequest, CreateServiceSpecificationRequest, ServiceCatalog,
+    ServiceSpecification, ServiceSpecificationRef as Tmf633ServiceSpecificationRef,
 };
-use tmf634_quote::models::{
-    CreateQuoteRequest, Quote, QuoteItem, QuoteState, RelatedParty as Tmf634RelatedParty,
-    UpdateQuoteRequest,
+use tmf634_resource_catalog::models::{
+    CreateResourceCatalogRequest, CreateResourceSpecificationRequest, ResourceCatalog,
+    ResourceSpecification, ResourceSpecificationRef as Tmf634ResourceSpecificationRef,
 };
 use tmf635_usage::models::{
     CreateRelatedPartyRequest as Tmf635CreateRelatedPartyRequest, CreateUsageRequest,
@@ -79,6 +83,16 @@ use tmf645_resource_order::models::{
     ResourceOrderItem, ResourceOrderState, ResourceRef as Tmf645ResourceRef,
     ResourceSpecificationRef as Tmf645ResourceSpecificationRef,
 };
+use tmf646_appointment::models::{
+    Appointment, AppointmentState, ContactMedium as Tmf688ContactMedium, CreateAppointmentRequest,
+    CreateContactMediumRequest as Tmf688CreateContactMediumRequest,
+    CreateRelatedPartyRequest as Tmf688CreateRelatedPartyRequest,
+    RelatedParty as Tmf688RelatedParty,
+};
+use tmf648_quote::models::{
+    CreateQuoteRequest, Quote, QuoteItem, QuoteState, RelatedParty as Tmf648RelatedParty,
+    UpdateQuoteRequest,
+};
 use tmf656_slice::models::{
     CreateNetworkFunctionRefRequest, CreateNetworkSliceRequest, CreateSLAParametersRequest,
     NetworkFunctionRef, NetworkSlice, SLAParameters, SliceState, SliceType,
@@ -94,20 +108,19 @@ use tmf669_identity::models::{
     CreateCredentialRequest, CreateIdentityRequest, Credential, CredentialType, Identity,
     IdentityState, PartyRef as Tmf669PartyRef,
 };
+use tmf677_usage::models::{
+    CreateCustomerUsageRequest, CreateRelatedPartyRequest as Tmf679CreateRelatedPartyRequest,
+    CustomerUsage, RelatedParty as Tmf679RelatedParty, UsageState as Tmf679UsageState,
+};
 use tmf678_billing::models::{
     BillItem, BillState, CreateBillItemRequest, CreateCustomerBillRequest,
     CreateRelatedPartyRequest as Tmf678CreateRelatedPartyRequest, CustomerBill, Money as BillMoney,
     ProductOfferingRef as Tmf678ProductOfferingRef, RelatedParty as Tmf678RelatedParty,
 };
-use tmf679_usage::models::{
-    CreateCustomerUsageRequest, CreateRelatedPartyRequest as Tmf679CreateRelatedPartyRequest,
-    CustomerUsage, RelatedParty as Tmf679RelatedParty, UsageState as Tmf679UsageState,
-};
-use tmf688_appointment::models::{
-    Appointment, AppointmentState, ContactMedium as Tmf688ContactMedium, CreateAppointmentRequest,
-    CreateContactMediumRequest as Tmf688CreateContactMediumRequest,
-    CreateRelatedPartyRequest as Tmf688CreateRelatedPartyRequest,
-    RelatedParty as Tmf688RelatedParty,
+use tmf679_product_offering_qualification::models::{
+    CreateProductOfferingQualificationRequest, ProductOfferingQualification,
+    ProductOfferingQualificationItem, ProductOfferingRef as Tmf679ProductOfferingRef,
+    QualificationResult,
 };
 use tmf702_resource_activation::models::{
     ConfigurationParameter as Tmf702ConfigurationParameter,
@@ -145,13 +158,13 @@ use utoipa_swagger_ui::SwaggerUi;
         tmf678_billing::handlers::get_bill_by_id,
         tmf678_billing::handlers::create_bill,
         // TMF679
-        tmf679_usage::handlers::get_usages,
-        tmf679_usage::handlers::get_usage_by_id,
-        tmf679_usage::handlers::create_usage,
+        tmf677_usage::handlers::get_usages,
+        tmf677_usage::handlers::get_usage_by_id,
+        tmf677_usage::handlers::create_usage,
         // TMF688
-        tmf688_appointment::handlers::get_appointments,
-        tmf688_appointment::handlers::get_appointment_by_id,
-        tmf688_appointment::handlers::create_appointment,
+        tmf646_appointment::handlers::get_appointments,
+        tmf646_appointment::handlers::get_appointment_by_id,
+        tmf646_appointment::handlers::create_appointment,
         // TMF641
         tmf641_service_order::handlers::get_service_orders,
         tmf641_service_order::handlers::get_service_order_by_id,
@@ -204,18 +217,36 @@ use utoipa_swagger_ui::SwaggerUi;
         tmf656_slice::handlers::create_network_slice,
         tmf656_slice::handlers::update_network_slice,
         tmf656_slice::handlers::delete_network_slice,
-        // TMF633
-        tmf633_trouble_ticket::handlers::get_trouble_tickets,
-        tmf633_trouble_ticket::handlers::get_trouble_ticket_by_id,
-        tmf633_trouble_ticket::handlers::create_trouble_ticket,
-        tmf633_trouble_ticket::handlers::update_trouble_ticket,
-        tmf633_trouble_ticket::handlers::delete_trouble_ticket,
-        // TMF634
-        tmf634_quote::handlers::get_quotes,
-        tmf634_quote::handlers::get_quote_by_id,
-        tmf634_quote::handlers::create_quote,
-        tmf634_quote::handlers::update_quote,
-        tmf634_quote::handlers::delete_quote,
+        // TMF621
+        tmf621_trouble_ticket::handlers::get_trouble_tickets,
+        tmf621_trouble_ticket::handlers::get_trouble_ticket_by_id,
+        tmf621_trouble_ticket::handlers::create_trouble_ticket,
+        tmf621_trouble_ticket::handlers::update_trouble_ticket,
+        tmf621_trouble_ticket::handlers::delete_trouble_ticket,
+        // TMF648
+        tmf648_quote::handlers::get_quotes,
+        tmf648_quote::handlers::get_quote_by_id,
+        tmf648_quote::handlers::create_quote,
+        tmf648_quote::handlers::update_quote,
+        tmf648_quote::handlers::delete_quote,
+        // TMF633 Service Catalog
+        tmf633_service_catalog::handlers::list_service_catalogs,
+        tmf633_service_catalog::handlers::get_service_catalog_by_id,
+        tmf633_service_catalog::handlers::create_service_catalog,
+        tmf633_service_catalog::handlers::list_service_specifications,
+        tmf633_service_catalog::handlers::get_service_specification_by_id,
+        tmf633_service_catalog::handlers::create_service_specification,
+        // TMF634 Resource Catalog
+        tmf634_resource_catalog::handlers::list_resource_catalogs,
+        tmf634_resource_catalog::handlers::get_resource_catalog_by_id,
+        tmf634_resource_catalog::handlers::create_resource_catalog,
+        tmf634_resource_catalog::handlers::list_resource_specifications,
+        tmf634_resource_catalog::handlers::get_resource_specification_by_id,
+        tmf634_resource_catalog::handlers::create_resource_specification,
+        // TMF679 Product Offering Qualification
+        tmf679_product_offering_qualification::handlers::list_qualifications,
+        tmf679_product_offering_qualification::handlers::get_qualification_by_id,
+        tmf679_product_offering_qualification::handlers::create_qualification,
     ),
     components(schemas(
         // TMF620
@@ -386,20 +417,38 @@ use utoipa_swagger_ui::SwaggerUi;
         CreateSLAParametersRequest,
         NetworkFunctionRef,
         CreateNetworkFunctionRefRequest,
-        // TMF633
+        // TMF621
         TroubleTicket,
         CreateTroubleTicketRequest,
         UpdateTroubleTicketRequest,
         TroubleTicketStatus,
         TroubleTicketPriority,
         TroubleTicketType,
-        // TMF634
+        // TMF648
         Quote,
         CreateQuoteRequest,
         UpdateQuoteRequest,
         QuoteState,
         QuoteItem,
-        Tmf634RelatedParty,
+        Tmf648RelatedParty,
+        // TMF633
+        ServiceCatalog,
+        ServiceSpecification,
+        CreateServiceCatalogRequest,
+        CreateServiceSpecificationRequest,
+        Tmf633ServiceSpecificationRef,
+        // TMF634
+        ResourceCatalog,
+        ResourceSpecification,
+        CreateResourceCatalogRequest,
+        CreateResourceSpecificationRequest,
+        Tmf634ResourceSpecificationRef,
+        // TMF679
+        ProductOfferingQualification,
+        ProductOfferingQualificationItem,
+        CreateProductOfferingQualificationRequest,
+        QualificationResult,
+        Tmf679ProductOfferingRef,
         // Common
         BaseEntity,
         LifecycleStatus,
@@ -411,8 +460,8 @@ use utoipa_swagger_ui::SwaggerUi;
         (name = "TMF637", description = "Product Inventory Management API"),
         (name = "TMF629", description = "Customer Management API"),
         (name = "TMF678", description = "Customer Bill Management API"),
-        (name = "TMF679", description = "Customer Usage Management API"),
-        (name = "TMF688", description = "Appointment Management API"),
+        (name = "TMF677", description = "Usage Consumption Management API"),
+        (name = "TMF646", description = "Appointment Management API"),
         (name = "TMF641", description = "Service Order Management API"),
         (name = "TMF638", description = "Service Inventory Management API"),
         (name = "TMF640", description = "Service Activation & Configuration API"),
@@ -425,12 +474,15 @@ use utoipa_swagger_ui::SwaggerUi;
         (name = "TMF669", description = "Identity & Credential Management API"),
         (name = "TMF642", description = "Alarm Management API"),
         (name = "TMF656", description = "Slice Management API"),
-        (name = "TMF633", description = "Trouble Ticket Management API"),
-        (name = "TMF634", description = "Quote Management API")
+        (name = "TMF621", description = "Trouble Ticket Management API"),
+        (name = "TMF648", description = "Quote Management API"),
+        (name = "TMF633", description = "Service Catalog Management API"),
+        (name = "TMF634", description = "Resource Catalog Management API"),
+        (name = "TMF679", description = "Product Offering Qualification API")
     ),
     info(
         title = "BSS/OSS Rust - TM Forum Open APIs",
-        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF679, TMF688, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF633, TMF634)",
+        description = "TM Forum Open API implementation for BSS/OSS ecosystem (TMF620, TMF622, TMF637, TMF629, TMF678, TMF677, TMF646, TMF641, TMF638, TMF640, TMF702, TMF639, TMF645, TMF635, TMF668, TMF632, TMF669, TMF642, TMF656, TMF621, TMF648, TMF633, TMF634, TMF679)",
         version = "0.3.0",
         contact(
             name = "Roberto de Souza",
@@ -582,8 +634,8 @@ async fn main() -> std::io::Result<()> {
     log::info!("   - TMF637: Product Inventory Management");
     log::info!("   - TMF629: Customer Management");
     log::info!("   - TMF678: Customer Bill Management");
-    log::info!("   - TMF679: Customer Usage Management");
-    log::info!("   - TMF688: Appointment Management");
+    log::info!("   - TMF677: Usage Consumption Management");
+    log::info!("   - TMF646: Appointment Management");
     log::info!("   - TMF641: Service Order Management");
     log::info!("   - TMF638: Service Inventory Management");
     log::info!("   - TMF640: Service Activation & Configuration");
@@ -596,8 +648,11 @@ async fn main() -> std::io::Result<()> {
     log::info!("   - TMF669: Identity & Credential Management");
     log::info!("   - TMF642: Alarm Management");
     log::info!("   - TMF656: Slice Management");
-    log::info!("   - TMF633: Trouble Ticket Management");
-    log::info!("   - TMF634: Quote Management");
+    log::info!("   - TMF621: Trouble Ticket Management");
+    log::info!("   - TMF648: Quote Management");
+    log::info!("   - TMF633: Service Catalog Management");
+    log::info!("   - TMF634: Resource Catalog Management");
+    log::info!("   - TMF679: Product Offering Qualification");
     log::info!("   - GraphQL: http://{}:{}/graphql", host, port);
     log::info!(
         "📚 Swagger UI will be available at http://{}:{}/swagger-ui",
@@ -673,8 +728,8 @@ async fn main() -> std::io::Result<()> {
             .configure(tmf637_inventory::api::configure_routes)
             .configure(tmf629_customer::api::configure_routes)
             .configure(tmf678_billing::api::configure_routes)
-            .configure(tmf679_usage::api::configure_routes)
-            .configure(tmf688_appointment::api::configure_routes)
+            .configure(tmf677_usage::api::configure_routes)
+            .configure(tmf646_appointment::api::configure_routes)
             .configure(tmf641_service_order::api::configure_routes)
             .configure(tmf638_service_inventory::api::configure_routes)
             .configure(tmf640_service_activation::api::configure_routes)
@@ -687,8 +742,11 @@ async fn main() -> std::io::Result<()> {
             .configure(tmf669_identity::api::configure_routes)
             .configure(tmf642_alarm::api::configure_routes)
             .configure(tmf656_slice::api::configure_routes)
-            .configure(tmf633_trouble_ticket::api::configure_routes)
-            .configure(tmf634_quote::api::configure_routes)
+            .configure(tmf621_trouble_ticket::api::configure_routes)
+            .configure(tmf648_quote::api::configure_routes)
+            .configure(tmf633_service_catalog::api::configure_routes)
+            .configure(tmf634_resource_catalog::api::configure_routes)
+            .configure(tmf679_product_offering_qualification::api::configure_routes)
     })
     .bind((host.as_str(), port))?
     .shutdown_timeout(30); // 30 seconds for graceful shutdown

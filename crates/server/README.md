@@ -16,14 +16,15 @@ This project provides a complete, production-ready implementation of TM Forum's 
 
 ## Features
 
-✅ **17 TM Forum APIs Implemented**:
+✅ **TM Forum APIs Implemented**:
 
-- **Phase 1 (Product Domain)**: TMF620 (Catalog), TMF622 (Ordering), TMF637 (Inventory)
-- **Phase 2 (Customer Domain)**: TMF629 (Customer), TMF678 (Billing), TMF679 (Usage), TMF688 (Appointment)
-- **Phase 3 (Service Lifecycle)**: TMF641 (Service Order), TMF638 (Service Inventory), TMF640 (Service Activation), TMF702 (Resource Activation)
-- **Phase 4 (Resource Domain)**: TMF639 (Resource Inventory), TMF645 (Resource Order)
+- **Phase 1 (Product Domain)**: TMF620 (Catalog), TMF622 (Ordering), TMF637 (Inventory), TMF679 (Product Offering Qualification)
+- **Phase 2 (Customer Domain)**: TMF629 (Customer), TMF678 (Billing), TMF677 (Usage Consumption), TMF646 (Appointment)
+- **Phase 3 (Service Lifecycle)**: TMF641 (Service Order), TMF638 (Service Inventory), TMF640 (Service Activation), TMF702 (Resource Activation), TMF633 (Service Catalog)
+- **Phase 4 (Resource Domain)**: TMF639 (Resource Inventory), TMF645 (Resource Order), TMF634 (Resource Catalog)
 - **Phase 5 (Revenue Management)**: TMF635 (Usage), TMF668 (Party Role)
 - **Phase 6 (Security, Party & Identity)**: TMF632 (Party), TMF669 (Identity & Credential)
+- **Assurance / Commercial**: TMF621 (Trouble Ticket), TMF648 (Quote), TMF642 (Alarm), TMF656 (Slice)
 
 ✅ **Production-Ready Features**:
 
@@ -110,8 +111,8 @@ All APIs follow TM Forum Open API standards and are accessible via REST:
 | TMF637  | `/tmf-api/productInventoryManagement/v4`         | Product inventory tracking  |
 | TMF629  | `/tmf-api/customerManagement/v4`                 | Customer profile management |
 | TMF678  | `/tmf-api/customerBillManagement/v4`             | Customer billing            |
-| TMF679  | `/tmf-api/customerUsageManagement/v4`            | Usage records (CDRs)        |
-| TMF688  | `/tmf-api/appointmentManagement/v4`              | Appointment scheduling      |
+| TMF677  | `/tmf-api/usageConsumptionManagement/v4`         | Usage consumption           |
+| TMF646  | `/tmf-api/appointmentManagement/v4`              | Appointment scheduling      |
 | TMF641  | `/tmf-api/serviceOrderingManagement/v4`          | Service order management    |
 | TMF638  | `/tmf-api/serviceInventoryManagement/v4`         | Service inventory           |
 | TMF640  | `/tmf-api/serviceActivationAndConfiguration/v4`  | Service activation          |

@@ -185,7 +185,7 @@ pub mod tmf678_tests {
     }
 }
 
-/// Test helper for TMF679 - Customer Usage Management API
+/// Test helper for TMF677 - Usage Consumption Management API
 pub mod tmf679_tests {
     use super::*;
 
@@ -204,7 +204,7 @@ pub mod tmf679_tests {
         let usage_json = fixtures::create_test_usage_record_json();
         let req = helpers::create_test_request(
             "POST",
-            "/tmf-api/customerUsageManagement/v4/usage",
+            "/tmf-api/usageConsumptionManagement/v4/usageConsumption",
             Some(&usage_json.to_string()),
         );
 
@@ -222,7 +222,7 @@ pub mod tmf679_tests {
     }
 }
 
-/// Test helper for TMF688 - Appointment Management API
+/// Test helper for TMF646 - Appointment Management API
 pub mod tmf688_tests {
     use super::*;
 

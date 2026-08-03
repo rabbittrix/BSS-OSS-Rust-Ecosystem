@@ -1,4 +1,4 @@
--- TMF634 Quote Management API Schema
+-- TMF648 Quote Management API Schema
 -- Quotes table
 CREATE TABLE
     IF NOT EXISTS quotes (
@@ -66,8 +66,8 @@ CREATE INDEX IF NOT EXISTS idx_quote_items_quote_id ON quote_items (quote_id);
 CREATE INDEX IF NOT EXISTS idx_quote_related_parties_quote_id ON quote_related_parties (quote_id);
 
 -- Comments
-COMMENT ON TABLE quotes IS 'TMF634 Quotes - Product and service price quotes';
+COMMENT ON TABLE quotes IS 'TMF648 Quotes - Product and service price quotes';
 
-COMMENT ON TABLE quote_items IS 'TMF634 Quote Items - Individual items within a quote';
+COMMENT ON TABLE quote_items IS 'TMF648 Quote Items - Individual items within a quote';
 
-COMMENT ON TABLE quote_related_parties IS 'TMF634 Quote Related Parties - Customers or parties related to quotes';
+COMMENT ON TABLE quote_related_parties IS 'TMF648 Quote Related Parties - Customers or parties related to quotes';

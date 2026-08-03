@@ -27,8 +27,8 @@ This project aims to revolutionize the BSS/OSS landscape by providing:
 
 - ✅ Implement **TMF629 - Customer Management API**
 - ✅ Implement **TMF678 - Customer Bill Management API**
-- ✅ Implement **TMF679 - Customer Usage Management API**
-- ✅ Implement **TMF688 - Appointment Management API**
+- ✅ Implement **TMF677 - Usage Consumption Management API**
+- ✅ Implement **TMF646 - Appointment Management API**
 
 ## 🧭 Phase 2 Roadmap – Customer & User Domain (High Priority) ✅
 
@@ -46,12 +46,12 @@ These are critical for any commercial BSS:
    - Retrieves bills and billing structures
    - **Why**: Required for customer portals and self-care
 
-3. ✅ **TMF679 – Customer Usage Management**
+3. ✅ **TMF677 – Usage Consumption Management**
 
    - Handles CDRs, usage records, and consumption
    - **Why**: Essential for 5G, IoT, prepaid, and analytics
 
-4. ✅ **TMF688 – Appointment Management**
+4. ✅ **TMF646 – Appointment Management**
    - For scheduling technician visits, installations, etc.
    - **Why**: Critical for field operations and order fulfillment
 
@@ -346,8 +346,8 @@ bss-oss-rust/
 │   │   ├── tmf637_inventory/  # TMF637 Product Inventory API ✅
 │   │   ├── tmf629_customer/   # TMF629 Customer Management API ✅
 │   │   ├── tmf678_billing/    # TMF678 Customer Bill Management API ✅
-│   │   ├── tmf679_usage/      # TMF679 Customer Usage Management API ✅
-│   │   ├── tmf688_appointment/# TMF688 Appointment Management API ✅
+│   │   ├── tmf677_usage/      # TMF677 Usage Consumption Management API ✅
+│   │   ├── tmf646_appointment/# TMF646 Appointment Management API ✅
 │   │   ├── tmf641_service_order/ # TMF641 Service Order Management API ✅
 │   │   ├── tmf638_service_inventory/ # TMF638 Service Inventory Management API ✅
 │   │   ├── tmf640_service_activation/ # TMF640 Service Activation & Configuration API ✅
@@ -359,7 +359,12 @@ bss-oss-rust/
 │   │   ├── tmf632_party/ # TMF632 Party Management API ✅
 │   │   ├── tmf669_identity/ # TMF669 Identity & Credential Management API ✅
 │   │   ├── tmf642_alarm/ # TMF642 Alarm Management API ✅
-│   │   └── tmf656_slice/ # TMF656 Slice Management API ✅
+│   │   ├── tmf656_slice/ # TMF656 Slice Management API ✅
+│   │   ├── tmf621_trouble_ticket/ # TMF621 Trouble Ticket Management API ✅
+│   │   ├── tmf648_quote/ # TMF648 Quote Management API ✅
+│   │   ├── tmf633_service_catalog/ # TMF633 Service Catalog Management API ✅
+│   │   ├── tmf634_resource_catalog/ # TMF634 Resource Catalog Management API ✅
+│   │   └── tmf679_product_offering_qualification/ # TMF679 Product Offering Qualification API ✅
 │   ├── pcm-engine/            # Product Catalog Engine
 │   ├── policy-engine/         # Policy Engine (bundling, eligibility, pricing, SLA)
 │   ├── pcf/                   # PCF / PCRF core (QoS, charging, quota) ✅
@@ -395,8 +400,8 @@ The most strategic choice for interoperability. Adherence to industry standards 
 - **TMF637** - Product Inventory Management API ✅
 - **TMF629** - Customer Management API ✅
 - **TMF678** - Customer Bill Management API ✅
-- **TMF679** - Customer Usage Management API ✅
-- **TMF688** - Appointment Management API ✅
+- **TMF677** - Usage Consumption Management API ✅
+- **TMF646** - Appointment Management API ✅
 - **TMF641** - Service Order Management API ✅
 - **TMF638** - Service Inventory Management API ✅
 - **TMF640** - Service Activation & Configuration API ✅
@@ -409,8 +414,14 @@ The most strategic choice for interoperability. Adherence to industry standards 
 - **TMF669** - Identity & Credential Management API ✅
 - **TMF642** - Alarm Management API ✅
 - **TMF656** - Slice Management API ✅
-- **TMF633** - Trouble Ticket Management API ✅
-- **TMF634** - Quote Management API ✅
+- **TMF621** - Trouble Ticket Management API ✅
+- **TMF648** - Quote Management API ✅
+- **TMF633** - Service Catalog Management API ✅
+- **TMF634** - Resource Catalog Management API ✅
+- **TMF679** - Product Offering Qualification API ✅
+- **TMF633** - Service Catalog Management API ✅
+- **TMF634** - Resource Catalog Management API ✅
+- **TMF679** - Product Offering Qualification API ✅
 
 **Total:** 21 TM Forum APIs Implemented
 
@@ -724,7 +735,7 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 - **GET** `/customerBill/{id}` - Get customer bill by ID (UUID)
 - **POST** `/customerBill` - Create a new customer bill
 
-### TMF679 Customer Usage Management API
+### TMF677 Usage Consumption Management API
 
 **Base URL:** `/tmf-api/customerUsageManagement/v4`
 
@@ -734,7 +745,7 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 - **GET** `/customerUsage/{id}` - Get customer usage by ID (UUID)
 - **POST** `/customerUsage` - Create a new customer usage record
 
-### TMF688 Appointment Management API
+### TMF646 Appointment Management API
 
 **Base URL:** `/tmf-api/appointmentManagement/v4`
 
@@ -808,7 +819,7 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 - **PATCH** `/networkSlice/{id}` - Update a network slice (state, activation_date, termination_date)
 - **DELETE** `/networkSlice/{id}` - Delete a network slice
 
-### TMF633 Trouble Ticket Management API
+### TMF621 Trouble Ticket Management API
 
 **Base URL:** `/tmf-api/troubleTicket/v4`
 
@@ -820,7 +831,7 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 - **PATCH** `/troubleTicket/{id}` - Update a trouble ticket (status, priority, resolution)
 - **DELETE** `/troubleTicket/{id}` - Delete a trouble ticket
 
-### TMF634 Quote Management API
+### TMF648 Quote Management API
 
 **Base URL:** `/tmf-api/quoteManagement/v4`
 
@@ -831,6 +842,31 @@ curl -X GET http://localhost:8080/tmf-api/productCatalogManagement/v4/catalog \
 - **POST** `/quote` - Create a new quote
 - **PATCH** `/quote/{id}` - Update a quote (state, items, pricing)
 - **DELETE** `/quote/{id}` - Delete a quote
+
+### TMF633 Service Catalog Management API
+
+**Base URL:** `/tmf-api/serviceCatalogManagement/v4`
+
+- **GET/POST** `/serviceCatalog` - List / create service catalogs
+- **GET** `/serviceCatalog/{id}` - Get service catalog by ID
+- **GET/POST** `/serviceSpecification` - List / create service specifications
+- **GET** `/serviceSpecification/{id}` - Get service specification by ID
+
+### TMF634 Resource Catalog Management API
+
+**Base URL:** `/tmf-api/resourceCatalogManagement/v4`
+
+- **GET/POST** `/resourceCatalog` - List / create resource catalogs
+- **GET** `/resourceCatalog/{id}` - Get resource catalog by ID
+- **GET/POST** `/resourceSpecification` - List / create resource specifications
+- **GET** `/resourceSpecification/{id}` - Get resource specification by ID
+
+### TMF679 Product Offering Qualification API
+
+**Base URL:** `/tmf-api/productOfferingQualification/v4`
+
+- **GET/POST** `/productOfferingQualification` - List / create qualifications
+- **GET** `/productOfferingQualification/{id}` - Get qualification by ID
 
 ### Example Requests
 
@@ -956,10 +992,10 @@ curl -X POST http://localhost:8080/tmf-api/customerBillManagement/v4/customerBil
   }'
 ```
 
-**Create a customer usage record (TMF679):**
+**Create a usage consumption record (TMF677):**
 
 ```bash
-curl -X POST http://localhost:8080/tmf-api/customerUsageManagement/v4/customerUsage \
+curl -X POST http://localhost:8080/tmf-api/usageConsumptionManagement/v4/usageConsumption \
   -H "Authorization: Bearer <your-token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -975,7 +1011,7 @@ curl -X POST http://localhost:8080/tmf-api/customerUsageManagement/v4/customerUs
   }'
 ```
 
-**Create an appointment (TMF688):**
+**Create an appointment (TMF646):**
 
 ```bash
 curl -X POST http://localhost:8080/tmf-api/appointmentManagement/v4/appointment \
@@ -1255,7 +1291,7 @@ curl -X POST http://localhost:8080/tmf-api/sliceManagement/v4/networkSlice \
   }'
 ```
 
-**Create a trouble ticket (TMF633):**
+**Create a trouble ticket (TMF621):**
 
 ```bash
 curl -X POST http://localhost:8080/tmf-api/troubleTicket/v4/troubleTicket \
@@ -1278,7 +1314,7 @@ curl -X POST http://localhost:8080/tmf-api/troubleTicket/v4/troubleTicket \
   }'
 ```
 
-**Create a quote (TMF634):**
+**Create a quote (TMF648):**
 
 ```bash
 curl -X POST http://localhost:8080/tmf-api/quoteManagement/v4/quote \
@@ -1486,8 +1522,8 @@ Swagger UI provides an interactive interface to test all TMF APIs:
    - **TMF637**: Product Inventory (inventory management)
    - **TMF629**: Customer Management (customers, contact info)
    - **TMF678**: Customer Bill Management (bills, billing structures)
-   - **TMF679**: Customer Usage Management (usage records, CDRs)
-   - **TMF688**: Appointment Management (scheduling, technician visits)
+   - **TMF677**: Usage Consumption Management (usage records, CDRs)
+   - **TMF646**: Appointment Management (scheduling, technician visits)
    - **TMF641**: Service Order Management (service-level orders)
    - **TMF638**: Service Inventory (provisioned services)
    - **TMF640**: Service Activation (service provisioning)
@@ -1500,8 +1536,8 @@ Swagger UI provides an interactive interface to test all TMF APIs:
    - **TMF669**: Identity & Credential Management (OAuth, JWT)
    - **TMF642**: Alarm Management (network alarms, NOC workflows)
    - **TMF656**: Slice Management (5G network slicing)
-   - **TMF633**: Trouble Ticket Management (trouble ticket lifecycle)
-   - **TMF634**: Quote Management (price quotes and quote items)
+   - **TMF621**: Trouble Ticket Management (trouble ticket lifecycle)
+   - **TMF648**: Quote Management (price quotes and quote items)
 
    **Total: 21 TM Forum APIs available via REST and GraphQL**
 
@@ -1535,8 +1571,8 @@ You can use Swagger UI to manually test all endpoints and verify:
 - **`tmf637-inventory`**: TMF637 Product Inventory Management API implementation
 - **`tmf629-customer`**: TMF629 Customer Management API implementation
 - **`tmf678-billing`**: TMF678 Customer Bill Management API implementation
-- **`tmf679-usage`**: TMF679 Customer Usage Management API implementation
-- **`tmf688-appointment`**: TMF688 Appointment Management API implementation
+- **`tmf677-usage`**: TMF677 Usage Consumption Management API implementation
+- **`tmf646-appointment`**: TMF646 Appointment Management API implementation
 - **`tmf641-service-order`**: TMF641 Service Order Management API implementation
 - **`tmf638-service-inventory`**: TMF638 Service Inventory Management API implementation
 - **`tmf640-service-activation`**: TMF640 Service Activation & Configuration API implementation
@@ -1549,8 +1585,13 @@ You can use Swagger UI to manually test all endpoints and verify:
 - **`tmf669-identity`**: TMF669 Identity & Credential Management API implementation
 - **`tmf642-alarm`**: TMF642 Alarm Management API implementation
 - **`tmf656-slice`**: TMF656 Slice Management API implementation
-- **`tmf633-trouble-ticket`**: TMF633 Trouble Ticket Management API implementation
-- **`tmf634-quote`**: TMF634 Quote Management API implementation
+- **`tmf621-trouble-ticket`**: TMF621 Trouble Ticket Management API implementation
+- **`tmf648-quote`**: TMF648 Quote Management API implementation
+- **`tmf633-service-catalog`**: TMF633 Service Catalog Management API implementation
+- **`tmf634-resource-catalog`**: TMF634 Resource Catalog Management API implementation
+- **`tmf679-product-offering-qualification`**: TMF679 Product Offering Qualification API implementation
+- **`tmf677-usage`**: TMF677 Usage Consumption Management API implementation
+- **`tmf646-appointment`**: TMF646 Appointment Management API implementation
 
 ### Core Engine Crates
 
@@ -1628,10 +1669,10 @@ psql -U bssoss -d bssoss -c "SELECT * FROM customers;"
 # Query customer bills (TMF678)
 psql -U bssoss -d bssoss -c "SELECT * FROM customer_bills;"
 
-# Query customer usages (TMF679)
+# Query usage consumption (TMF677)
 psql -U bssoss -d bssoss -c "SELECT * FROM customer_usages;"
 
-# Query appointments (TMF688)
+# Query appointments (TMF646)
 psql -U bssoss -d bssoss -c "SELECT * FROM appointments;"
 
 # Query service orders (TMF641)
