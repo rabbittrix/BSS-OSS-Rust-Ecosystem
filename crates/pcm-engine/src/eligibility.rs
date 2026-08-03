@@ -53,22 +53,63 @@ pub struct EligibilityContext {
     pub customer_attributes: std::collections::HashMap<String, String>,
 }
 
+impl EligibilityContext {
+    pub fn new() -> Self {
+        Self {
+            customer_id: None,
+            customer_segment: None,
+            existing_products: Vec::new(),
+            customer_attributes: std::collections::HashMap::new(),
+        }
+    }
+}
+
+impl Default for EligibilityContext {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Structured eligibility outcome (reason codes for ineligible results).
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct EligibilityOutcome {
+    pub eligible: bool,
+    pub failed_conditions: Vec<String>,
+}
+
 /// Check if a product offering is eligible for a customer
 pub fn is_eligible(rule: &EligibilityRule, context: &EligibilityContext) -> bool {
-    match rule.rule_type {
-        EligibilityRuleType::All => rule
-            .conditions
-            .iter()
-            .all(|condition| evaluate_condition(condition, context)),
-        EligibilityRuleType::Any => rule
-            .conditions
-            .iter()
-            .any(|condition| evaluate_condition(condition, context)),
+    evaluate_eligibility(rule, context).eligible
+}
+
+/// Evaluate eligibility with failure reasons.
+pub fn evaluate_eligibility(
+    rule: &EligibilityRule,
+    context: &EligibilityContext,
+) -> EligibilityOutcome {
+    let mut failed = Vec::new();
+    for condition in &rule.conditions {
+        if !evaluate_condition(condition, context) {
+            failed.push(format!(
+                "{} {:?} {}",
+                condition.field, condition.operator, condition.value
+            ));
+        }
+    }
+
+    let eligible = match rule.rule_type {
+        EligibilityRuleType::All => failed.is_empty(),
+        EligibilityRuleType::Any => failed.len() < rule.conditions.len(),
+    };
+
+    EligibilityOutcome {
+        eligible,
+        failed_conditions: if eligible { Vec::new() } else { failed },
     }
 }
 
 fn evaluate_condition(condition: &EligibilityCondition, context: &EligibilityContext) -> bool {
-    let field_value = get_field_value(&condition.field, context);
+    let field_value = get_field_value(&condition.field, condition, context);
 
     match condition.operator {
         EligibilityConditionOperator::Equals => field_value == condition.value,
@@ -102,18 +143,55 @@ fn evaluate_condition(condition: &EligibilityCondition, context: &EligibilityCon
     }
 }
 
-fn get_field_value(field: &str, context: &EligibilityContext) -> String {
+fn get_field_value(
+    field: &str,
+    condition: &EligibilityCondition,
+    context: &EligibilityContext,
+) -> String {
     match field {
         "customer_segment" => context.customer_segment.clone().unwrap_or_default(),
         "has_product" => {
-            // Check if customer has a specific product
-            // This would need product_id in the condition value
-            "false".to_string()
+            // Condition value is the product offering UUID the customer must own.
+            match Uuid::parse_str(&condition.value) {
+                Ok(id) => {
+                    if context.existing_products.contains(&id) {
+                        condition.value.clone()
+                    } else {
+                        String::new()
+                    }
+                }
+                Err(_) => String::new(),
+            }
         }
+        "product_count" => context.existing_products.len().to_string(),
         _ => context
             .customer_attributes
             .get(field)
             .cloned()
             .unwrap_or_default(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn has_product_condition_works() {
+        let owned = Uuid::new_v4();
+        let rule = EligibilityRule {
+            id: Uuid::new_v4(),
+            product_offering_id: Uuid::new_v4(),
+            rule_type: EligibilityRuleType::All,
+            conditions: vec![EligibilityCondition {
+                field: "has_product".into(),
+                operator: EligibilityConditionOperator::Equals,
+                value: owned.to_string(),
+            }],
+        };
+        let mut ctx = EligibilityContext::new();
+        assert!(!is_eligible(&rule, &ctx));
+        ctx.existing_products.push(owned);
+        assert!(is_eligible(&rule, &ctx));
     }
 }

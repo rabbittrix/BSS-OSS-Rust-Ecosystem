@@ -1,15 +1,18 @@
 [package]
 name = "pcm-engine"
-version.workspace = true
+# Bumped independently for feature-complete PCM releases.
+version = "0.4.0"
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "MIT"
-description = "Product Catalog Engine (PCM) Framework for pricing, eligibility, and bundling rules"
+readme = "README.md"
+description = "Product Catalog Engine (PCM) Framework for pricing, eligibility, bundling, relationships, and catalog versioning"
 repository.workspace = true
 documentation.workspace = true
+keywords = ["pcm", "catalog", "pricing", "telecom", "bss"]
+categories = ["algorithms", "finance"]
 
 [dependencies]
-tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.0" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true

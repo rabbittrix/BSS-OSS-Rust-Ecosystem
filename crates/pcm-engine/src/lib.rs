@@ -21,11 +21,12 @@ pub mod versioning;
 
 pub use bundling::*;
 pub use eligibility::*;
-pub use engine::CatalogEngine;
+pub use engine::{CatalogEngine, QualifyAndPriceResult};
 // Re-export pricing types except TimePeriod to avoid conflict
 pub use pricing::{
-    calculate_final_price, DiscountCondition, DiscountRule, DiscountType, Money, PriceType,
-    PricingConditionOperator, PricingContext, PricingRule,
+    calculate_best_price, calculate_final_price, DiscountCondition, DiscountRule, DiscountType,
+    Money, PriceType, PricingConditionOperator, PricingContext, PricingRule,
+    TimePeriod as PricingTimePeriod,
 };
 pub use rules::{
     evaluate_rule, ActionType, CatalogRule, LogicalOperator, RuleAction, RuleCondition,
@@ -41,4 +42,4 @@ pub use complex_pricing::{
 };
 
 // Re-export versioning types
-pub use versioning::{CatalogVersion, VersionDiff, VersionManager};
+pub use versioning::{CatalogSnapshot, CatalogVersion, VersionDiff, VersionManager};

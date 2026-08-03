@@ -418,12 +418,20 @@ The most strategic choice for interoperability. Adherence to industry standards 
 
 The heart of the BSS. An efficient catalog allows Telcos to innovate quickly in service offerings.
 
+**Crate:** [`pcm-engine`](crates/pcm-engine) **v0.4.0** — [crates.io/crates/pcm-engine](https://crates.io/crates/pcm-engine)
+
 **Features:**
 
-- Pricing rules and calculations
-- Product eligibility validation
-- Bundling and product relationships
-- Catalog versioning and lifecycle management
+- **Pricing rules and calculations** — base + discounts, `valid_for` windows, priority selection, complex models (tiered / volume / subscription / dynamic)
+- **Product eligibility validation** — All/Any rules, segments, attributes, `has_product` ownership, structured failure reasons
+- **Bundling and product relationships** — mandatory / optional / exclusive bundles, selection validation, `DependsOn` / `Excludes` / `Requires`
+- **Catalog versioning and lifecycle** — content snapshots, publish / rollback, content-aware diffs
+
+```bash
+cargo add pcm-engine@0.4.0
+# or from this workspace:
+cargo test -p pcm-engine
+```
 
 #### 3. Service Orchestrator ✅
 
@@ -1536,7 +1544,7 @@ You can use Swagger UI to manually test all endpoints and verify:
 
 ### Core Engine Crates
 
-- **`pcm-engine`**: Product Catalog Engine framework (pricing, eligibility, bundling)
+- **`pcm-engine`**: Product Catalog Engine **v0.4.0** (pricing, eligibility, bundling, relationships, versioning) — [crates.io/crates/pcm-engine](https://crates.io/crates/pcm-engine)
 - **`policy-engine`**: Policy Engine (bundling, eligibility, pricing, network, SLA policies)
 - **`bss-oss-pcf`**: 5G/4G **Policy Control Function** core (QoS, charging rules, quota) — [crates.io/crates/bss-oss-pcf](https://crates.io/crates/bss-oss-pcf)
 - **`bss-oss-pcf-nextgen`**: **Next-generation PCF** HTTP service (REST edge, intent engine, Swagger UI, metrics) — [crates.io/crates/bss-oss-pcf-nextgen](https://crates.io/crates/bss-oss-pcf-nextgen); run with `cargo run -p bss-oss-pcf-nextgen`, UI at `http://127.0.0.1:9080/swagger-ui/`
