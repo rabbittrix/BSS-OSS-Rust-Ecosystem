@@ -80,6 +80,7 @@ pub struct LogicStep {
 }
 
 impl LogicStep {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         flow_id: Uuid,
         seq: u32,

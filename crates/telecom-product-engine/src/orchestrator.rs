@@ -62,6 +62,7 @@ impl<G: TmfGateway> ProductOrchestrator<G> {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     async fn step(
         &self,
         flow_id: Uuid,
@@ -168,7 +169,7 @@ impl<G: TmfGateway + 'static> ProductService for ProductOrchestrator<G> {
             product,
             "TMF654",
             "POST",
-            &format!("/tmf-api/prepayBalanceManagement/v4/prepayBalance/{{id}}/adjust"),
+            "/tmf-api/prepayBalanceManagement/v4/prepayBalance/{id}/adjust",
             LogicStepStatus::Started,
             "Credit monetary prepay balance",
         )
