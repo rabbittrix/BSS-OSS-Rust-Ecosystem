@@ -20,8 +20,34 @@ impl SettlementEngine {
         Self { pool }
     }
 
+    /// Pure revenue-share split (percentage 0–100)
+    pub fn compute_revenue_share(
+        total_revenue: f64,
+        revenue_share_percentage: f64,
+    ) -> Result<(f64, f64), RevenueError> {
+        if !(0.0..=100.0).contains(&revenue_share_percentage) {
+            return Err(RevenueError::Validation(
+                "revenue_share_percentage must be between 0 and 100".to_string(),
+            ));
+        }
+        if total_revenue < 0.0 {
+            return Err(RevenueError::Validation(
+                "total_revenue must be non-negative".to_string(),
+            ));
+        }
+        let partner_share = total_revenue * (revenue_share_percentage / 100.0);
+        let platform_share = total_revenue - partner_share;
+        Ok((partner_share, platform_share))
+    }
+
     /// Create a settlement rule for a partner
     pub async fn create_settlement_rule(&self, rule: SettlementRule) -> Result<Uuid, RevenueError> {
+        if !(0.0..=100.0).contains(&rule.revenue_share_percentage) {
+            return Err(RevenueError::Validation(
+                "revenue_share_percentage must be between 0 and 100".to_string(),
+            ));
+        }
+
         sqlx::query(
             "INSERT INTO settlement_rules (id, partner_id, product_offering_id, 
              revenue_share_percentage, valid_from, valid_to)
@@ -61,7 +87,6 @@ impl SettlementEngine {
             partner_id, period_start, period_end
         );
 
-        // Get all revenue for the period (from charging results)
         let revenue_rows = sqlx::query_as::<_, RevenueRow>(
             "SELECT 
                 cr.total_amount_value as revenue,
@@ -77,10 +102,16 @@ impl SettlementEngine {
         .fetch_all(&self.pool)
         .await?;
 
-        // Get settlement rules for the partner
         let rules = self
             .get_settlement_rules(partner_id, period_start, period_end)
             .await?;
+
+        if rules.is_empty() {
+            return Err(RevenueError::Settlement(format!(
+                "No settlement rules for partner {}",
+                partner_id
+            )));
+        }
 
         let mut total_revenue = 0.0;
         let mut partner_share = 0.0;
@@ -89,19 +120,20 @@ impl SettlementEngine {
             .map(|r| r.currency.clone())
             .unwrap_or_else(|| "USD".to_string());
 
-        // Calculate revenue share for each transaction
+        // Only include revenue rows that match this partner's rules
         for revenue_row in &revenue_rows {
-            total_revenue += revenue_row.revenue;
-
-            // Find applicable settlement rule
-            let applicable_rule = rules.iter().find(|rule| {
-                rule.product_offering_id
-                    .map(|po_id| po_id == revenue_row.product_offering_id)
-                    .unwrap_or(true) // If no product offering specified, rule applies to all
+            let applicable_rule = rules.iter().find(|rule| match rule.product_offering_id {
+                Some(po_id) => po_id == revenue_row.product_offering_id,
+                None => true,
             });
 
             if let Some(rule) = applicable_rule {
-                partner_share += revenue_row.revenue * (rule.revenue_share_percentage / 100.0);
+                total_revenue += revenue_row.revenue;
+                let (share, _) = Self::compute_revenue_share(
+                    revenue_row.revenue,
+                    rule.revenue_share_percentage,
+                )?;
+                partner_share += share;
             }
         }
 
@@ -156,14 +188,33 @@ impl SettlementEngine {
         })
     }
 
+    /// Full workflow helper: calculate → optionally leave for approve/pay
+    pub async fn run_settlement_workflow(
+        &self,
+        partner_id: Uuid,
+        period_start: DateTime<Utc>,
+        period_end: DateTime<Utc>,
+        auto_approve: bool,
+    ) -> Result<PartnerSettlement, RevenueError> {
+        let mut settlement = self
+            .calculate_settlement(partner_id, period_start, period_end)
+            .await?;
+        if auto_approve {
+            self.approve_settlement(settlement.id).await?;
+            settlement.status = SettlementStatus::Approved;
+        }
+        Ok(settlement)
+    }
+
     /// Approve a settlement
     pub async fn approve_settlement(&self, settlement_id: Uuid) -> Result<(), RevenueError> {
         sqlx::query(
             "UPDATE partner_settlements SET status = $1, updated_at = CURRENT_TIMESTAMP
-             WHERE id = $2",
+             WHERE id = $2 AND status = $3",
         )
         .bind(settlement_status_to_string(&SettlementStatus::Approved))
         .bind(settlement_id)
+        .bind(settlement_status_to_string(&SettlementStatus::Calculated))
         .execute(&self.pool)
         .await?;
 
@@ -171,14 +222,32 @@ impl SettlementEngine {
         Ok(())
     }
 
+    /// Reject a settlement
+    pub async fn reject_settlement(&self, settlement_id: Uuid) -> Result<(), RevenueError> {
+        sqlx::query(
+            "UPDATE partner_settlements SET status = $1, updated_at = CURRENT_TIMESTAMP
+             WHERE id = $2 AND status IN ($3, $4)",
+        )
+        .bind(settlement_status_to_string(&SettlementStatus::Rejected))
+        .bind(settlement_id)
+        .bind(settlement_status_to_string(&SettlementStatus::Pending))
+        .bind(settlement_status_to_string(&SettlementStatus::Calculated))
+        .execute(&self.pool)
+        .await?;
+
+        info!("Settlement {} rejected", settlement_id);
+        Ok(())
+    }
+
     /// Mark settlement as paid
     pub async fn mark_settlement_paid(&self, settlement_id: Uuid) -> Result<(), RevenueError> {
         sqlx::query(
             "UPDATE partner_settlements SET status = $1, settlement_date = CURRENT_TIMESTAMP,
-             updated_at = CURRENT_TIMESTAMP WHERE id = $2",
+             updated_at = CURRENT_TIMESTAMP WHERE id = $2 AND status = $3",
         )
         .bind(settlement_status_to_string(&SettlementStatus::Paid))
         .bind(settlement_id)
+        .bind(settlement_status_to_string(&SettlementStatus::Approved))
         .execute(&self.pool)
         .await?;
 
@@ -354,4 +423,21 @@ struct SettlementRuleRow {
     revenue_share_percentage: f64,
     valid_from: DateTime<Utc>,
     valid_to: Option<DateTime<Utc>>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn revenue_share_split() {
+        let (partner, platform) = SettlementEngine::compute_revenue_share(1000.0, 30.0).unwrap();
+        assert!((partner - 300.0).abs() < 1e-9);
+        assert!((platform - 700.0).abs() < 1e-9);
+    }
+
+    #[test]
+    fn invalid_percentage_rejected() {
+        assert!(SettlementEngine::compute_revenue_share(100.0, 150.0).is_err());
+    }
 }

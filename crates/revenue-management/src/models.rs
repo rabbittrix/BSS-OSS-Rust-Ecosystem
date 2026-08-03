@@ -1,6 +1,6 @@
 //! Revenue Management Models
 
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Timelike, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -60,12 +60,54 @@ pub enum RateType {
     TimeBased,
 }
 
-/// Tiered rate
+/// Tiered rate (progressive bands by cumulative quantity)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TieredRate {
     pub min_quantity: f64,
     pub max_quantity: Option<f64>,
     pub rate: f64,
+}
+
+/// Optional context for time-based / peak rating
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RatingContext {
+    /// Event time used for peak/off-peak (UTC hour)
+    pub event_time: DateTime<Utc>,
+    /// Peak multiplier when hour is in peak window (default 1.5)
+    pub peak_multiplier: Option<f64>,
+    /// Off-peak multiplier (default 1.0)
+    pub off_peak_multiplier: Option<f64>,
+    /// Inclusive start hour (0-23) for peak; default 8
+    pub peak_start_hour: Option<u32>,
+    /// Exclusive end hour (0-23) for peak; default 20
+    pub peak_end_hour: Option<u32>,
+}
+
+impl RatingContext {
+    pub fn at(event_time: DateTime<Utc>) -> Self {
+        Self {
+            event_time,
+            peak_multiplier: None,
+            off_peak_multiplier: None,
+            peak_start_hour: None,
+            peak_end_hour: None,
+        }
+    }
+
+    pub fn is_peak(&self) -> bool {
+        let hour = self.event_time.hour();
+        let start = self.peak_start_hour.unwrap_or(8);
+        let end = self.peak_end_hour.unwrap_or(20);
+        hour >= start && hour < end
+    }
+
+    pub fn time_multiplier(&self) -> f64 {
+        if self.is_peak() {
+            self.peak_multiplier.unwrap_or(1.5)
+        } else {
+            self.off_peak_multiplier.unwrap_or(1.0)
+        }
+    }
 }
 
 /// Aggregated usage

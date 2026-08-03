@@ -1,12 +1,15 @@
 [package]
 name = "revenue-management"
-version.workspace = true
+version = "0.4.0"
 edition.workspace = true
 authors = ["Roberto de Souza <rabbittrix@hotmail.com>"]
 license = "MIT"
-description = "Revenue Management System for Charging, Billing, and Partner Settlement"
+readme = "README.md"
+description = "Revenue management: real-time charging, rating, billing cycles, and partner settlements"
 repository.workspace = true
 documentation.workspace = true
+keywords = ["billing", "charging", "telecom", "bss", "settlement"]
+categories = ["finance", "asynchronous"]
 
 [dependencies]
 tmf-apis-core = { path = "../tmf-apis/core", version = "0.3.0" }

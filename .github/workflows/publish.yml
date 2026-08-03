@@ -21,6 +21,7 @@ on:
           - bss-oss-utils
           - bss-oss-pcf-nextgen
           - bss-oss-service-orchestrator
+          - revenue-management
 
 env:
   CARGO_TERM_COLOR: always
@@ -147,6 +148,15 @@ jobs:
           cargo publish -p bss-oss-service-orchestrator --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
           cargo publish -p bss-oss-service-orchestrator --token ${{ secrets.CRATES_IO_TOKEN }}
 
+      - name: Publish revenue-management
+        if: |
+          github.event_name == 'release' ||
+          (github.event_name == 'workflow_dispatch' && 
+           (github.event.inputs.crate == 'all' || github.event.inputs.crate == 'revenue-management'))
+        run: |
+          cargo publish -p revenue-management --token ${{ secrets.CRATES_IO_TOKEN }} --dry-run
+          cargo publish -p revenue-management --token ${{ secrets.CRATES_IO_TOKEN }}
+
       - name: Verify publication
         run: |
           echo "✅ All crates published successfully to crates.io"
@@ -156,6 +166,7 @@ jobs:
           echo "🔗 Check: https://crates.io/crates/bss-oss-utils"
           echo "🔗 Check: https://crates.io/crates/bss-oss-pcf-nextgen"
           echo "🔗 Check: https://crates.io/crates/bss-oss-service-orchestrator"
+          echo "🔗 Check: https://crates.io/crates/revenue-management"
 
       - name: Create GitHub release notes
         if: github.event_name == 'release'
@@ -169,7 +180,8 @@ jobs:
               'pcm-engine',
               'bss-oss-utils',
               'bss-oss-pcf-nextgen',
-              'bss-oss-service-orchestrator'
+              'bss-oss-service-orchestrator',
+              'revenue-management'
             ];
             
             let notes = `# Release ${{ steps.version.outputs.version }}\n\n`;

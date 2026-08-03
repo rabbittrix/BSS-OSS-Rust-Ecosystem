@@ -1,6 +1,6 @@
 //! Billing Cycle Management
 //!
-//! Manages billing cycles and generates bills automatically
+//! Manages billing cycles and generates bills automatically from pre-rated charges.
 
 use crate::error::RevenueError;
 use crate::models::{BillingCycle, CycleStatus, CycleType};
@@ -8,6 +8,7 @@ use crate::rating::RatingEngine;
 use chrono::{DateTime, Duration, Utc};
 use log::{info, warn};
 use sqlx::{FromRow, PgPool};
+use std::sync::Arc;
 use tmf678_billing::{
     CreateBillItemRequest, CreateCustomerBillRequest, CreateRelatedPartyRequest, Money as BillMoney,
 };
@@ -36,7 +37,7 @@ impl BillingCycleManager {
         cycle_type: CycleType,
         start_date: DateTime<Utc>,
     ) -> Result<BillingCycle, RevenueError> {
-        let (end_date, due_date) = self.calculate_cycle_dates(&cycle_type, start_date)?;
+        let (end_date, due_date) = Self::calculate_cycle_dates(&cycle_type, start_date)?;
 
         let cycle_id = Uuid::new_v4();
         sqlx::query(
@@ -71,11 +72,10 @@ impl BillingCycleManager {
         })
     }
 
-    /// Close a billing cycle and generate bill
+    /// Close a billing cycle and generate bill from already-rated charging_results
     pub async fn close_billing_cycle(&self, cycle_id: Uuid) -> Result<Uuid, RevenueError> {
         info!("Closing billing cycle: {}", cycle_id);
 
-        // Get the billing cycle
         let cycle = self.get_billing_cycle(cycle_id).await?;
         if cycle.status != CycleStatus::Open {
             return Err(RevenueError::BillingCycle(
@@ -83,51 +83,33 @@ impl BillingCycleManager {
             ));
         }
 
-        // Aggregate usage for the cycle period
-        let aggregated_usage = self
+        // Use pre-rated charges — do not re-rate (avoids double billing)
+        let charge_rows = self
             .rating_engine
-            .aggregate_usage(
-                cycle.customer_id,
-                None,
-                None,
-                cycle.start_date,
-                cycle.end_date,
-            )
+            .aggregate_charges(cycle.customer_id, cycle.start_date, cycle.end_date)
             .await?;
 
-        // Calculate total charges
         let mut total_amount = 0.0;
+        let mut currency = "USD".to_string();
         let mut bill_items = Vec::new();
 
-        for usage in aggregated_usage {
-            // Rate each aggregated usage
-            let rating_result = self
-                .rating_engine
-                .rate_usage(
-                    usage.product_offering_id,
-                    usage.usage_type.clone(),
-                    usage.total_amount,
-                    usage.unit.clone(),
-                )
-                .await?;
-
-            total_amount += rating_result.charge_amount.value;
-
+        for agg in charge_rows {
+            total_amount += agg.total;
+            currency = agg.currency.clone();
             bill_items.push(CreateBillItemRequest {
                 description: format!(
-                    "{} - {} {}",
-                    usage.usage_type, usage.total_amount, usage.unit
+                    "{} ({} {}) — rated charges",
+                    agg.usage_type, agg.usage_count, agg.unit
                 ),
                 amount: BillMoney {
-                    value: rating_result.charge_amount.value,
-                    unit: rating_result.charge_amount.unit,
+                    value: agg.total,
+                    unit: agg.currency,
                 },
-                quantity: Some(usage.usage_count as i32),
-                product_offering_id: Some(usage.product_offering_id),
+                quantity: Some(agg.usage_count as i32),
+                product_offering_id: agg.product_offering_id,
             });
         }
 
-        // Create the bill
         let bill_request = CreateCustomerBillRequest {
             name: format!("Bill for cycle {}", cycle.start_date.format("%Y-%m-%d")),
             description: Some(format!(
@@ -139,9 +121,9 @@ impl BillingCycleManager {
             due_date: Some(cycle.due_date),
             total_amount: Some(BillMoney {
                 value: total_amount,
-                unit: "USD".to_string(),
+                unit: currency,
             }),
-            tax_included: false,
+            tax_included: true,
             bill_item: Some(bill_items),
             related_party: Some(vec![CreateRelatedPartyRequest {
                 name: "Customer".to_string(),
@@ -153,7 +135,6 @@ impl BillingCycleManager {
             .await
             .map_err(|e| RevenueError::BillingCycle(e.to_string()))?;
 
-        // Update billing cycle status
         let bill_id = bill.base.id;
         sqlx::query(
             "UPDATE billing_cycles SET status = $1, bill_id = $2, updated_at = CURRENT_TIMESTAMP
@@ -166,7 +147,7 @@ impl BillingCycleManager {
         .await?;
 
         info!(
-            "Billing cycle {} closed and bill {} created with total: {} USD",
+            "Billing cycle {} closed and bill {} created with total: {}",
             cycle_id, bill_id, total_amount
         );
 
@@ -254,9 +235,31 @@ impl BillingCycleManager {
         Ok(processed)
     }
 
+    /// Background worker that closes due billing cycles on an interval
+    pub fn start_background_worker(
+        self: Arc<Self>,
+        interval_seconds: u64,
+    ) -> tokio::task::JoinHandle<()> {
+        tokio::spawn(async move {
+            let mut interval =
+                tokio::time::interval(tokio::time::Duration::from_secs(interval_seconds));
+            loop {
+                interval.tick().await;
+                match self.process_due_cycles().await {
+                    Ok(bills) if !bills.is_empty() => {
+                        info!("Auto-generated {} bills from due cycles", bills.len());
+                    }
+                    Ok(_) => {}
+                    Err(e) => {
+                        log::error!("Error processing due billing cycles: {}", e);
+                    }
+                }
+            }
+        })
+    }
+
     /// Calculate cycle dates based on cycle type
-    fn calculate_cycle_dates(
-        &self,
+    pub fn calculate_cycle_dates(
         cycle_type: &CycleType,
         start_date: DateTime<Utc>,
     ) -> Result<(DateTime<Utc>, DateTime<Utc>), RevenueError> {
@@ -277,7 +280,6 @@ impl BillingCycleManager {
     }
 }
 
-/// Helper functions for cycle type conversion
 fn cycle_type_to_string(cycle_type: &CycleType) -> String {
     match cycle_type {
         CycleType::Monthly => "MONTHLY".to_string(),
@@ -317,7 +319,6 @@ fn string_to_cycle_status(s: &str) -> CycleStatus {
     }
 }
 
-/// Internal row structure
 #[derive(Debug, FromRow)]
 struct BillingCycleRow {
     id: Uuid,
@@ -328,4 +329,25 @@ struct BillingCycleRow {
     due_date: DateTime<Utc>,
     status: String,
     bill_id: Option<Uuid>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn monthly_cycle_dates() {
+        let start = Utc::now();
+        let (end, due) = BillingCycleManager::calculate_cycle_dates(&CycleType::Monthly, start)
+            .unwrap();
+        assert_eq!((end - start).num_days(), 30);
+        assert_eq!((due - end).num_days(), 15);
+    }
+
+    #[test]
+    fn custom_cycle_requires_explicit_dates() {
+        let err = BillingCycleManager::calculate_cycle_dates(&CycleType::Custom, Utc::now())
+            .unwrap_err();
+        assert!(matches!(err, RevenueError::Configuration(_)));
+    }
 }

@@ -3,17 +3,22 @@
 //! Processes usage events in real-time and applies charging rules
 
 use crate::error::RevenueError;
-use crate::models::{ChargingRequest, ChargingResult, Money};
+use crate::models::{ChargingRequest, ChargingResult, Money, RatingContext};
 use crate::rating::RatingEngine;
+use bss_oss_event_bus::events::EventEnvelope;
+use bss_oss_event_bus::publisher::EventPublisher;
 use chrono::Utc;
 use log::info;
 use sqlx::{FromRow, PgPool};
+use std::sync::Arc;
+use tmf635_usage::models::Usage;
 use uuid::Uuid;
 
 /// Charging engine for real-time usage processing
 pub struct ChargingEngine {
     pool: PgPool,
     rating_engine: RatingEngine,
+    event_publisher: Option<Arc<dyn EventPublisher>>,
 }
 
 impl ChargingEngine {
@@ -23,28 +28,91 @@ impl ChargingEngine {
         Self {
             pool,
             rating_engine: RatingEngine::new(pool_clone),
+            event_publisher: None,
         }
+    }
+
+    /// Attach an event publisher for `usage.charged` notifications
+    pub fn with_event_publisher(mut self, publisher: Arc<dyn EventPublisher>) -> Self {
+        self.event_publisher = Some(publisher);
+        self
+    }
+
+    /// Access the rating engine (e.g. to register in-memory rules)
+    pub fn rating_engine(&self) -> &RatingEngine {
+        &self.rating_engine
+    }
+
+    /// Charge from a TMF635 Usage record (real-time usage event integration)
+    pub async fn charge_usage_event(&self, usage: &Usage) -> Result<ChargingResult, RevenueError> {
+        let product_offering_id = usage
+            .product_offering
+            .as_ref()
+            .map(|p| p.id)
+            .ok_or_else(|| {
+                RevenueError::Validation("usage missing product_offering".to_string())
+            })?;
+
+        let customer_id = usage
+            .related_party
+            .as_ref()
+            .and_then(|parties| {
+                parties
+                    .iter()
+                    .find(|p| p.role.eq_ignore_ascii_case("customer"))
+                    .map(|p| p.id)
+            })
+            .ok_or_else(|| RevenueError::Validation("usage missing customer party".to_string()))?;
+
+        let request = ChargingRequest {
+            usage_id: usage.base.id,
+            customer_id,
+            product_offering_id,
+            usage_type: usage
+                .usage_type
+                .clone()
+                .unwrap_or_else(|| "USAGE".to_string()),
+            amount: usage.amount.unwrap_or(0.0),
+            unit: usage.unit.clone().unwrap_or_else(|| "UNIT".to_string()),
+            start_date: usage.start_date.or(usage.usage_date).unwrap_or_else(Utc::now),
+            end_date: usage.end_date,
+        };
+
+        let context = usage
+            .usage_date
+            .or(usage.start_date)
+            .map(RatingContext::at);
+
+        self.charge_with_context(request, context).await
     }
 
     /// Process a charging request in real-time
     pub async fn charge(&self, request: ChargingRequest) -> Result<ChargingResult, RevenueError> {
+        self.charge_with_context(request, None).await
+    }
+
+    /// Charge with optional rating context (time-based peak/off-peak)
+    pub async fn charge_with_context(
+        &self,
+        request: ChargingRequest,
+        context: Option<RatingContext>,
+    ) -> Result<ChargingResult, RevenueError> {
         info!(
             "Processing real-time charge for usage_id: {}, customer_id: {}",
             request.usage_id, request.customer_id
         );
 
-        // Rate the usage
         let rating_result = self
             .rating_engine
-            .rate_usage(
+            .rate_usage_with_context(
                 request.product_offering_id,
                 request.usage_type.clone(),
                 request.amount,
                 request.unit.clone(),
+                context,
             )
             .await?;
 
-        // Calculate tax (simplified - in production, this would use tax rules)
         let tax_amount = self.calculate_tax(rating_result.charge_amount.value)?;
 
         let charge_amount_value = rating_result.charge_amount.value;
@@ -54,8 +122,7 @@ impl ChargingEngine {
             unit: charge_amount_unit.clone(),
         };
 
-        // Store the charging result
-        let rating_id = Uuid::new_v4();
+        let rating_id = rating_result.rating_rule_id;
         let charge_amount = Money {
             value: charge_amount_value,
             unit: charge_amount_unit.clone(),
@@ -70,7 +137,6 @@ impl ChargingEngine {
         )
         .await?;
 
-        // Update usage record state to "Rated"
         self.update_usage_state(request.usage_id, "RATED").await?;
 
         let result = ChargingResult {
@@ -83,6 +149,8 @@ impl ChargingEngine {
             timestamp: Utc::now(),
         };
 
+        self.publish_charged_event(&result).await;
+
         info!(
             "Charging completed for usage_id: {}, total_amount: {} {}",
             request.usage_id, result.total_amount.value, result.total_amount.unit
@@ -91,9 +159,40 @@ impl ChargingEngine {
         Ok(result)
     }
 
-    /// Calculate tax (simplified implementation)
+    /// Charge a batch of usage events
+    pub async fn charge_batch(
+        &self,
+        requests: Vec<ChargingRequest>,
+    ) -> Result<Vec<ChargingResult>, RevenueError> {
+        let mut results = Vec::with_capacity(requests.len());
+        for request in requests {
+            results.push(self.charge(request).await?);
+        }
+        Ok(results)
+    }
+
+    async fn publish_charged_event(&self, result: &ChargingResult) {
+        let Some(publisher) = &self.event_publisher else {
+            return;
+        };
+        let data = match serde_json::to_value(result) {
+            Ok(v) => v,
+            Err(e) => {
+                log::warn!("Failed to serialize charging result for event: {}", e);
+                return;
+            }
+        };
+        let event = EventEnvelope::new(
+            "usage.charged".to_string(),
+            "revenue-management".to_string(),
+            data,
+        );
+        if let Err(e) = publisher.publish("usage.charged", event).await {
+            log::warn!("Failed to publish usage.charged event: {}", e);
+        }
+    }
+
     fn calculate_tax(&self, amount: f64) -> Result<Money, RevenueError> {
-        // Default tax rate of 10% - in production, this would be configurable
         let tax_rate = 0.10;
         Ok(Money {
             value: amount * tax_rate,
@@ -101,7 +200,6 @@ impl ChargingEngine {
         })
     }
 
-    /// Store charging result in database
     async fn store_charging_result(
         &self,
         usage_id: Uuid,
@@ -141,7 +239,6 @@ impl ChargingEngine {
         Ok(())
     }
 
-    /// Update usage record state
     async fn update_usage_state(&self, usage_id: Uuid, state: &str) -> Result<(), RevenueError> {
         sqlx::query("UPDATE usages SET state = $1, last_update = CURRENT_TIMESTAMP WHERE id = $2")
             .bind(state)
@@ -191,7 +288,6 @@ impl ChargingEngine {
     }
 }
 
-/// Internal row structure for charging results
 #[derive(Debug, FromRow)]
 struct ChargingResultRow {
     usage_id: Uuid,

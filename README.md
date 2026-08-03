@@ -145,8 +145,8 @@ Beyond the TMF APIs, comprehensive revenue management capabilities have been imp
 3. ✅ **Billing Cycle Management**
 
    - Manages billing cycles (Monthly, Quarterly, Annually, Weekly)
-   - Automatically closes cycles and generates bills
-   - Aggregates usage and applies rating for bill generation
+   - Automatically closes cycles and generates bills from pre-rated charges
+   - Background worker for due cycles
    - Batch processing of due cycles
 
 4. ✅ **Partner Settlement Workflows**
@@ -450,9 +450,9 @@ cargo add bss-oss-service-orchestrator@0.4.0
 cargo test -p bss-oss-service-orchestrator
 ```
 
-#### 4. Revenue Management System ✅
+#### 4. Revenue Management System ✅ (`revenue-management` 0.4.0)
 
-Comprehensive revenue management for charging, billing, and partner settlements.
+Comprehensive revenue management for charging, billing, and partner settlements. **Implemented** and published on [crates.io](https://crates.io/crates/revenue-management).
 
 **Features:**
 
@@ -460,6 +460,11 @@ Comprehensive revenue management for charging, billing, and partner settlements.
 - Usage aggregation and rating engine with multiple rate types
 - Billing cycle management with automatic bill generation
 - Partner settlement workflows with revenue sharing
+
+```bash
+cargo add revenue-management@0.4.0
+cargo test -p revenue-management
+```
 
 #### 5. Security System ✅
 
@@ -1556,7 +1561,7 @@ You can use Swagger UI to manually test all endpoints and verify:
 - **`order-orchestrator`**: Order orchestration (decomposition, dependencies, state management)
 - **`service-orchestrator`**: Service lifecycle orchestrator (`bss-oss-service-orchestrator` 0.4.0 — workflows, dependency graph, auto-activation, background worker) ✅
 - **`resource-management`**: Resource management (capacity, reservation, network topology)
-- **`revenue-management`**: Revenue management system (charging, rating, billing cycles, settlements) ✅
+- **`revenue-management`**: Revenue management (`revenue-management` 0.4.0 — charging, rating, billing cycles, settlements) ✅
 - **`security`**: Security system (OAuth 2.0/OIDC, MFA, RBAC, audit logging) ✅
 
 ### Infrastructure Crates
