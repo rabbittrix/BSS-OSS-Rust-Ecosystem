@@ -338,16 +338,16 @@ mod tests {
     #[test]
     fn monthly_cycle_dates() {
         let start = Utc::now();
-        let (end, due) = BillingCycleManager::calculate_cycle_dates(&CycleType::Monthly, start)
-            .unwrap();
+        let (end, due) =
+            BillingCycleManager::calculate_cycle_dates(&CycleType::Monthly, start).unwrap();
         assert_eq!((end - start).num_days(), 30);
         assert_eq!((due - end).num_days(), 15);
     }
 
     #[test]
     fn custom_cycle_requires_explicit_dates() {
-        let err = BillingCycleManager::calculate_cycle_dates(&CycleType::Custom, Utc::now())
-            .unwrap_err();
+        let err =
+            BillingCycleManager::calculate_cycle_dates(&CycleType::Custom, Utc::now()).unwrap_err();
         assert!(matches!(err, RevenueError::Configuration(_)));
     }
 }

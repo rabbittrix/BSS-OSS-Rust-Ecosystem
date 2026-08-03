@@ -39,8 +39,10 @@ pub struct ServiceOrchestrator {
 impl ServiceOrchestrator {
     pub fn new(pool: PgPool) -> Self {
         let dependency_graph = Arc::new(tokio::sync::RwLock::new(ServiceDependencyGraph::new()));
-        let activation_engine =
-            Arc::new(ServiceActivationEngine::new(pool.clone(), dependency_graph.clone()));
+        let activation_engine = Arc::new(ServiceActivationEngine::new(
+            pool.clone(),
+            dependency_graph.clone(),
+        ));
         Self {
             pool: Arc::new(pool),
             activation_engine,
@@ -54,8 +56,10 @@ impl ServiceOrchestrator {
             .await
             .map_err(OrchestratorError::Database)?;
         let dependency_graph = Arc::new(tokio::sync::RwLock::new(dependency_graph));
-        let activation_engine =
-            Arc::new(ServiceActivationEngine::new(pool.clone(), dependency_graph.clone()));
+        let activation_engine = Arc::new(ServiceActivationEngine::new(
+            pool.clone(),
+            dependency_graph.clone(),
+        ));
         Ok(Self {
             pool: Arc::new(pool),
             activation_engine,
@@ -222,7 +226,8 @@ impl ServiceOrchestrator {
                         .find(|t| {
                             matches!(
                                 t.task_type,
-                                ServiceTaskType::ExecuteActivation | ServiceTaskType::CreateActivation
+                                ServiceTaskType::ExecuteActivation
+                                    | ServiceTaskType::CreateActivation
                             ) && t.activation_id.is_some()
                         })
                         .and_then(|t| t.activation_id)
@@ -309,10 +314,12 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
         {
             let mut dependency_graph = self.dependency_graph.write().await;
             for spec_id in &service_specs {
-                let dependencies =
-                    ServiceDependencyGraph::load_dependencies_for_spec(self.pool.as_ref(), *spec_id)
-                        .await
-                        .map_err(OrchestratorError::Database)?;
+                let dependencies = ServiceDependencyGraph::load_dependencies_for_spec(
+                    self.pool.as_ref(),
+                    *spec_id,
+                )
+                .await
+                .map_err(OrchestratorError::Database)?;
                 dependency_graph.add_service_spec(*spec_id, dependencies);
                 dependency_graph.ensure_node(*spec_id);
             }
@@ -346,7 +353,9 @@ impl ServiceOrchestratorTrait for ServiceOrchestrator {
             if context.state.is_terminal() {
                 break;
             }
-            let progressed = self.process_one_pass(&mut context, service_order_id).await?;
+            let progressed = self
+                .process_one_pass(&mut context, service_order_id)
+                .await?;
             if progressed == 0 {
                 break;
             }

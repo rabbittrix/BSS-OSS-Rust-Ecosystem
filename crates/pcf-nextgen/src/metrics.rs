@@ -44,5 +44,7 @@ impl PcfMetrics {
 pub fn gather(registry: &Registry) -> String {
     let encoder = TextEncoder::new();
     let metric_families = registry.gather();
-    encoder.encode_to_string(&metric_families).unwrap_or_default()
+    encoder
+        .encode_to_string(&metric_families)
+        .unwrap_or_default()
 }

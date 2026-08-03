@@ -6,7 +6,9 @@ use actix_web::http::StatusCode;
 use actix_web::{test, web, App};
 use bss_oss_pcf::PcfEngine;
 use bss_oss_pcf_nextgen::adapters::http::{configure_routes, AppState};
-use bss_oss_pcf_nextgen::application::orchestrator::{seed_demo_subscriber, NextGenPcfOrchestrator};
+use bss_oss_pcf_nextgen::application::orchestrator::{
+    seed_demo_subscriber, NextGenPcfOrchestrator,
+};
 use bss_oss_pcf_nextgen::application::PolicyMarketplace;
 use bss_oss_pcf_nextgen::metrics::PcfMetrics;
 use prometheus::Registry;
@@ -121,7 +123,9 @@ async fn get_demo_ar_vr_returns_policy_decision() {
             .configure(configure_routes),
     )
     .await;
-    let req = test::TestRequest::get().uri("/demo/ar-vr/policy").to_request();
+    let req = test::TestRequest::get()
+        .uri("/demo/ar-vr/policy")
+        .to_request();
     let resp = test::call_service(&app, req).await;
     assert_eq!(resp.status(), StatusCode::OK);
     let bytes = test::read_body(resp).await;

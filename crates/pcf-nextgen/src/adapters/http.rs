@@ -14,7 +14,9 @@ use crate::application::monetization_engine::MonetizationEngine;
 use crate::application::orchestrator::{sample_ar_vr_request, NextGenPcfOrchestrator};
 use crate::application::twin::DigitalTwin;
 use crate::application::PolicyMarketplace;
-use crate::domain::{MonetizationQuoteRequest, NetworkTelemetrySample, OrderQoSPolicyRequest, PolicyIntent};
+use crate::domain::{
+    MonetizationQuoteRequest, NetworkTelemetrySample, OrderQoSPolicyRequest, PolicyIntent,
+};
 use crate::metrics::{gather, PcfMetrics};
 
 #[derive(Clone)]
@@ -104,7 +106,11 @@ pub async fn paas_decide(
                 .metrics
                 .decision_latency
                 .observe(started.elapsed().as_secs_f64());
-            state.metrics.decisions_total.with_label_values(&["ok"]).inc();
+            state
+                .metrics
+                .decisions_total
+                .with_label_values(&["ok"])
+                .inc();
             HttpResponse::Ok().json(decision)
         }
         Err(e) => {
@@ -151,7 +157,11 @@ pub async fn sba_decision(
                 .metrics
                 .decision_latency
                 .observe(started.elapsed().as_secs_f64());
-            state.metrics.decisions_total.with_label_values(&["ok"]).inc();
+            state
+                .metrics
+                .decisions_total
+                .with_label_values(&["ok"])
+                .inc();
             HttpResponse::Ok().json(decision)
         }
         Err(e) => {
@@ -207,7 +217,11 @@ pub async fn sba_intent(
                 .metrics
                 .decision_latency
                 .observe(started.elapsed().as_secs_f64());
-            state.metrics.decisions_total.with_label_values(&["ok"]).inc();
+            state
+                .metrics
+                .decisions_total
+                .with_label_values(&["ok"])
+                .inc();
             HttpResponse::Ok().json(decision)
         }
         Err(e) => {

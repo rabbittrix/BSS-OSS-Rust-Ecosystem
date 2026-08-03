@@ -62,7 +62,7 @@ impl PolicyControlEngine {
             NetworkGeneration::ThreeG,
             QoS {
                 max_download_bandwidth_kbps: 21000, // ~21 Mbps HSPA+
-                max_upload_bandwidth_kbps: 5800,     // ~5.8 Mbps
+                max_upload_bandwidth_kbps: 5800,    // ~5.8 Mbps
                 qci: None,
                 arp: Some(8),
                 gbr_download_kbps: None,
@@ -113,7 +113,7 @@ impl PolicyControlEngine {
             NetworkGeneration::SixG,
             QoS {
                 max_download_bandwidth_kbps: 10000000, // 10 Gbps
-                max_upload_bandwidth_kbps: 5000000,     // 5 Gbps
+                max_upload_bandwidth_kbps: 5000000,    // 5 Gbps
                 qci: Some(9),
                 arp: Some(8),
                 gbr_download_kbps: None,
@@ -315,10 +315,10 @@ impl PolicyControlTrait for PolicyControlEngine {
     ) -> Result<bool, PcfError> {
         // Check if service is explicitly blocked in subscriber profile
         // This would typically come from parental controls, content filtering, etc.
-        
+
         // For now, check if quota is exceeded (this would trigger throttling, not gating)
         // Gating would be for explicit blocks
-        
+
         Ok(false) // Default: don't gate
     }
 }

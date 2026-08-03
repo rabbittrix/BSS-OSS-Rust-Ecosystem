@@ -28,9 +28,6 @@ pub async fn swagger_index(_req: HttpRequest) -> impl Responder {
 }
 
 pub fn configure_swagger(cfg: &mut ServiceConfig) {
-    cfg.route(
-        "/openapi/pcf-nextgen-sba.yaml",
-        web::get().to(openapi_yaml),
-    );
+    cfg.route("/openapi/pcf-nextgen-sba.yaml", web::get().to(openapi_yaml));
     cfg.route("/swagger-ui/", web::get().to(swagger_index));
 }

@@ -5,7 +5,9 @@ use std::sync::Arc;
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use bss_oss_pcf::PcfEngine;
 use bss_oss_pcf_nextgen::adapters::http::{configure_routes, AppState};
-use bss_oss_pcf_nextgen::application::orchestrator::{seed_demo_subscriber, NextGenPcfOrchestrator};
+use bss_oss_pcf_nextgen::application::orchestrator::{
+    seed_demo_subscriber, NextGenPcfOrchestrator,
+};
 use bss_oss_pcf_nextgen::application::PolicyMarketplace;
 use bss_oss_pcf_nextgen::config::RuntimeConfig;
 use bss_oss_pcf_nextgen::metrics::PcfMetrics;
@@ -27,7 +29,9 @@ async fn main() -> std::io::Result<()> {
         .kafka_brokers
         .clone()
         .unwrap_or_else(|| "localhost:9092".into());
-    let orchestrator = Arc::new(NextGenPcfOrchestrator::with_default_event_bus(engine, kafka));
+    let orchestrator = Arc::new(NextGenPcfOrchestrator::with_default_event_bus(
+        engine, kafka,
+    ));
 
     let marketplace = Arc::new(PolicyMarketplace::new());
     marketplace.seed_demo();

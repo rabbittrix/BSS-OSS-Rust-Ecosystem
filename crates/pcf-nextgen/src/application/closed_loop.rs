@@ -34,8 +34,9 @@ impl ClosedLoopController {
             return PolicyAdjustmentSuggestion {
                 scale_mbr_factor: 0.9,
                 priority_delta: 1,
-                rationale: "Latency elevated under load — mild de-prioritization of elastic traffic."
-                    .into(),
+                rationale:
+                    "Latency elevated under load — mild de-prioritization of elastic traffic."
+                        .into(),
             };
         }
 

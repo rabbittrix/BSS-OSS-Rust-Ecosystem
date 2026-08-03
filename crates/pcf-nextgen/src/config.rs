@@ -16,8 +16,7 @@ pub struct RuntimeConfig {
 impl RuntimeConfig {
     pub fn from_env() -> Self {
         Self {
-            bind_addr: env::var("PCF_BIND")
-                .unwrap_or_else(|_| "0.0.0.0:9080".to_string()),
+            bind_addr: env::var("PCF_BIND").unwrap_or_else(|_| "0.0.0.0:9080".to_string()),
             kafka_brokers: env::var("KAFKA_BROKERS").ok(),
             redis_url: env::var("REDIS_URL").ok(),
             database_url: env::var("DATABASE_URL").ok(),

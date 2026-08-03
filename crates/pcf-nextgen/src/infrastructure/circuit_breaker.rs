@@ -40,7 +40,10 @@ impl CircuitBreaker {
     }
 
     fn is_open(&self) -> bool {
-        let mut guard = self.opened_at.lock().expect("circuit breaker mutex poisoned");
+        let mut guard = self
+            .opened_at
+            .lock()
+            .expect("circuit breaker mutex poisoned");
         if let Some(t) = *guard {
             if t.elapsed() >= self.cfg.open_duration {
                 *guard = None;
@@ -52,14 +55,20 @@ impl CircuitBreaker {
     }
 
     fn trip(&self) {
-        let mut guard = self.opened_at.lock().expect("circuit breaker mutex poisoned");
+        let mut guard = self
+            .opened_at
+            .lock()
+            .expect("circuit breaker mutex poisoned");
         *guard = Some(Instant::now());
         self.consecutive_failures.store(0, Ordering::SeqCst);
     }
 
     fn on_success(&self) {
         self.consecutive_failures.store(0, Ordering::SeqCst);
-        let mut guard = self.opened_at.lock().expect("circuit breaker mutex poisoned");
+        let mut guard = self
+            .opened_at
+            .lock()
+            .expect("circuit breaker mutex poisoned");
         *guard = None;
     }
 

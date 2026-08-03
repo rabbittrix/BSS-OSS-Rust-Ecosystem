@@ -47,6 +47,8 @@ impl RevenueManager {
 
     /// Start background worker that auto-closes due billing cycles
     pub fn start_billing_worker(&self, interval_seconds: u64) -> tokio::task::JoinHandle<()> {
-        self.billing.clone().start_background_worker(interval_seconds)
+        self.billing
+            .clone()
+            .start_background_worker(interval_seconds)
     }
 }

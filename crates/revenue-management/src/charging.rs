@@ -45,13 +45,14 @@ impl ChargingEngine {
 
     /// Charge from a TMF635 Usage record (real-time usage event integration)
     pub async fn charge_usage_event(&self, usage: &Usage) -> Result<ChargingResult, RevenueError> {
-        let product_offering_id = usage
-            .product_offering
-            .as_ref()
-            .map(|p| p.id)
-            .ok_or_else(|| {
-                RevenueError::Validation("usage missing product_offering".to_string())
-            })?;
+        let product_offering_id =
+            usage
+                .product_offering
+                .as_ref()
+                .map(|p| p.id)
+                .ok_or_else(|| {
+                    RevenueError::Validation("usage missing product_offering".to_string())
+                })?;
 
         let customer_id = usage
             .related_party
@@ -74,14 +75,14 @@ impl ChargingEngine {
                 .unwrap_or_else(|| "USAGE".to_string()),
             amount: usage.amount.unwrap_or(0.0),
             unit: usage.unit.clone().unwrap_or_else(|| "UNIT".to_string()),
-            start_date: usage.start_date.or(usage.usage_date).unwrap_or_else(Utc::now),
+            start_date: usage
+                .start_date
+                .or(usage.usage_date)
+                .unwrap_or_else(Utc::now),
             end_date: usage.end_date,
         };
 
-        let context = usage
-            .usage_date
-            .or(usage.start_date)
-            .map(RatingContext::at);
+        let context = usage.usage_date.or(usage.start_date).map(RatingContext::at);
 
         self.charge_with_context(request, context).await
     }

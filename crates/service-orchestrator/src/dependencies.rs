@@ -335,7 +335,11 @@ impl ServiceDependencyGraph {
 
     /// Ensure a node exists (e.g. leaf services with no DB dependency rows).
     pub fn ensure_node(&mut self, service_spec_id: Uuid) {
-        if !self.nodes.iter().any(|n| n.service_spec_id == service_spec_id) {
+        if !self
+            .nodes
+            .iter()
+            .any(|n| n.service_spec_id == service_spec_id)
+        {
             self.add_service_spec(service_spec_id, vec![]);
         }
     }

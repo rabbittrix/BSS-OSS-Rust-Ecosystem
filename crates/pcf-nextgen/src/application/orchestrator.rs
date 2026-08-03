@@ -9,7 +9,7 @@ use uuid::Uuid;
 use super::intent_engine::IntentPolicyEngine;
 use super::policy_fast_path::PolicyFastPath;
 use crate::domain::{EnterpriseQoSRule, PolicyIntent};
-use crate::infrastructure::{PolicyEventPublisher, KafkaPolicyEventPublisher};
+use crate::infrastructure::{KafkaPolicyEventPublisher, PolicyEventPublisher};
 
 /// Next-generation PCF orchestration façade (clean architecture application layer).
 pub struct NextGenPcfOrchestrator {
@@ -31,7 +31,9 @@ impl NextGenPcfOrchestrator {
     pub fn with_default_event_bus(engine: Arc<PcfEngine>, kafka_brokers: String) -> Self {
         Self::new(
             engine,
-            Arc::new(KafkaPolicyEventPublisher { brokers: kafka_brokers }),
+            Arc::new(KafkaPolicyEventPublisher {
+                brokers: kafka_brokers,
+            }),
         )
     }
 
@@ -86,14 +88,22 @@ impl NextGenPcfOrchestrator {
         let Some(entries) = rules.get(&tenant_id) else {
             return;
         };
-        for rule in entries.value().iter().filter(|r| r.valid && dnn.contains(&r.dnn_pattern)) {
+        for rule in entries
+            .value()
+            .iter()
+            .filter(|r| r.valid && dnn.contains(&r.dnn_pattern))
+        {
             let p = decision.qos.priority as i16 + rule.priority_boost as i16;
             decision.qos.priority = p.clamp(1, 15) as u8;
             let extra_kbps = (rule.max_extra_bandwidth_mbps as u64) * 1000;
-            decision.qos.max_download_bandwidth_kbps =
-                decision.qos.max_download_bandwidth_kbps.saturating_add(extra_kbps);
-            decision.qos.max_upload_bandwidth_kbps =
-                decision.qos.max_upload_bandwidth_kbps.saturating_add(extra_kbps / 2);
+            decision.qos.max_download_bandwidth_kbps = decision
+                .qos
+                .max_download_bandwidth_kbps
+                .saturating_add(extra_kbps);
+            decision.qos.max_upload_bandwidth_kbps = decision
+                .qos
+                .max_upload_bandwidth_kbps
+                .saturating_add(extra_kbps / 2);
         }
     }
 }

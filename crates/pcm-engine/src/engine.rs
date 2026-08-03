@@ -10,9 +10,7 @@ use crate::complex_pricing::{
 use crate::eligibility::{
     evaluate_eligibility, EligibilityContext, EligibilityOutcome, EligibilityRule,
 };
-use crate::pricing::{
-    calculate_best_price, Money, PricingContext, PricingRule,
-};
+use crate::pricing::{calculate_best_price, Money, PricingContext, PricingRule};
 use crate::rules::{evaluate_rule, CatalogRule, RuleContext};
 use crate::versioning::{CatalogSnapshot, CatalogVersion, VersionManager};
 use uuid::Uuid;
@@ -79,7 +77,11 @@ impl CatalogEngine {
     }
 
     /// Register a complex pricing model for an offering.
-    pub fn add_complex_pricing_model(&mut self, product_offering_id: Uuid, model: ComplexPricingModel) {
+    pub fn add_complex_pricing_model(
+        &mut self,
+        product_offering_id: Uuid,
+        model: ComplexPricingModel,
+    ) {
         self.complex_models.push((product_offering_id, model));
     }
 
@@ -286,7 +288,9 @@ impl Default for CatalogEngine {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::eligibility::{EligibilityCondition, EligibilityConditionOperator, EligibilityRuleType};
+    use crate::eligibility::{
+        EligibilityCondition, EligibilityConditionOperator, EligibilityRuleType,
+    };
     use crate::pricing::{PriceType, PricingRule};
 
     #[test]
@@ -318,7 +322,8 @@ mod tests {
 
         let mut elig = EligibilityContext::new();
         elig.customer_segment = Some("premium".into());
-        let result = engine.qualify_and_price(offering, &elig, &PricingContext::new(1), &[offering]);
+        let result =
+            engine.qualify_and_price(offering, &elig, &PricingContext::new(1), &[offering]);
         assert!(result.eligible);
         assert_eq!(result.price.unwrap().value, 25.0);
     }

@@ -100,8 +100,7 @@ pub fn validate_bundle_selection(
 ) -> Result<(), String> {
     validate_bundle(bundle)?;
 
-    let selected: std::collections::HashSet<Uuid> =
-        selected_offering_ids.iter().copied().collect();
+    let selected: std::collections::HashSet<Uuid> = selected_offering_ids.iter().copied().collect();
 
     for bp in &bundle.products {
         if bp.is_required && !selected.contains(&bp.product_offering_id) {

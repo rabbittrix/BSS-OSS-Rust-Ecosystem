@@ -39,12 +39,7 @@ impl PolicyMarketplace {
     pub fn order(&self, req: &OrderQoSPolicyRequest) -> Result<String, String> {
         self.listings
             .get(&req.listing_id)
-            .map(|l| {
-                format!(
-                    "ORDER:{}:{}:{}",
-                    l.listing_id, req.buyer_tenant_id, req.dnn
-                )
-            })
+            .map(|l| format!("ORDER:{}:{}:{}", l.listing_id, req.buyer_tenant_id, req.dnn))
             .ok_or_else(|| "listing not found".into())
     }
 }

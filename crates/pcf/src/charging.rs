@@ -81,8 +81,7 @@ impl ChargingRulesEngine {
     /// Add zero-rating rule
     pub fn add_zero_rating_rule(&self, rule: ZeroRatingRule) {
         let service_id = rule.service_identifier.clone();
-        self.zero_rating_rules
-            .insert(service_id.clone(), rule);
+        self.zero_rating_rules.insert(service_id.clone(), rule);
         info!("Added zero-rating rule for: {}", service_id);
     }
 
@@ -99,7 +98,10 @@ impl ChargingRulesEngine {
     ) -> bool {
         // Check subscriber's zero-rated services list
         if let Some(service_id) = service_identifier {
-            if subscriber_profile.zero_rated_services.contains(&service_id.to_string()) {
+            if subscriber_profile
+                .zero_rated_services
+                .contains(&service_id.to_string())
+            {
                 return true;
             }
 
@@ -136,13 +138,11 @@ impl ChargingRulesEngine {
             rule_id: format!("default_{}", request.subscriber_id),
             service_identifier: request.application_id.clone(),
             rating_group: Some(1), // Default rating group
-            zero_rating: self.check_zero_rating(
-                request.application_id.as_deref(),
-                subscriber_profile,
-            ),
+            zero_rating: self
+                .check_zero_rating(request.application_id.as_deref(), subscriber_profile),
             charging_method,
             metering_method: "volume".to_string(), // Volume-based by default
-            unit_cost: None, // Would be determined by rating engine
+            unit_cost: None,                       // Would be determined by rating engine
         }
     }
 }
@@ -189,10 +189,8 @@ impl ChargingRulesTrait for ChargingRulesEngine {
         request: &PolicyRequest,
         subscriber_profile: &crate::models::SubscriberProfile,
     ) -> Result<bool, PcfError> {
-        let is_zero_rated = self.check_zero_rating(
-            request.application_id.as_deref(),
-            subscriber_profile,
-        );
+        let is_zero_rated =
+            self.check_zero_rating(request.application_id.as_deref(), subscriber_profile);
 
         if is_zero_rated {
             info!(

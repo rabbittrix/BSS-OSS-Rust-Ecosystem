@@ -174,7 +174,11 @@ fn diff_snapshots(a: &CatalogSnapshot, b: &CatalogSnapshot) -> Vec<String> {
         ));
     }
     if a.bundles.len() != b.bundles.len() {
-        diffs.push(format!("bundles: {} → {}", a.bundles.len(), b.bundles.len()));
+        diffs.push(format!(
+            "bundles: {} → {}",
+            a.bundles.len(),
+            b.bundles.len()
+        ));
     }
     if a.catalog_rules.len() != b.catalog_rules.len() {
         diffs.push(format!(
@@ -191,10 +195,8 @@ fn diff_snapshots(a: &CatalogSnapshot, b: &CatalogSnapshot) -> Vec<String> {
         ));
     }
 
-    let a_price_ids: std::collections::HashSet<_> =
-        a.pricing_rules.iter().map(|r| r.id).collect();
-    let b_price_ids: std::collections::HashSet<_> =
-        b.pricing_rules.iter().map(|r| r.id).collect();
+    let a_price_ids: std::collections::HashSet<_> = a.pricing_rules.iter().map(|r| r.id).collect();
+    let b_price_ids: std::collections::HashSet<_> = b.pricing_rules.iter().map(|r| r.id).collect();
     for id in a_price_ids.difference(&b_price_ids) {
         diffs.push(format!("pricing_rule removed: {id}"));
     }
@@ -247,10 +249,7 @@ mod tests {
         );
 
         vm.publish_version(v2.id).unwrap();
-        assert_eq!(
-            vm.get_active_version(catalog_id).unwrap().version,
-            "1.1.0"
-        );
+        assert_eq!(vm.get_active_version(catalog_id).unwrap().version, "1.1.0");
 
         let diff = vm.compare_versions(v1.id, v2.id).unwrap();
         assert!(!diff.differences.is_empty());

@@ -23,10 +23,17 @@ pub trait QuotaManagerTrait: Send + Sync {
     ) -> Result<Quota, PcfError>;
 
     /// Check if quota threshold is reached
-    async fn check_threshold(&self, subscriber_id: &str) -> Result<Option<QuotaNotification>, PcfError>;
+    async fn check_threshold(
+        &self,
+        subscriber_id: &str,
+    ) -> Result<Option<QuotaNotification>, PcfError>;
 
     /// Reset quota (e.g., monthly reset)
-    async fn reset_quota(&self, subscriber_id: &str, new_quota_bytes: u64) -> Result<Quota, PcfError>;
+    async fn reset_quota(
+        &self,
+        subscriber_id: &str,
+        new_quota_bytes: u64,
+    ) -> Result<Quota, PcfError>;
 
     /// Set throttled bandwidth when quota is exceeded
     async fn set_throttled_bandwidth(
@@ -106,7 +113,10 @@ impl QuotaManager {
 #[async_trait]
 impl QuotaManagerTrait for QuotaManager {
     async fn get_quota(&self, subscriber_id: &str) -> Result<Option<Quota>, PcfError> {
-        Ok(self.quota_cache.get(subscriber_id).map(|q| q.value().clone()))
+        Ok(self
+            .quota_cache
+            .get(subscriber_id)
+            .map(|q| q.value().clone()))
     }
 
     async fn update_quota_usage(
@@ -117,7 +127,9 @@ impl QuotaManagerTrait for QuotaManager {
         let mut quota = self
             .quota_cache
             .get(subscriber_id)
-            .ok_or_else(|| PcfError::QuotaExceeded(format!("Quota not found for {}", subscriber_id)))?
+            .ok_or_else(|| {
+                PcfError::QuotaExceeded(format!("Quota not found for {}", subscriber_id))
+            })?
             .value()
             .clone();
 
@@ -150,7 +162,8 @@ impl QuotaManagerTrait for QuotaManager {
         }
 
         // Update cache
-        self.quota_cache.insert(subscriber_id.to_string(), quota.clone());
+        self.quota_cache
+            .insert(subscriber_id.to_string(), quota.clone());
 
         debug!(
             "Updated quota for {}: {}/{} bytes ({}%)",
@@ -163,11 +176,16 @@ impl QuotaManagerTrait for QuotaManager {
         Ok(quota)
     }
 
-    async fn check_threshold(&self, subscriber_id: &str) -> Result<Option<QuotaNotification>, PcfError> {
+    async fn check_threshold(
+        &self,
+        subscriber_id: &str,
+    ) -> Result<Option<QuotaNotification>, PcfError> {
         let quota = self
             .quota_cache
             .get(subscriber_id)
-            .ok_or_else(|| PcfError::QuotaExceeded(format!("Quota not found for {}", subscriber_id)))?
+            .ok_or_else(|| {
+                PcfError::QuotaExceeded(format!("Quota not found for {}", subscriber_id))
+            })?
             .value()
             .clone();
 
@@ -204,7 +222,11 @@ impl QuotaManagerTrait for QuotaManager {
         Ok(None)
     }
 
-    async fn reset_quota(&self, subscriber_id: &str, new_quota_bytes: u64) -> Result<Quota, PcfError> {
+    async fn reset_quota(
+        &self,
+        subscriber_id: &str,
+        new_quota_bytes: u64,
+    ) -> Result<Quota, PcfError> {
         let threshold = self
             .notification_thresholds
             .get(subscriber_id)
@@ -221,7 +243,8 @@ impl QuotaManagerTrait for QuotaManager {
             last_update: chrono::Utc::now(),
         };
 
-        self.quota_cache.insert(subscriber_id.to_string(), quota.clone());
+        self.quota_cache
+            .insert(subscriber_id.to_string(), quota.clone());
         self.throttled_bandwidth.remove(subscriber_id);
 
         info!(
