@@ -506,11 +506,32 @@ impl DefaultAIService {
     }
 
     /// Check if CPF has repeated digits
+    ///
+    /// Detects:
+    /// - All digits identical (e.g. `11111111111`)
+    /// - Any consecutive run of 3+ identical digits (e.g. `11144477735`)
     pub fn is_repeated_pattern(cpf: &str) -> bool {
-        if cpf.is_empty() {
+        let digits: Vec<char> = cpf.chars().filter(|c| c.is_ascii_digit()).collect();
+        if digits.is_empty() {
             return false;
         }
-        cpf.chars().all(|c| c == cpf.chars().next().unwrap())
+
+        if digits.iter().all(|&c| c == digits[0]) {
+            return true;
+        }
+
+        let mut run = 1usize;
+        for i in 1..digits.len() {
+            if digits[i] == digits[i - 1] {
+                run += 1;
+                if run >= 3 {
+                    return true;
+                }
+            } else {
+                run = 1;
+            }
+        }
+        false
     }
 
     /// Check if CPF has palindrome pattern
@@ -652,6 +673,8 @@ mod tests {
     fn test_is_repeated_pattern() {
         assert!(DefaultAIService::is_repeated_pattern("11111111111"));
         assert!(DefaultAIService::is_repeated_pattern("22222222222"));
+        // Triplet runs (valid checksum CPF used in fraud-pattern tests)
+        assert!(DefaultAIService::is_repeated_pattern("11144477735"));
         assert!(!DefaultAIService::is_repeated_pattern("12345678909"));
     }
 
