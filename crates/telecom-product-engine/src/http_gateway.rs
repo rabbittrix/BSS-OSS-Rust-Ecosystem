@@ -34,8 +34,8 @@ impl HttpTmfGateway {
         if token.trim().is_empty() {
             return None;
         }
-        let base = std::env::var("BSS_OSS_BASE_URL")
-            .unwrap_or_else(|_| "http://127.0.0.1:8080".into());
+        let base =
+            std::env::var("BSS_OSS_BASE_URL").unwrap_or_else(|_| "http://127.0.0.1:8080".into());
         Some(Self::new(base, token))
     }
 
@@ -43,7 +43,10 @@ impl HttpTmfGateway {
         format!("{}{}", self.base_url, path)
     }
 
-    async fn get_json<T: for<'de> Deserialize<'de>>(&self, path: &str) -> ProductResult<(StatusCode, Option<T>)> {
+    async fn get_json<T: for<'de> Deserialize<'de>>(
+        &self,
+        path: &str,
+    ) -> ProductResult<(StatusCode, Option<T>)> {
         let res = self
             .client
             .get(self.url(path))
@@ -337,9 +340,7 @@ impl TmfGateway for HttpTmfGateway {
         installments: u32,
     ) -> ProductResult<(Uuid, String, Money)> {
         if installments == 0 {
-            return Err(ProductError::Validation(
-                "installments must be >= 1".into(),
-            ));
+            return Err(ProductError::Validation("installments must be >= 1".into()));
         }
         let label = format!("BNPL-{device_name}-{installments}x");
         let account: IdOnly = self

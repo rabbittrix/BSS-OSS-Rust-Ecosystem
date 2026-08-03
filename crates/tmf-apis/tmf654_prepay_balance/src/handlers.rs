@@ -21,7 +21,10 @@ pub async fn get_balances(
     validate_token(&req)?;
     match db::get_balances(pool.get_ref()).await {
         Ok(items) => Ok(HttpResponse::Ok().json(items)),
-        Err(e) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({"error": e.to_string()}))),
+        Err(e) => {
+            Ok(HttpResponse::InternalServerError()
+                .json(serde_json::json!({"error": e.to_string()})))
+        }
     }
 }
 
@@ -47,7 +50,10 @@ pub async fn get_balance_by_id(
     match db::get_balance_by_id(pool.get_ref(), id).await {
         Ok(Some(b)) => Ok(HttpResponse::Ok().json(b)),
         Ok(None) => Ok(HttpResponse::NotFound().json(serde_json::json!({"error": "Not found"}))),
-        Err(e) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({"error": e.to_string()}))),
+        Err(e) => {
+            Ok(HttpResponse::InternalServerError()
+                .json(serde_json::json!({"error": e.to_string()})))
+        }
     }
 }
 
@@ -66,7 +72,10 @@ pub async fn create_balance(
     validate_token(&req)?;
     match db::create_balance(pool.get_ref(), body.into_inner()).await {
         Ok(b) => Ok(HttpResponse::Created().json(b)),
-        Err(e) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({"error": e.to_string()}))),
+        Err(e) => {
+            Ok(HttpResponse::InternalServerError()
+                .json(serde_json::json!({"error": e.to_string()})))
+        }
     }
 }
 
@@ -93,7 +102,9 @@ pub async fn adjust_balance(
     };
     match db::adjust_balance(pool.get_ref(), id, body.into_inner()).await {
         Ok(b) => Ok(HttpResponse::Ok().json(b)),
-        Err(TmfError::NotFound(msg)) => Ok(HttpResponse::NotFound().json(serde_json::json!({"error": msg}))),
+        Err(TmfError::NotFound(msg)) => {
+            Ok(HttpResponse::NotFound().json(serde_json::json!({"error": msg})))
+        }
         Err(e) => Ok(HttpResponse::BadRequest().json(serde_json::json!({"error": e.to_string()}))),
     }
 }
@@ -121,8 +132,13 @@ pub async fn update_balance(
     };
     match db::update_balance(pool.get_ref(), id, body.into_inner()).await {
         Ok(b) => Ok(HttpResponse::Ok().json(b)),
-        Err(TmfError::NotFound(msg)) => Ok(HttpResponse::NotFound().json(serde_json::json!({"error": msg}))),
-        Err(e) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({"error": e.to_string()}))),
+        Err(TmfError::NotFound(msg)) => {
+            Ok(HttpResponse::NotFound().json(serde_json::json!({"error": msg})))
+        }
+        Err(e) => {
+            Ok(HttpResponse::InternalServerError()
+                .json(serde_json::json!({"error": e.to_string()})))
+        }
     }
 }
 
@@ -147,7 +163,12 @@ pub async fn delete_balance(
     };
     match db::delete_balance(pool.get_ref(), id).await {
         Ok(()) => Ok(HttpResponse::NoContent().finish()),
-        Err(TmfError::NotFound(msg)) => Ok(HttpResponse::NotFound().json(serde_json::json!({"error": msg}))),
-        Err(e) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({"error": e.to_string()}))),
+        Err(TmfError::NotFound(msg)) => {
+            Ok(HttpResponse::NotFound().json(serde_json::json!({"error": msg})))
+        }
+        Err(e) => {
+            Ok(HttpResponse::InternalServerError()
+                .json(serde_json::json!({"error": e.to_string()})))
+        }
     }
 }

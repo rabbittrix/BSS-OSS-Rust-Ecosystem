@@ -1,7 +1,7 @@
 //! JWT Authentication for TMF654 API
 
 use actix_web::{Error as ActixError, HttpRequest};
-use jsonwebtoken::{decode, DecodingKey, EncodingKey, Header, Validation, encode};
+use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
 use std::env;
 

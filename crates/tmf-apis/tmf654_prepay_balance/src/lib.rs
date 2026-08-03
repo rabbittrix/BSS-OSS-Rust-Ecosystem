@@ -12,6 +12,4 @@ pub use auth::*;
 pub use handlers::*;
 pub use models::*;
 
-pub use db::{
-    get_balance_by_id as db_get_balance_by_id, get_balances as db_get_balances,
-};
+pub use db::{get_balance_by_id as db_get_balance_by_id, get_balances as db_get_balances};

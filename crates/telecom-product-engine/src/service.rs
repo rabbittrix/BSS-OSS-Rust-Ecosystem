@@ -16,7 +16,8 @@ pub trait ProductService: Send + Sync {
         req: DataWalletTransferRequest,
     ) -> ProductResult<DataWalletTransferResult>;
     async fn bnpl_device(&self, req: BnplRequest) -> ProductResult<BnplResult>;
-    async fn issue_identity(&self, req: IdentityIssueRequest) -> ProductResult<IdentityIssueResult>;
+    async fn issue_identity(&self, req: IdentityIssueRequest)
+        -> ProductResult<IdentityIssueResult>;
 
     /// Demo/helper: credit a DATA (or other) balance for a party.
     async fn seed_balance(

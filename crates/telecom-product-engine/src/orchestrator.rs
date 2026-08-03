@@ -111,7 +111,10 @@ impl<G: TmfGateway + 'static> ProductService for ProductOrchestrator<G> {
             product,
             "TMF629",
             "GET",
-            &format!("/tmf-api/customerManagement/v4/customer/{}", req.customer_id),
+            &format!(
+                "/tmf-api/customerManagement/v4/customer/{}",
+                req.customer_id
+            ),
             LogicStepStatus::Started,
             "Validate customer exists",
         )
@@ -123,7 +126,10 @@ impl<G: TmfGateway + 'static> ProductService for ProductOrchestrator<G> {
             product,
             "TMF629",
             "GET",
-            &format!("/tmf-api/customerManagement/v4/customer/{}", req.customer_id),
+            &format!(
+                "/tmf-api/customerManagement/v4/customer/{}",
+                req.customer_id
+            ),
             LogicStepStatus::Succeeded,
             "Customer validated",
         )
@@ -162,9 +168,7 @@ impl<G: TmfGateway + 'static> ProductService for ProductOrchestrator<G> {
             product,
             "TMF654",
             "POST",
-            &format!(
-                "/tmf-api/prepayBalanceManagement/v4/prepayBalance/{{id}}/adjust"
-            ),
+            &format!("/tmf-api/prepayBalanceManagement/v4/prepayBalance/{{id}}/adjust"),
             LogicStepStatus::Started,
             "Credit monetary prepay balance",
         )
@@ -184,13 +188,20 @@ impl<G: TmfGateway + 'static> ProductService for ProductOrchestrator<G> {
                 balance.id
             ),
             LogicStepStatus::Succeeded,
-            format!("new_balance={} {}", balance.amount.value, balance.amount.unit),
+            format!(
+                "new_balance={} {}",
+                balance.amount.value, balance.amount.unit
+            ),
         )
         .await;
 
         self.push(
-            ProductEvent::new(ProductEventKind::TopUpCompleted, product, "Top-up completed")
-                .with_ids([payment_id, balance.id]),
+            ProductEvent::new(
+                ProductEventKind::TopUpCompleted,
+                product,
+                "Top-up completed",
+            )
+            .with_ids([payment_id, balance.id]),
         )
         .await;
 
@@ -233,7 +244,10 @@ impl<G: TmfGateway + 'static> ProductService for ProductOrchestrator<G> {
             product,
             "TMF629",
             "GET",
-            &format!("/tmf-api/customerManagement/v4/customer/{}", req.customer_id),
+            &format!(
+                "/tmf-api/customerManagement/v4/customer/{}",
+                req.customer_id
+            ),
             LogicStepStatus::Started,
             "Validate subscriber before network upgrade",
         )
@@ -245,7 +259,10 @@ impl<G: TmfGateway + 'static> ProductService for ProductOrchestrator<G> {
             product,
             "TMF629",
             "GET",
-            &format!("/tmf-api/customerManagement/v4/customer/{}", req.customer_id),
+            &format!(
+                "/tmf-api/customerManagement/v4/customer/{}",
+                req.customer_id
+            ),
             LogicStepStatus::Succeeded,
             "Subscriber OK",
         )
@@ -555,8 +572,12 @@ impl<G: TmfGateway + 'static> ProductService for ProductOrchestrator<G> {
         .await;
 
         self.push(
-            ProductEvent::new(ProductEventKind::BnplCompleted, product, "BNPL account ready")
-                .with_ids([account_id]),
+            ProductEvent::new(
+                ProductEventKind::BnplCompleted,
+                product,
+                "BNPL account ready",
+            )
+            .with_ids([account_id]),
         )
         .await;
 
@@ -567,7 +588,10 @@ impl<G: TmfGateway + 'static> ProductService for ProductOrchestrator<G> {
         })
     }
 
-    async fn issue_identity(&self, req: IdentityIssueRequest) -> ProductResult<IdentityIssueResult> {
+    async fn issue_identity(
+        &self,
+        req: IdentityIssueRequest,
+    ) -> ProductResult<IdentityIssueResult> {
         let flow_id = Uuid::new_v4();
         let product = "identity_aas";
 

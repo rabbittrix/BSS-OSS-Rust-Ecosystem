@@ -18,8 +18,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
                     .route(web::delete().to(delete_balance)),
             )
             .service(
-                web::resource("/prepayBalance/{id}/adjust")
-                    .route(web::post().to(adjust_balance)),
+                web::resource("/prepayBalance/{id}/adjust").route(web::post().to(adjust_balance)),
             ),
     );
 }

@@ -104,7 +104,10 @@ impl TmfGateway for InMemoryGateway {
             .get(&party_id)
             .and_then(|ids| {
                 ids.iter().find_map(|id| {
-                    state.balances.get(id).filter(|b| b.balance_type == balance_type && b.amount.unit == amount.unit)
+                    state
+                        .balances
+                        .get(id)
+                        .filter(|b| b.balance_type == balance_type && b.amount.unit == amount.unit)
                 })
             })
             .cloned();
@@ -198,9 +201,7 @@ impl TmfGateway for InMemoryGateway {
         installments: u32,
     ) -> ProductResult<(Uuid, String, Money)> {
         if installments == 0 {
-            return Err(ProductError::Validation(
-                "installments must be >= 1".into(),
-            ));
+            return Err(ProductError::Validation("installments must be >= 1".into()));
         }
         let installment = Money {
             value: total.value / installments as f64,

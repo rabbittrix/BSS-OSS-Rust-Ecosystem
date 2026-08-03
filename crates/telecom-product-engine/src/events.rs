@@ -30,7 +30,11 @@ pub struct ProductEvent {
 }
 
 impl ProductEvent {
-    pub fn new(kind: ProductEventKind, product: impl Into<String>, message: impl Into<String>) -> Self {
+    pub fn new(
+        kind: ProductEventKind,
+        product: impl Into<String>,
+        message: impl Into<String>,
+    ) -> Self {
         Self {
             id: Uuid::new_v4(),
             kind,
