@@ -28,7 +28,7 @@ pub struct AppState {
     pub require_bearer: bool,
 }
 
-fn authorize(req: &HttpRequest, state: &AppState) -> Result<(), HttpResponse> {
+fn authorize(req: &HttpRequest, state: &AppState) -> Result<(), Box<HttpResponse>> {
     if !state.require_bearer {
         return Ok(());
     }
@@ -38,9 +38,9 @@ fn authorize(req: &HttpRequest, state: &AppState) -> Result<(), HttpResponse> {
         .and_then(|v| v.to_str().ok())
         .unwrap_or("");
     if !auth.starts_with("Bearer ") {
-        return Err(HttpResponse::Unauthorized().json(serde_json::json!({
+        return Err(Box::new(HttpResponse::Unauthorized().json(serde_json::json!({
             "error": "missing bearer token"
-        })));
+        }))));
     }
     Ok(())
 }
@@ -52,7 +52,7 @@ pub async fn monetization_quote(
     body: web::Json<MonetizationQuoteRequest>,
 ) -> impl Responder {
     if let Err(resp) = authorize(&req, &state) {
-        return resp;
+        return *resp;
     }
     HttpResponse::Ok().json(MonetizationEngine::quote(&body))
 }
@@ -60,7 +60,7 @@ pub async fn monetization_quote(
 #[actix_web::get("/marketplace/v1/listings")]
 pub async fn marketplace_list(state: web::Data<AppState>, req: HttpRequest) -> impl Responder {
     if let Err(resp) = authorize(&req, &state) {
-        return resp;
+        return *resp;
     }
     HttpResponse::Ok().json(state.marketplace.list_open())
 }
@@ -72,7 +72,7 @@ pub async fn marketplace_order(
     body: web::Json<OrderQoSPolicyRequest>,
 ) -> impl Responder {
     if let Err(resp) = authorize(&req, &state) {
-        return resp;
+        return *resp;
     }
     match state.marketplace.order(&body) {
         Ok(token) => HttpResponse::Ok().json(serde_json::json!({ "order_token": token })),
@@ -93,7 +93,7 @@ pub async fn paas_decide(
     body: web::Json<PolicyRequest>,
 ) -> impl Responder {
     if let Err(resp) = authorize(&req, &state) {
-        return resp;
+        return *resp;
     }
     let started = Instant::now();
     match state
@@ -144,7 +144,7 @@ pub async fn sba_decision(
     body: web::Json<SbaDecisionBody>,
 ) -> impl Responder {
     if let Err(resp) = authorize(&req, &state) {
-        return resp;
+        return *resp;
     }
     let started = Instant::now();
     match state
@@ -187,7 +187,7 @@ pub async fn sba_intent(
     body: web::Json<serde_json::Value>,
 ) -> impl Responder {
     if let Err(resp) = authorize(&req, &state) {
-        return resp;
+        return *resp;
     }
     let intent: PolicyIntent = match serde_json::from_value(body["intent"].clone()) {
         Ok(v) => v,
@@ -247,7 +247,7 @@ pub async fn simulation_run(
     body: web::Json<PolicyRequest>,
 ) -> impl Responder {
     if let Err(resp) = authorize(&req, &state) {
-        return resp;
+        return *resp;
     }
     match state.orchestrator.decide_policy(&body, None).await {
         Ok(decision) => HttpResponse::Ok().json(DigitalTwin::wrap(decision)),
@@ -263,7 +263,7 @@ pub async fn closed_loop(
     body: web::Json<NetworkTelemetrySample>,
 ) -> impl Responder {
     if let Err(resp) = authorize(&req, &state) {
-        return resp;
+        return *resp;
     }
     let _ = &*state; // future: publish telemetry + suggestions to Kafka
     HttpResponse::Ok().json(ClosedLoopController::suggest(&body))
