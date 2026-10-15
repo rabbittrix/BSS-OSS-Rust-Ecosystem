@@ -84,17 +84,19 @@ pub fn get_api_version(req: &HttpRequest) -> ApiVersion {
 pub fn validate_version(
     req: &HttpRequest,
     supported_versions: &[ApiVersion],
-) -> Result<ApiVersion, HttpResponse> {
+) -> Result<ApiVersion, Box<HttpResponse>> {
     let requested_version = get_api_version(req);
 
     if supported_versions.contains(&requested_version) {
         Ok(requested_version)
     } else {
-        Err(HttpResponse::BadRequest().json(serde_json::json!({
-            "error": "Unsupported API version",
-            "requested": requested_version.to_string(),
-            "supported": supported_versions.iter().map(|v| v.to_string()).collect::<Vec<_>>()
-        })))
+        Err(Box::new(HttpResponse::BadRequest().json(
+            serde_json::json!({
+                "error": "Unsupported API version",
+                "requested": requested_version.to_string(),
+                "supported": supported_versions.iter().map(|v| v.to_string()).collect::<Vec<_>>()
+            }),
+        )))
     }
 }
 
@@ -123,7 +125,7 @@ pub fn find_compatible_version(
 pub fn negotiate_version(
     req: &HttpRequest,
     supported_versions: &[ApiVersion],
-) -> Result<ApiVersion, HttpResponse> {
+) -> Result<ApiVersion, Box<HttpResponse>> {
     let requested_version = get_api_version(req);
 
     // Exact match
@@ -137,10 +139,12 @@ pub fn negotiate_version(
     }
 
     // No compatible version found
-    Err(HttpResponse::BadRequest().json(serde_json::json!({
-        "error": "Unsupported API version",
-        "requested": requested_version.to_string(),
-        "supported": supported_versions.iter().map(|v| v.to_string()).collect::<Vec<_>>(),
-        "message": "No compatible version found. Please use one of the supported versions."
-    })))
+    Err(Box::new(HttpResponse::BadRequest().json(
+        serde_json::json!({
+            "error": "Unsupported API version",
+            "requested": requested_version.to_string(),
+            "supported": supported_versions.iter().map(|v| v.to_string()).collect::<Vec<_>>(),
+            "message": "No compatible version found. Please use one of the supported versions."
+        }),
+    )))
 }
