@@ -38,9 +38,11 @@ fn authorize(req: &HttpRequest, state: &AppState) -> Result<(), Box<HttpResponse
         .and_then(|v| v.to_str().ok())
         .unwrap_or("");
     if !auth.starts_with("Bearer ") {
-        return Err(Box::new(HttpResponse::Unauthorized().json(serde_json::json!({
-            "error": "missing bearer token"
-        }))));
+        return Err(Box::new(HttpResponse::Unauthorized().json(
+            serde_json::json!({
+                "error": "missing bearer token"
+            }),
+        )));
     }
     Ok(())
 }
