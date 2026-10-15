@@ -697,6 +697,13 @@ async fn graphql_playground() -> HttpResponse {
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
+    // Load `.env`: cwd first, then workspace root overrides (wins over stale shell DATABASE_URL)
+    let _ = dotenvy::dotenv();
+    let manifest = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+    if let Some(root) = manifest.parent().and_then(|p| p.parent()) {
+        let _ = dotenvy::from_path_override(root.join(".env"));
+    }
+
     // Initialize logger
     init_logger();
 
@@ -844,8 +851,24 @@ async fn main() -> std::io::Result<()> {
             .configure(tmf651_agreement::api::configure_routes)
             .configure(tmf654_prepay_balance::api::configure_routes)
     })
-    .bind((host.as_str(), port))?
     .shutdown_timeout(30); // 30 seconds for graceful shutdown
+
+    let server = match server.bind((host.as_str(), port)) {
+        Ok(s) => s,
+        Err(e) if e.kind() == std::io::ErrorKind::AddrInUse => {
+            log::error!(
+                "Cannot bind to http://{}:{} — port already in use. \
+                 Stop the other process (often a previous `bss-oss-rust` run) or change PORT in `.env`.",
+                host,
+                port
+            );
+            log::error!(
+                "Windows: Get-Process -Name bss-oss-rust -ErrorAction SilentlyContinue | Stop-Process -Force"
+            );
+            return Err(e);
+        }
+        Err(e) => return Err(e),
+    };
 
     log::info!("✅ Server started successfully");
     log::info!("   - Health: http://{}:{}/health", host, port);

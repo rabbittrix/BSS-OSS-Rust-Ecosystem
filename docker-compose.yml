@@ -1,0 +1,16 @@
+# Dev PostgreSQL only (app runs on host via `cargo run --bin bss-oss-rust`).
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: bss-oss-postgres
+    environment:
+      POSTGRES_USER: bssoss
+      POSTGRES_PASSWORD: bssoss123
+      POSTGRES_DB: bssoss
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bssoss -d bssoss"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

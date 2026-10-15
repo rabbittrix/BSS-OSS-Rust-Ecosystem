@@ -1,5 +1,35 @@
 -- TMF666 Account Management, TMF676 Payment Management, TMF651 Agreement Management
 
+-- TMF632 created party_accounts as party→account links; rename before TMF666 PartyAccount table.
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables
+        WHERE table_schema = 'public' AND table_name = 'party_accounts'
+    ) AND EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = 'public' AND table_name = 'party_accounts' AND column_name = 'party_id'
+    ) AND NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = 'public' AND table_name = 'party_accounts' AND column_name = 'state'
+    ) THEN
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.tables
+            WHERE table_schema = 'public' AND table_name = 'party_account_refs'
+        ) THEN
+            ALTER TABLE party_accounts RENAME TO party_account_refs;
+            IF EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_party_accounts_party_id') THEN
+                ALTER INDEX idx_party_accounts_party_id RENAME TO idx_party_account_refs_party_id;
+            END IF;
+        ELSE
+            INSERT INTO party_account_refs (id, party_id, name, href, created_at)
+            SELECT id, party_id, name, href, created_at FROM party_accounts
+            ON CONFLICT (id) DO NOTHING;
+            DROP TABLE party_accounts;
+        END IF;
+    END IF;
+END $$;
+
 CREATE TABLE IF NOT EXISTS billing_accounts (
     id UUID PRIMARY KEY,
     href TEXT,

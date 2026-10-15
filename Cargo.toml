@@ -72,7 +72,7 @@ sqlx = { version = "0.8.6", features = [
 ] }
 jsonwebtoken = "9"
 utoipa = "4"
-utoipa-swagger-ui = { version = "6", features = ["actix-web"] }
+utoipa-swagger-ui = { version = "6", features = ["actix-web", "debug-embed"] }
 thiserror = "1.0"
 log = "0.4"
 env_logger = "0.10"
@@ -90,6 +90,7 @@ opentelemetry-prometheus = "0.13"
 tracing-opentelemetry = "0.24"
 async-trait = "0.1"
 futures = "0.3"
+dotenvy = "0.15"
 
 [workspace.package]
 version = "0.3.2"
@@ -145,11 +146,7 @@ categories = [
     "openapi-v0.9",
 ]
 
-[workspace.build-dependencies]
-cargo-release = "0.25.22"
-
-[workspace.dev-dependencies]
-cargo-release = "0.25.22"
-
-[workspace.package.metadata]
-release = { crate-name = "bss-oss-rust" }
+# Disable incremental compilation on dev builds to avoid hard-link warnings when
+# `target/` lives on a volume that does not support hard links (common on Windows).
+[profile.dev]
+incremental = false

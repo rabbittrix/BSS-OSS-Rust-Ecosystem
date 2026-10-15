@@ -4,10 +4,11 @@ import LiveLogicViewer from "../components/LiveLogicViewer";
 import {
   bnplDevice,
   dataWalletTransfer,
+  isSimulatedResult,
   issueIdentity,
   onLogicStep,
   realTimeTopUp,
-  simulateTurboBoostLogic,
+  simulateProductLogic,
   turboBoost,
   type LogicStep,
 } from "../lib/tauri";
@@ -81,14 +82,9 @@ export default function InnovativePage() {
     setRunning(true);
     setSteps([]);
     try {
-      if (action.id === "turbo") {
-        // Prefer live Tauri stream; fall back to browser simulation.
-        const result = await action.run();
-        if (result && typeof result === "object" && "simulated" in (result as object)) {
-          await simulateTurboBoostLogic(appendStep, 60);
-        }
-      } else {
-        await action.run();
+      const result = await action.run();
+      if (isSimulatedResult(result)) {
+        await simulateProductLogic(action.id, appendStep, result);
       }
       qc.invalidateQueries({ queryKey: ["events"] });
     } finally {

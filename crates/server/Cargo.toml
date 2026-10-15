@@ -9,6 +9,9 @@ repository.workspace = true
 documentation.workspace = true
 readme = "README.md"
 
+[package.metadata.release]
+# Run `cargo release` from this crate (publishes binary `bss-oss-rust`).
+
 [[bin]]
 name = "bss-oss-rust"
 path = "src/main.rs"
@@ -57,3 +60,4 @@ prometheus = "0.13"
 serde_json.workspace = true
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+dotenvy.workspace = true

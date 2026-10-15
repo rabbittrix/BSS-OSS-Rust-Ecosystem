@@ -46,9 +46,9 @@ CREATE TABLE
             TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );
 
--- Party Accounts table
+-- Party account links (TMF632); not TMF666 PartyAccount — see party_accounts in migration 031
 CREATE TABLE
-    IF NOT EXISTS party_accounts (
+    IF NOT EXISTS party_account_refs (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
         party_id UUID NOT NULL REFERENCES parties (id) ON DELETE CASCADE,
         name VARCHAR(255) NOT NULL,
@@ -80,7 +80,7 @@ CREATE INDEX IF NOT EXISTS idx_party_contact_mediums_party_id ON party_contact_m
 
 CREATE INDEX IF NOT EXISTS idx_party_related_parties_party_id ON party_related_parties (party_id);
 
-CREATE INDEX IF NOT EXISTS idx_party_accounts_party_id ON party_accounts (party_id);
+CREATE INDEX IF NOT EXISTS idx_party_account_refs_party_id ON party_account_refs (party_id);
 
 CREATE INDEX IF NOT EXISTS idx_party_characteristics_party_id ON party_characteristics (party_id);
 
@@ -91,7 +91,7 @@ COMMENT ON TABLE party_contact_mediums IS 'TMF632 Contact Mediums - Contact info
 
 COMMENT ON TABLE party_related_parties IS 'TMF632 Related Parties - Parties related to parties';
 
-COMMENT ON TABLE party_accounts IS 'TMF632 Accounts - Account references for parties';
+COMMENT ON TABLE party_account_refs IS 'TMF632 account references linked to a party';
 
 COMMENT ON TABLE party_characteristics IS 'TMF632 Characteristics - Attributes for parties';
 

@@ -185,7 +185,7 @@ pub async fn create_party(pool: &Pool<Postgres>, request: CreatePartyRequest) ->
         for account in accounts {
             let account_id = Uuid::new_v4();
             sqlx::query(
-                "INSERT INTO party_accounts (id, party_id, name)
+                "INSERT INTO party_account_refs (id, party_id, name)
                  VALUES ($1, $2, $3)",
             )
             .bind(account_id)

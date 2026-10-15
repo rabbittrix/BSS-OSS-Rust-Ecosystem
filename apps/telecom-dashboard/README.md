@@ -37,4 +37,4 @@ Click **Buy Turbo Boost** to watch the paced sequence:
 2. `TMF656` POST networkSlice  
 3. `TMF640` POST/PATCH serviceActivation  
 
-In Tauri, steps are emitted as `logic-step` events from `telecom-product-engine`. In the browser (`npm run dev`), Turbo Boost falls back to a client-side simulation of the same sequence.
+In Tauri, steps are emitted as `logic-step` events from `telecom-product-engine`. In the browser (`npm run dev`), all Innovative actions fall back to client-side simulations of the same TMF sequences (no `invoke` — use `npm run tauri:dev` for the real engine).

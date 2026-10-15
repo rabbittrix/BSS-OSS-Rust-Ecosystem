@@ -39,9 +39,22 @@ fn lifecycle_status_to_string(status: &LifecycleStatus) -> String {
     }
 }
 
+fn db_connection_help(err: &sqlx::Error) -> String {
+    format!(
+        "{err}. Check DATABASE_URL in the repo root `.env` (see `.env.example`). \
+         Start PostgreSQL with `docker compose up -d postgres` or your local instance, \
+         then apply migrations under `migrations/`."
+    )
+}
+
 /// Initialize database connection pool
 pub async fn init_db() -> Pool<Postgres> {
-    let db_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let db_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| {
+        panic!(
+            "DATABASE_URL must be set. Copy .env.example to .env in the repo root, \
+             start PostgreSQL, and apply migrations under migrations/."
+        )
+    });
 
     // Retry connection with exponential backoff
     let mut retries = 5;
@@ -59,13 +72,16 @@ pub async fn init_db() -> Pool<Postgres> {
                 log::warn!(
                     "Failed to connect to database ({} retries left): {}",
                     retries,
-                    e
+                    db_connection_help(&e)
                 );
                 retries -= 1;
                 tokio::time::sleep(std::time::Duration::from_secs(delay)).await;
                 delay *= 2;
             }
-            Err(e) => panic!("Failed to connect to database after retries: {}", e),
+            Err(e) => panic!(
+                "Failed to connect to database after retries: {}",
+                db_connection_help(&e)
+            ),
         }
     }
 }

@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS oauth_clients (
     expires_at TIMESTAMP WITH TIME ZONE
 );
 
-CREATE INDEX idx_oauth_clients_client_id ON oauth_clients(client_id);
-CREATE INDEX idx_oauth_clients_identity_id ON oauth_clients(identity_id);
+CREATE INDEX IF NOT EXISTS idx_oauth_clients_client_id ON oauth_clients(client_id);
+CREATE INDEX IF NOT EXISTS idx_oauth_clients_identity_id ON oauth_clients(identity_id);
 
 -- Authorization Codes
 CREATE TABLE IF NOT EXISTS authorization_codes (
@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS authorization_codes (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_authorization_codes_code ON authorization_codes(code);
-CREATE INDEX idx_authorization_codes_client_id ON authorization_codes(client_id);
-CREATE INDEX idx_authorization_codes_expires_at ON authorization_codes(expires_at);
+CREATE INDEX IF NOT EXISTS idx_authorization_codes_code ON authorization_codes(code);
+CREATE INDEX IF NOT EXISTS idx_authorization_codes_client_id ON authorization_codes(client_id);
+CREATE INDEX IF NOT EXISTS idx_authorization_codes_expires_at ON authorization_codes(expires_at);
 
 -- Access Tokens
 CREATE TABLE IF NOT EXISTS access_tokens (
@@ -51,11 +51,11 @@ CREATE TABLE IF NOT EXISTS access_tokens (
     expires_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
-CREATE INDEX idx_access_tokens_token ON access_tokens(token);
-CREATE INDEX idx_access_tokens_refresh_token ON access_tokens(refresh_token);
-CREATE INDEX idx_access_tokens_client_id ON access_tokens(client_id);
-CREATE INDEX idx_access_tokens_user_id ON access_tokens(user_id);
-CREATE INDEX idx_access_tokens_expires_at ON access_tokens(expires_at);
+CREATE INDEX IF NOT EXISTS idx_access_tokens_token ON access_tokens(token);
+CREATE INDEX IF NOT EXISTS idx_access_tokens_refresh_token ON access_tokens(refresh_token);
+CREATE INDEX IF NOT EXISTS idx_access_tokens_client_id ON access_tokens(client_id);
+CREATE INDEX IF NOT EXISTS idx_access_tokens_user_id ON access_tokens(user_id);
+CREATE INDEX IF NOT EXISTS idx_access_tokens_expires_at ON access_tokens(expires_at);
 
 -- MFA Configurations
 CREATE TABLE IF NOT EXISTS mfa_configs (
@@ -72,9 +72,9 @@ CREATE TABLE IF NOT EXISTS mfa_configs (
     last_used TIMESTAMP WITH TIME ZONE
 );
 
-CREATE INDEX idx_mfa_configs_identity_id ON mfa_configs(identity_id);
-CREATE INDEX idx_mfa_configs_method ON mfa_configs(method);
-CREATE INDEX idx_mfa_configs_enabled ON mfa_configs(is_enabled);
+CREATE INDEX IF NOT EXISTS idx_mfa_configs_identity_id ON mfa_configs(identity_id);
+CREATE INDEX IF NOT EXISTS idx_mfa_configs_method ON mfa_configs(method);
+CREATE INDEX IF NOT EXISTS idx_mfa_configs_enabled ON mfa_configs(is_enabled);
 
 -- MFA Challenges
 CREATE TABLE IF NOT EXISTS mfa_challenges (
@@ -87,9 +87,9 @@ CREATE TABLE IF NOT EXISTS mfa_challenges (
     verified BOOLEAN NOT NULL DEFAULT false
 );
 
-CREATE INDEX idx_mfa_challenges_identity_id ON mfa_challenges(identity_id);
-CREATE INDEX idx_mfa_challenges_code ON mfa_challenges(challenge_code);
-CREATE INDEX idx_mfa_challenges_expires_at ON mfa_challenges(expires_at);
+CREATE INDEX IF NOT EXISTS idx_mfa_challenges_identity_id ON mfa_challenges(identity_id);
+CREATE INDEX IF NOT EXISTS idx_mfa_challenges_code ON mfa_challenges(challenge_code);
+CREATE INDEX IF NOT EXISTS idx_mfa_challenges_expires_at ON mfa_challenges(expires_at);
 
 -- Roles
 CREATE TABLE IF NOT EXISTS roles (
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS roles (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_roles_name ON roles(name);
+CREATE INDEX IF NOT EXISTS idx_roles_name ON roles(name);
 
 -- User Role Assignments
 CREATE TABLE IF NOT EXISTS user_roles (
@@ -113,10 +113,10 @@ CREATE TABLE IF NOT EXISTS user_roles (
     expires_at TIMESTAMP WITH TIME ZONE
 );
 
-CREATE INDEX idx_user_roles_identity_id ON user_roles(identity_id);
-CREATE INDEX idx_user_roles_role_id ON user_roles(role_id);
-CREATE INDEX idx_user_roles_expires_at ON user_roles(expires_at);
-CREATE UNIQUE INDEX idx_user_roles_unique ON user_roles(identity_id, role_id);
+CREATE INDEX IF NOT EXISTS idx_user_roles_identity_id ON user_roles(identity_id);
+CREATE INDEX IF NOT EXISTS idx_user_roles_role_id ON user_roles(role_id);
+CREATE INDEX IF NOT EXISTS idx_user_roles_expires_at ON user_roles(expires_at);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_roles_unique ON user_roles(identity_id, role_id);
 
 -- Audit Logs
 CREATE TABLE IF NOT EXISTS audit_logs (
@@ -133,11 +133,11 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_audit_logs_identity_id ON audit_logs(identity_id);
-CREATE INDEX idx_audit_logs_event_type ON audit_logs(event_type);
-CREATE INDEX idx_audit_logs_timestamp ON audit_logs(timestamp);
-CREATE INDEX idx_audit_logs_result ON audit_logs(result);
-CREATE INDEX idx_audit_logs_resource_action ON audit_logs(resource, action);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_identity_id ON audit_logs(identity_id);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_event_type ON audit_logs(event_type);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_timestamp ON audit_logs(timestamp);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_result ON audit_logs(result);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_resource_action ON audit_logs(resource, action);
 
 -- Comments
 COMMENT ON TABLE oauth_clients IS 'OAuth 2.0 client registrations';

@@ -1,0 +1,3 @@
+# Keep artifacts on the same drive as the source tree (avoids broken paths when I: ↔ F: junctions).
+[build]
+target-dir = "target"

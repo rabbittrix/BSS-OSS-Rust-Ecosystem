@@ -1,8 +1,13 @@
 -- Multi-tenant support schema
 -- This migration adds tenant isolation capabilities
 
--- Create tenant_status enum
-CREATE TYPE IF NOT EXISTS tenant_status AS ENUM ('ACTIVE', 'SUSPENDED', 'INACTIVE');
+-- Create tenant_status enum (PostgreSQL 15 does not support CREATE TYPE IF NOT EXISTS)
+DO $$
+BEGIN
+    CREATE TYPE tenant_status AS ENUM ('ACTIVE', 'SUSPENDED', 'INACTIVE');
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Create tenants table
 CREATE TABLE IF NOT EXISTS tenants (
